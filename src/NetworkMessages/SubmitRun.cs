@@ -15,6 +15,7 @@ public class SubmitRunRequest : SendMessage
     
     public string mapName;
     public string playerName;
+    public string steamId;
     
     public float time;
     public float style;
@@ -25,6 +26,7 @@ public class LevelClaimNotification : PlayerNotification
 {
     public int claimType; //0:Claimed , 1: Improved, 2: Reclaimed
     public string username;
+
     public string levelname;
     public string team;
     

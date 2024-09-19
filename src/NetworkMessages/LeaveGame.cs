@@ -8,5 +8,6 @@ public class LeaveGameRequest : SendMessage
     
     public int roomId;
     public string username;
+    public string steamId;
 }
 

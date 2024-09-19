@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace UltraBINGO;
 
@@ -6,7 +7,6 @@ public class Player
 {
     public string username;
 }
-
 
 public class GameLevel
 {
@@ -24,19 +24,19 @@ public class GameGrid
 {
     public int size;
     public Dictionary<string,GameLevel> levelTable;
-
 }
 
 public class Game
 {
     public int gameId;
-    public List<Player> currentPlayers;
+    public Dictionary<string,Player> currentPlayers;
+    
     public GameGrid grid;
-    public Player gameHost;
+    public string gameHost; //SteamID
     public int gameState;
     
     public List<Player> getPlayers()
     {
-        return currentPlayers;
+        return currentPlayers.Values.ToList();
     }
 }

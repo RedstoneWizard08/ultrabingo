@@ -23,6 +23,7 @@ public class CreateRoomRequest : SendMessage
     public bool pRankRequired;
     
     public string hostSteamName;
+    public string hostSteamId;
 }
 
 public class CreateRoomResponse : MessageResponse
@@ -50,9 +51,6 @@ public static class CreateRoomResponseHandler
             //Once room details have been obtained: set up the lobby screen with the following:
             // Player list
             GameManager.SetupGameDetails(response.roomDetails);
-            
-
-            
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joining room ID: "+response.roomId);
         }
     }

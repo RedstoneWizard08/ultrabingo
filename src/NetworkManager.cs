@@ -80,6 +80,7 @@ public static class NetworkManager
         crr.pRankRequired = false;
         
         crr.hostSteamName = Steamworks.SteamClient.Name;
+        crr.hostSteamId = Steamworks.SteamClient.SteamId.ToString();
         
         sendEncodedMessage(JsonConvert.SerializeObject(crr));
     }
@@ -115,6 +116,7 @@ public static class NetworkManager
     {
         LeaveGameRequest leaveRequest = new LeaveGameRequest();
         leaveRequest.username = Steamworks.SteamClient.Name;
+        leaveRequest.steamId = Steamworks.SteamClient.SteamId.ToString();
         leaveRequest.roomId = roomId;
         
         sendEncodedMessage(JsonConvert.SerializeObject(leaveRequest));

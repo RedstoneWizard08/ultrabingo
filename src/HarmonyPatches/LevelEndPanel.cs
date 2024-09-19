@@ -71,6 +71,7 @@ public class FinalRankFanfare
             SubmitRunRequest srr = new SubmitRunRequest();
             
             srr.playerName = Steamworks.SteamClient.Name;
+            srr.steamId = Steamworks.SteamClient.SteamId.ToString();
             srr.team = GameManager.currentTeam;
             
             srr.gameId = GameManager.CurrentGame.gameId;
