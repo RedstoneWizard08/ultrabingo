@@ -156,6 +156,13 @@ public static class NetworkManager
                 PlayerJoiningResponseHandler.handle(response);
                 break;
             }
+            case "RoomUpdate":
+            {
+                Logging.Message("Settings for our currently connected room has updated");
+                UpdateRoomSettingsNotification response = JsonConvert.DeserializeObject<UpdateRoomSettingsNotification>(em.contents);
+                UpdateRoomSettingsHandler.handle(response);
+                break;
+            }
             case "StartGame":
             {
                 Logging.Message("Got signal from server to start game we're in!");

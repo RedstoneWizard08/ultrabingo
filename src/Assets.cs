@@ -14,6 +14,8 @@ public static class AssetLoader
     
     public static GameObject searchBar;
     
+    public static GameObject BingoGameSettings;
+    
     public static void LoadAssets()
     {
         AssetBundle assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"ultrabingo.resource"));
@@ -21,5 +23,6 @@ public static class AssetLoader
         gameFont = assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
         UISprite = assets.LoadAsset<Sprite>("UISprite");
         searchBar = assets.LoadAsset<GameObject>("IdInput");
+        BingoGameSettings = assets.LoadAsset<GameObject>("BingoGameSettings");
     }
 }

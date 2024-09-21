@@ -12,7 +12,10 @@ public static class BingoMenuController
     
     public static void LoadBingoLevel(string levelName, string levelCoords)
     {
-        //Force disable cheats and major assists, set difficulty to difficulty set by the host.
+        //Force disable cheats and major assists, set difficulty to difficulty of the game set by the host.
+        MonoSingleton<PrefsManager>.Instance.SetBool("majorAssist", false);
+        MonoSingleton<AssistController>.Instance.cheatsEnabled = false;
+        MonoSingleton<PrefsManager>.Instance.SetInt("difficulty", GameManager.CurrentGame.gameSettings.difficulty);
         
         int row = int.Parse(levelCoords[0].ToString());
         int column = int.Parse(levelCoords[2].ToString());

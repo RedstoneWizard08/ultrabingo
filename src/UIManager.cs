@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using Newtonsoft.Json;
+using TMPro;
+using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
 using UnityEngine;
@@ -12,6 +14,19 @@ public static class UIManager
 {
     public static GameObject ultrabingoButtonObject = null;
     public static GameObject ultrabingoEncapsulator = null;
+    
+    public static void HandleGameSettingsUpdate()
+    {
+        UpdateRoomSettingsRequest urss = new UpdateRoomSettingsRequest();
+        urss.roomId = GameManager.CurrentGame.gameId;
+        urss.maxPlayers = int.Parse(BingoLobby.MaxPlayers.text);
+        urss.maxTeams = int.Parse(BingoLobby.MaxPlayers.text);
+        urss.PRankRequired = BingoLobby.RequirePRank.enabled;
+        urss.gameType = BingoLobby.GameType.value;
+        urss.difficulty = BingoLobby.Difficulty.value;
+        
+        NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(urss));
+    }
     
     public static void Open()
     {

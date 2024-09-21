@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UltraBINGO.UI_Elements;
@@ -14,8 +15,23 @@ public class BingoCard
     public static GameObject LeaveGame;
     
     public static GameObject TeamIndicator;
+    public static GameObject ObjectiveIndicator;
     
     public static string team = "PLACEHOLDER";
+    
+    public static void UpdateTitles()
+    {
+        TeamIndicator.GetComponent<TMP_Text>().text = "-- You are on the <color=" + GameManager.currentTeam.ToLower() + ">" + GameManager.currentTeam + " team</color> --";
+        ObjectiveIndicator.GetComponent<TMP_Text>().text =
+            (GameManager.CurrentGame.gameSettings.gameType == 0
+                ? "Race to <color=orange>obtain the fastest time</color> for your team on each level!"
+                : "Rack up <color=orange>as much style</color> as you can for your team on each level!");
+        
+        if(GameManager.CurrentGame.gameSettings.requiresPRank)
+        {
+            ObjectiveIndicator.GetComponent<TMP_Text>().text += "\n <color=#ffa200d9>P</color>-Ranks are <color=orange>required</color>. You need to finish a level with a <color=#ffa200d9>P</color>-Rank to claim it.";
+        }
+    }
     
     public static GameObject Init()
     {
@@ -65,6 +81,10 @@ public class BingoCard
         TeamIndicator = UIHelper.CreateText("-- You are on the "+team+" team -- ",32,"TeamIndicator");
         TeamIndicator.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.8f,0f);
         TeamIndicator.transform.SetParent(Root.transform);
+        
+        ObjectiveIndicator = UIHelper.CreateText("Objective here",18,"Objective Indicator");
+        ObjectiveIndicator.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.75f,0f);
+        ObjectiveIndicator.transform.SetParent(Root.transform);
 
         return Root;
     }

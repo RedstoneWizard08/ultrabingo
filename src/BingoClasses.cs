@@ -26,6 +26,15 @@ public class GameGrid
     public Dictionary<string,GameLevel> levelTable;
 }
 
+public class GameSettings
+{
+    public int maxPlayers;
+    public int maxTeams;
+    public bool requiresPRank;
+    public int gameType;
+    public int difficulty;
+}
+
 public class Game
 {
     public int gameId;
@@ -34,6 +43,8 @@ public class Game
     public GameGrid grid;
     public string gameHost; //SteamID
     public int gameState;
+    
+    public GameSettings gameSettings;
     
     public List<Player> getPlayers()
     {
