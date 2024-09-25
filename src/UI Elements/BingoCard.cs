@@ -1,4 +1,6 @@
 ﻿using TMPro;
+using UltraBINGO.Components;
+using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +19,10 @@ public class BingoCard
     public static GameObject TeamIndicator;
     public static GameObject ObjectiveIndicator;
     
+    public static GameObject LevelInformation;
+    public static GameObject LevelInformationText;
+    
+    
     public static string team = "PLACEHOLDER";
     
     public static void UpdateTitles()
@@ -24,13 +30,36 @@ public class BingoCard
         TeamIndicator.GetComponent<TMP_Text>().text = "-- You are on the <color=" + GameManager.currentTeam.ToLower() + ">" + GameManager.currentTeam + " team</color> --";
         ObjectiveIndicator.GetComponent<TMP_Text>().text =
             (GameManager.CurrentGame.gameSettings.gameType == 0
-                ? "Race to <color=orange>obtain the fastest time</color> for your team on each level!"
-                : "Rack up <color=orange>as much style</color> as you can for your team on each level!");
+                ? "Race to <color=orange>obtain the fastest time</color> for your team on each level."
+                : "Rack up <color=orange>the highest style</color> as you can for your team on each level.")
+            + "\nClaim " + GameManager.CurrentGame.grid.size + " levels horizontally, vertically or diagonally for your team to win!";
         
         if(GameManager.CurrentGame.gameSettings.requiresPRank)
         {
-            ObjectiveIndicator.GetComponent<TMP_Text>().text += "\n <color=#ffa200d9>P</color>-Ranks are <color=orange>required</color>. You need to finish a level with a <color=#ffa200d9>P</color>-Rank to claim it.";
+            ObjectiveIndicator.GetComponent<TMP_Text>().text += "\n<color=#ffa200d9>P</color>-Ranks are <color=orange>required</color> to claim a level.";
         }
+    }
+    
+    public static void ShowLevelData(BingoLevelData levelData)
+    {
+        if(!levelData.isClaimed)
+        {
+            LevelInformationText.GetComponent<TextMeshProUGUI>().text = "This level is currently unclaimed.\n";
+            LevelInformationText.GetComponent<TextMeshProUGUI>().text += (GameManager.CurrentGame.gameSettings.gameType == 0 ? "Set a time " : "Grab some style ") + "to claim it for your team!";
+        }
+        else
+        {
+            LevelInformationText.GetComponent<TextMeshProUGUI>().text = "Claimed by the " + levelData.claimedTeam + " team\n";
+            LevelInformationText.GetComponent<TextMeshProUGUI>().text += (GameManager.CurrentGame.gameSettings.gameType == 0 ? "Time " : "Style ") + "to beat: "
+                + (GameManager.CurrentGame.gameSettings.gameType == 0 ? levelData.timeRequirement : levelData.styleRequirement);
+        }
+        
+        LevelInformation.SetActive(true);
+    }
+    
+    public static void HideLevelData()
+    {
+        LevelInformation.SetActive(false);
     }
     
     public static GameObject Init()
@@ -85,7 +114,23 @@ public class BingoCard
         ObjectiveIndicator = UIHelper.CreateText("Objective here",18,"Objective Indicator");
         ObjectiveIndicator.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.75f,0f);
         ObjectiveIndicator.transform.SetParent(Root.transform);
-
+        
+        //Bingo Level Information panel
+        LevelInformation = new GameObject();
+        LevelInformation.name = "Background";
+        LevelInformation.AddComponent<Image>();
+        LevelInformation.GetComponent<Image>().color = new Vector4(0.0f,0.0f,0.0f,1f);
+        LevelInformation.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.3f,0f);
+        LevelInformation.GetComponent<RectTransform>().sizeDelta = new Vector2(600f,100f);
+        
+        LevelInformation.transform.SetParent(Root.transform);
+        LevelInformation.SetActive(false);
+        
+        //Level Information text
+        LevelInformationText = UIHelper.CreateText("BingoLevelData info here",26,"LevelInfoText");
+        LevelInformationText.transform.SetParent(LevelInformation.transform);
+        LevelInformationText.transform.localPosition = Vector3.zero;
+        
         return Root;
     }
 }

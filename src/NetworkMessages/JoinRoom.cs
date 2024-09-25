@@ -8,6 +8,7 @@ public class JoinRoomRequest : SendMessage
     
     public int roomId;
     public string username;
+    public string steamId;
     
 }
 
@@ -45,7 +46,7 @@ public static class JoinRoomResponseHandler
         }
         else
         {
-            GameManager.SetupGameDetails(response.roomDetails);
+            GameManager.SetupGameDetails(response.roomDetails,false);
         }
     }
 }

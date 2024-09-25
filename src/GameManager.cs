@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
-using UltraBINGO.NetworkMessages;
+using UltraBINGO.Components;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UltraBINGO.CommonFunctions;
 
@@ -31,6 +32,11 @@ public static class GameManager
         BingoLobby.RoomIdDisplay.GetComponent<TextMeshProUGUI>().text = "Game ID: " + CurrentGame.gameId;
     }
     
+    public static bool playerIsHost()
+    {
+        return Steamworks.SteamClient.SteamId.ToString() == CurrentGame.gameHost;
+    }
+    
     public static void RefreshPlayerList()
     {
         string players = "Players:<br>";
@@ -42,6 +48,16 @@ public static class GameManager
         BingoLobby.PlayerList.GetComponent<TextMeshProUGUI>().text = players;
     }
     
+    public static void OnMouseOverLevel(PointerEventData data)
+    {
+        BingoCard.ShowLevelData(data.pointerEnter.GetComponent<BingoLevelData>());
+    }
+    
+    public static void OnMouseExitLevel(PointerEventData data)
+    {
+        BingoCard.HideLevelData();
+    }
+    
     public static void SetupBingoCardAtLoad()
     {
         for(int x = 0; x < 3; x++)
@@ -49,6 +65,24 @@ public static class GameManager
             for(int y = 0; y < 3; y++)
             {
                 GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,BingoCard.ButtonTemplate.transform.parent.transform);
+                level.AddComponent<BingoLevelData>();
+                level.AddComponent<EventTrigger>();
+                EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
+                mouseEnter.eventID = EventTriggerType.PointerEnter;
+                mouseEnter.callback.AddListener((data) =>
+                {
+                    OnMouseOverLevel((PointerEventData)data);
+                });
+                level.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
+                
+                EventTrigger.Entry mouseExit = new EventTrigger.Entry();
+                mouseExit.eventID = EventTriggerType.PointerExit;
+                mouseExit.callback.AddListener((data) =>
+                {
+                    OnMouseExitLevel((PointerEventData)data);
+                });
+                level.GetComponent<EventTrigger>().triggers.Add(mouseExit);
+                
                 string lvlCoords = x+"-"+y;
                 level.name = lvlCoords;
                 level.transform.SetParent(BingoCard.Grid.transform);
@@ -76,7 +110,7 @@ public static class GameManager
         }
     }
 
-    public static void SetupGameDetails(Game game)
+    public static void SetupGameDetails(Game game,bool isHost=true)
     {
         CurrentGame = game;
         
@@ -85,6 +119,13 @@ public static class GameManager
         
         ShowGameId();
         RefreshPlayerList();
+        
+        BingoLobby.MaxPlayers.interactable = isHost;
+        BingoLobby.MaxTeams.interactable = isHost;
+        BingoLobby.RequirePRank.interactable = isHost;
+        BingoLobby.GameType.interactable = isHost;
+        BingoLobby.Difficulty.interactable = isHost;
+        BingoLobby.StartGame.SetActive(isHost);
         
         SetupBingoCard(game.grid);
     }
@@ -114,7 +155,7 @@ public static class GameManager
         BingoEncapsulator.BingoCardScreen.SetActive(true);
     }
     
-    public static void UpdateCards(int row, int column, string team)
+    public static void UpdateCards(int row, int column, string team, string playername, float newRequirement)
     {
         string coordLookup = row+"-"+column;
         GameManager.CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
@@ -122,6 +163,13 @@ public static class GameManager
         if(getSceneName() == "Main Menu")
         {
             GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+            GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().isClaimed = true;
+            GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
+            GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
+            
+            if(GameManager.CurrentGame.gameSettings.gameType == 0) {GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newRequirement;}
+            else{ {GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newRequirement;}}
+            
         }
         else
         {

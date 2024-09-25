@@ -92,6 +92,7 @@ public static class NetworkManager
         JoinRoomRequest jrr = new JoinRoomRequest();
         jrr.roomId = roomId;
         jrr.username = Steamworks.SteamClient.Name;
+        jrr.steamId = Steamworks.SteamClient.SteamId.ToString();
         sendEncodedMessage(JsonConvert.SerializeObject(jrr));
         
         Logging.Message("Request sent");
