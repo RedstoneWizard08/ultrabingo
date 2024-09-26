@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using UltraBINGO;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
@@ -31,12 +32,14 @@ public static class NetworkManager
     {
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
+        ws.WaitTime = TimeSpan.FromSeconds(30);
         //ws.Log.Level = LogLevel.Debug;
         
         ws.OnMessage += (sender,e) =>
         {
             NetworkManager.onMessageRecieved(e);
         };
+        
         
         ws.OnClose += (sender,e) =>
         {

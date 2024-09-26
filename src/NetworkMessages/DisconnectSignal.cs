@@ -24,6 +24,7 @@ public static class DisconnectSignalHandler
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Disconnected.");
             BingoEncapsulator.BingoCardScreen.SetActive(false);
             BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+            BingoEncapsulator.BingoEndScreen.SetActive(false);
             BingoEncapsulator.BingoMenu.SetActive(true);
         }
         else

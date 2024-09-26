@@ -46,8 +46,15 @@ public class Game
     
     public GameSettings gameSettings;
     
+    public string winningTeam;
+    
     public List<Player> getPlayers()
     {
         return currentPlayers.Values.ToList();
+    }
+    
+    public bool isGameFinished()
+    {
+        return this.gameState == 2; // State 2 = game finished
     }
 }

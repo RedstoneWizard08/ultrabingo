@@ -11,6 +11,7 @@ public static class BingoEncapsulator
     public static GameObject BingoMenu;
     public static GameObject BingoLobbyScreen;
     public static GameObject BingoCardScreen;
+    public static GameObject BingoEndScreen;
     
     
     public static GameObject Init()
@@ -38,6 +39,10 @@ public static class BingoEncapsulator
         
         BingoCardScreen = BingoCard.Init();
         BingoCardScreen.transform.SetParent(Root.transform);
+        
+        BingoEndScreen = BingoEnd.Init();
+        BingoEndScreen.transform.SetParent(Root.transform);
+            
 
         
         return Root;

@@ -17,15 +17,20 @@ public static class UIManager
     
     public static void HandleGameSettingsUpdate()
     {
-        UpdateRoomSettingsRequest urss = new UpdateRoomSettingsRequest();
-        urss.roomId = GameManager.CurrentGame.gameId;
-        urss.maxPlayers = int.Parse(BingoLobby.MaxPlayers.text);
-        urss.maxTeams = int.Parse(BingoLobby.MaxPlayers.text);
-        urss.PRankRequired = BingoLobby.RequirePRank.enabled;
-        urss.gameType = BingoLobby.GameType.value;
-        urss.difficulty = BingoLobby.Difficulty.value;
+        //Only send if we're the host.
+        if(GameManager.playerIsHost())
+        {
+            UpdateRoomSettingsRequest urss = new UpdateRoomSettingsRequest();
+            urss.roomId = GameManager.CurrentGame.gameId;
+            urss.maxPlayers = int.Parse(BingoLobby.MaxPlayers.text);
+            urss.maxTeams = int.Parse(BingoLobby.MaxTeams.text);
+            urss.PRankRequired = BingoLobby.RequirePRank.isOn;
+            urss.gameType = BingoLobby.GameType.value;
+            urss.difficulty = BingoLobby.Difficulty.value;
         
-        NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(urss));
+            NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(urss));
+        }
+
     }
     
     public static void Open()
@@ -46,6 +51,7 @@ public static class UIManager
         ultrabingoEncapsulator.SetActive(false);
         ultrabingoButtonObject.transform.parent.gameObject.SetActive(true);
     }
+    
     
     //Borrowed and repurposed this code from Hydra's BossRush mod, cheers man :D
     public static void SetupElements(CanvasController __instance)

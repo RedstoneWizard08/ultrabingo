@@ -158,17 +158,22 @@ public static class GameManager
     public static void UpdateCards(int row, int column, string team, string playername, float newRequirement)
     {
         string coordLookup = row+"-"+column;
+        
+        Logging.Message(coordLookup);
+        
         GameManager.CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
         
         if(getSceneName() == "Main Menu")
         {
-            GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
-            GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().isClaimed = true;
-            GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
-            GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
+            GameObject bingoGrid = GetGameObjectChild(BingoEncapsulator.BingoCardScreen,"BingoGrid");
             
-            if(GameManager.CurrentGame.gameSettings.gameType == 0) {GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newRequirement;}
-            else{ {GetGameObjectChild(BingoEncapsulator.BingoCardScreen,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newRequirement;}}
+            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().isClaimed = true;
+            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
+            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
+            
+            if(GameManager.CurrentGame.gameSettings.gameType == 0) {GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newRequirement;}
+            else{ {GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newRequirement;}}
             
         }
         else

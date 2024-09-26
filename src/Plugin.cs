@@ -5,6 +5,7 @@ using BepInEx;
 using HarmonyLib;
 using TMPro;
 using UltraBINGO;
+using UltraBINGO.UI_Elements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using LogType = UnityEngine.LogType;
@@ -25,10 +26,6 @@ namespace UltrakillBingoClient
         public static bool IsDevelopmentBuild = true;
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        
-        public static TMP_FontAsset vcrFont;
-        
-        
         
         /*
          * UltraBINGO
@@ -92,8 +89,11 @@ namespace UltrakillBingoClient
             GameManager.hasSent = false;
             if(getSceneName() == "Main Menu")
             {
-                GameObject canva = GetInactiveRootObject("Canvas");
-                vcrFont = GameObject.Find(canva.name + "/Main Menu (1)/Title/Text").GetComponentInParent<TextMeshProUGUI>().font;
+                if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())
+                {
+                    Logging.Message("Game is over, showing end screen");
+                    BingoEnd.ShowEndScreen();
+                }
             }
         }
     }

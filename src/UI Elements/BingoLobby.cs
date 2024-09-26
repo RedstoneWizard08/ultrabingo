@@ -74,6 +74,7 @@ public static class BingoLobby
         MaxTeams.text = newSettings.maxTeams.ToString();
         RequirePRank.isOn = newSettings.PRankRequired;
         GameType.value = newSettings.gameType;
+        Difficulty.value = newSettings.difficulty;
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
         GameManager.CurrentGame.gameSettings.maxTeams = newSettings.maxTeams;
