@@ -23,7 +23,7 @@ namespace UltrakillBingoClient
         public const string pluginName = "UltraBINGO";
         public const string pluginVersion = "0.0.1";
         
-        public static bool IsDevelopmentBuild = true;
+        public static bool IsDevelopmentBuild = false;
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         

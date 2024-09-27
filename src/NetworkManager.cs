@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Runtime.Remoting.Channels;
+using System.Timers;
 using Newtonsoft.Json;
 using UltraBINGO;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
+using UnityEngine.SceneManagement;
 using WebSocketSharp;
 
 namespace UltrakillBingoClient;
@@ -26,13 +29,14 @@ public static class NetworkManager
     public static string serverURL = Main.IsDevelopmentBuild ? "ws://127.0.0.1:2052" : "ws://vranks.uk:2052";
     
     static WebSocket ws;
+    static Timer heartbeatTimer;
     
     
     public static void initialise()
     {
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
-        ws.WaitTime = TimeSpan.FromSeconds(30);
+        ws.WaitTime = TimeSpan.FromSeconds(60);
         //ws.Log.Level = LogLevel.Debug;
         
         ws.OnMessage += (sender,e) =>
@@ -40,11 +44,47 @@ public static class NetworkManager
             NetworkManager.onMessageRecieved(e);
         };
         
+        ws.OnError += (sender,e) =>
+        {
+            NetworkManager.handleError(e);
+        };
+        
         
         ws.OnClose += (sender,e) =>
         {
             Logging.Message("Connection closed");
         };
+        
+        
+        
+    }
+    
+    public static async void handleError(ErrorEventArgs e)
+    {
+        Logging.Warn("Network error happened");
+        Logging.Error(e.Message);
+        Logging.Error(e.Exception.ToString());
+        
+        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>Network error</color>");
+        
+        
+        /*if(ws.IsAlive)
+        {
+            Logging.Warn("Network error happened but our connection is still alive, so likely wasn't from us");
+        }
+        else
+        {
+            Logging.Error("Network error occurred on our end");
+
+            
+            if(GameManager.isInBingoLevel)
+            {
+                /*MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the server was lost.\nExitting in 5 seconds...");
+                await Task.Delay(5000);
+                Logging.Message("Trying to return to main menu");
+                SceneManager.LoadScene("Main Menu");
+            }
+        }*/
     }
     
     public static string DecodeMessage(string encodedMessage)
@@ -64,6 +104,14 @@ public static class NetworkManager
     public static void ConnectWebSocket()
     {
         ws.Connect();
+        setupHeartbeat();
+    }
+    public static async void setupHeartbeat()
+    {
+        heartbeatTimer = new Timer(20000); //Ping once every 20 seconds
+        heartbeatTimer.Elapsed += pingAttempt;
+        heartbeatTimer.AutoReset = true;
+        heartbeatTimer.Enabled = true;
     }
     
     public static void DisconnectWebSocket(ushort code=1000,string reason="Disconnect reason not specified")
@@ -71,6 +119,10 @@ public static class NetworkManager
         ws.Close(code,reason);
     }
     
+    public static void pingAttempt(Object source, ElapsedEventArgs e)
+    {
+        ws.Ping();
+    }
     
     public static void CreateRoom()
     {
@@ -99,7 +151,6 @@ public static class NetworkManager
         sendEncodedMessage(JsonConvert.SerializeObject(jrr));
         
         Logging.Message("Request sent");
-        
     }
     
     public static void SendStartGameSignal(int roomId)
@@ -199,11 +250,23 @@ public static class NetworkManager
                 DisconnectNotificationHandler.handle(response);
                 break;
             }
+            case "TimeoutNotification":
+            {
+                Logging.Message("Someone in our game lost connection");
+                TimeoutSignal response = JsonConvert.DeserializeObject<TimeoutSignal>(em.contents);
+                TimeoutSignalHandler.handle(response);
+                break;
+            }
             case "GameEnd":
             {
                 Logging.Message("Game over!");
                 EndGameSignal response = JsonConvert.DeserializeObject<EndGameSignal>(em.contents);
                 EndGameSignalHandler.handle(response);
+                break;
+            }
+            case "Pong":
+            {
+                //No need to do anything here, ping/pong just keeps the connection alive
                 break;
             }
             default: {Logging.Warn("Unknown or unimplemented packet received from server ("+em.header+"), discarding");break;}
