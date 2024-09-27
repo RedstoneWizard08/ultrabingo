@@ -1,11 +1,26 @@
 ﻿using System;
 using HarmonyLib;
 using TMPro;
+using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
-
+using UltrakillBingoClient;
 using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.HarmonyPatches;
+
+[HarmonyPatch(typeof(OptionsMenuToManager),"QuitMissionNoConfirm")]
+public static class LeaveBingoGame
+{
+    [HarmonyPrefix]
+    public static bool leaveBingoGame()
+    {
+        if(GameManager.isInBingoLevel)
+        {
+            GameManager.LeaveGame();
+        }
+        return true;
+    }
+}
 
 [HarmonyPatch(typeof(OptionsMenuToManager),"QuitMission")]
 public static class ConfirmLeaveGame
@@ -22,8 +37,10 @@ public static class ConfirmLeaveGame
             }
             else
             {
-                leaveText.text = "Are you sure you want to leave?\n(<color=orange>WARNING</color>: You will not be able to rejoin.)";
+                leaveText.text = "Leave game in progress?\n(<color=orange>WARNING</color>: You will not be able to rejoin.)";
             }
+            
+            
             __instance.quitDialog.ShowDialog();
             return false;
         }
