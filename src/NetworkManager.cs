@@ -236,6 +236,12 @@ public static class NetworkManager
                 LevelClaimHandler.handle(response);
                 break;
             }
+            case "HostLeftGame":
+            {
+                Logging.Message("Host left our game, ending");
+                HostLeftGameHandler.handle();
+                break;
+            }
             case "Disconnect":
             {
                 Logging.Message("Received disconnect signal from server");

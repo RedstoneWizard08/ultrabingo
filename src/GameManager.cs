@@ -146,6 +146,18 @@ public static class GameManager
         BingoEncapsulator.BingoCardScreen.SetActive(false);*/
     }
     
+    public static void clearGameVariables()
+    {
+        CurrentGame = null;
+        currentTeam = null;
+        currentRow = 0;
+        currentColumn = 0;
+        isInBingoLevel = false;
+        returningFromBingoLevel = false;
+        teammates = null;
+        
+    }
+    
     public static void MoveToCard()
     {
         BingoCard.UpdateTitles();

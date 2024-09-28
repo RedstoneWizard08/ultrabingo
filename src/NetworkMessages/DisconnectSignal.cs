@@ -51,3 +51,31 @@ public static class DisconnectNotificationHandler
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(response.username + " has left the game.");
     }
 }
+
+public static class HostLeftGameHandler
+{
+    public static async void handle()
+    {
+        string message = "The host has left the game.";
+
+        Logging.Message("Clearing game data from client cache");
+        GameManager.clearGameVariables();
+        
+        if(getSceneName() != "Main Menu")
+        {
+            message += "\nExiting in 5 seconds...";
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(message);
+            await Task.Delay(5000);
+            SceneHelper.LoadScene("Main Menu");
+        }
+        else
+        {
+            message += "\nReturning to menu.";
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(message);
+            //Still in lobby settings screen, or bingo card screen - Return to the ultrabingo main menu
+            BingoEncapsulator.BingoCardScreen.SetActive(false);
+            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+            BingoEncapsulator.BingoMenu.SetActive(true);
+        }
+    }
+}
