@@ -64,25 +64,6 @@ namespace UltrakillBingoClient
             NetworkManager.initialise();
         }
         
-        private void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.H))
-            {
-                if(getSceneName() == "Main Menu")
-                {
-                    NetworkManager.ConnectWebSocket();
-                }
-            }
-            
-            //Test to see if a room is created
-            if(Input.GetKeyDown(KeyCode.M))
-            {
-                if(getSceneName() == "Main Menu")
-                {
-                    NetworkManager.CreateRoom();
-                }
-            }
-        }
         
         public void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
