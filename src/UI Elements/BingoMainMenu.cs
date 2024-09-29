@@ -59,12 +59,10 @@ public static class BingoMainMenu
             
             JoinGame.GetComponent<Button>().onClick.AddListener(delegate
             {
-                Logging.Warn(JoinGameInput.name);
                 GameObject input = GetGameObjectChild(JoinGameInput,"InputField (TMP)");
-                Logging.Warn(input.name);
                 
                 int roomId = int.Parse(input.GetComponent<TMP_InputField>().text);
-                NetworkManager.JoinGame(roomId);
+                BingoMenuController.JoinRoom(roomId);
             });
             
             //Join game input field.

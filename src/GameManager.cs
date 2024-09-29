@@ -138,15 +138,22 @@ public static class GameManager
         NetworkManager.SendStartGameSignal(CurrentGame.gameId);
     }
     
-    public static void LeaveGame()
+    public static void LeaveGame(bool isInLevel=false)
     {
         //Send a request to the server saying we want to leave.
         NetworkManager.SendLeaveGameRequest(CurrentGame.gameId);
         
-        //When we get the ok signal back, back out of the lobby/card UI.
-        /*BingoEncapsulator.BingoMenu.SetActive(true);
-        BingoEncapsulator.BingoLobbyScreen.SetActive(false);
-        BingoEncapsulator.BingoCardScreen.SetActive(false);*/
+        //When that's sent off, close the connection on our end.
+        NetworkManager.DisconnectWebSocket(1000,"Normal close");
+        
+        if(!isInLevel)
+        {
+            //If dc'ing from lobby/card/end screen, return to the bingo menu.
+            BingoEncapsulator.BingoCardScreen.SetActive(false);
+            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+            BingoEncapsulator.BingoEndScreen.SetActive(false);
+            BingoEncapsulator.BingoMenu.SetActive(true);
+        }
     }
     
     public static void clearGameVariables()

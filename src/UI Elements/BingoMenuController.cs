@@ -49,21 +49,44 @@ public static class BingoMenuController
     {
         Logging.Message("Exiting menu");
         BingoEncapsulator.Root.SetActive(false);
-        //bingoMenu.SetActive(false);
         GetGameObjectChild(bingoMenu.transform.parent.parent.gameObject,"Chapter Select").SetActive(true);
-        NetworkManager.DisconnectWebSocket(1001,"Client exited Bingo menu");
     }
     
-    public static void CreateRoom()
+    public static async void CreateRoom()
     {
+        //Check if the websocket connection is up.
+        if(!NetworkManager.isConnectionUp())
+        {
+            NetworkManager.ConnectWebSocket();
+        }
+        
+        if(!NetworkManager.isConnectionUp())
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
+            return;
+        }
+        
         NetworkManager.CreateRoom();
+    }
+    
+    public static void JoinRoom(int roomId)
+    {
+        if(!NetworkManager.isConnectionUp())
+        {
+            NetworkManager.ConnectWebSocket();
+        }
+        if(!NetworkManager.isConnectionUp())
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
+            return;
+        }
+        NetworkManager.JoinGame(roomId);
     }
     
     public static void StartGame()
     {
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("The game has begun!");
         GameManager.MoveToCard();
-
     }
     
 }

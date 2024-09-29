@@ -16,7 +16,7 @@ public static class LeaveBingoGame
     {
         if(GameManager.isInBingoLevel)
         {
-            GameManager.LeaveGame();
+            GameManager.LeaveGame(true);
         }
         return true;
     }

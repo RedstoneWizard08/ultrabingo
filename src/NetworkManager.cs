@@ -31,6 +31,11 @@ public static class NetworkManager
     static WebSocket ws;
     static Timer heartbeatTimer;
     
+    public static bool isConnectionUp()
+    {
+        return ws.IsAlive;
+    }
+    
     
     public static void initialise()
     {
@@ -52,11 +57,17 @@ public static class NetworkManager
         
         ws.OnClose += (sender,e) =>
         {
-            Logging.Message("Connection closed");
+            Logging.Message("Server closed connection.");
+            if(e.WasClean)
+            {
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Disconnected from server.");
+            }
+            else
+            {
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Server error, disconnected.");
+            }
+            
         };
-        
-        
-        
     }
     
     public static async void handleError(ErrorEventArgs e)
@@ -65,7 +76,7 @@ public static class NetworkManager
         Logging.Error(e.Message);
         Logging.Error(e.Exception.ToString());
         
-        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>Network error</color>");
+        //MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>Network error</color>");
         
         
         /*if(ws.IsAlive)
@@ -103,8 +114,13 @@ public static class NetworkManager
     
     public static void ConnectWebSocket()
     {
+        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
         ws.Connect();
         setupHeartbeat();
+        if(ws.IsAlive)
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connected.");
+        }
     }
     public static async void setupHeartbeat()
     {
