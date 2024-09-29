@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UltraBINGO.NetworkMessages;
@@ -23,12 +24,6 @@ public static class BingoLobby
     public static Toggle RequirePRank;
     public static TMP_Dropdown GameType;
     public static TMP_Dropdown Difficulty;
-    
-    // Stuff for the lobby:
-    
-    //Room id (for testing)
-    //Show players currently in lobby
-    //Leave game button
     
     public static void onMaxPlayerUpdate(string playerAmount)
     {

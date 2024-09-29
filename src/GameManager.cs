@@ -39,6 +39,7 @@ public static class GameManager
     
     public static void RefreshPlayerList()
     {
+        BingoLobby.PlayerList.SetActive(false);
         string players = "Players:<br>";
         foreach(Player player in CurrentGame.getPlayers())
         {
@@ -46,6 +47,8 @@ public static class GameManager
         }
         
         BingoLobby.PlayerList.GetComponent<TextMeshProUGUI>().text = players;
+        BingoLobby.PlayerList.SetActive(true);
+        
     }
     
     public static void OnMouseOverLevel(PointerEventData data)

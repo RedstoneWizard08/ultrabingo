@@ -38,7 +38,7 @@ public class GameSettings
 public class Game
 {
     public int gameId;
-    public Dictionary<string,Player> currentPlayers;
+    public Dictionary<string,Player> currentPlayers; //<SteamID,Player>
     
     public GameGrid grid;
     public string gameHost; //SteamID

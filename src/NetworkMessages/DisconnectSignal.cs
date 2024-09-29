@@ -42,6 +42,7 @@ public static class DisconnectSignalHandler
 public class DisconnectNotification : MessageResponse
 {
     public string username;
+    public string steamId;
 }
 
 public static class DisconnectNotificationHandler
@@ -49,6 +50,8 @@ public static class DisconnectNotificationHandler
     public static void handle(DisconnectNotification response)
     {
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(response.username + " has left the game.");
+        GameManager.CurrentGame.currentPlayers.Remove(response.steamId);
+        GameManager.RefreshPlayerList();
     }
 }
 
