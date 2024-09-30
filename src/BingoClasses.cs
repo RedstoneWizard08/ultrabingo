@@ -13,7 +13,7 @@ public class GameLevel
     public string levelName;
     public string claimedBy;
     public string personToBeat;
-    public int timeToBeat;
+    public float timeToBeat;
     public int styleToBeat;
     
     public int row;

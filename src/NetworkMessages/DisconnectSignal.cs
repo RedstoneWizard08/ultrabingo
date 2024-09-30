@@ -17,7 +17,6 @@ public static class DisconnectSignalHandler
 {
     public static async void handle(DisconnectSignal response = null)
     {
-        Logging.Message("Disconnect message");
         //If the player is in-game, warn them of returning to menu in 5 seconds.
         if(getSceneName() == "Main Menu")
         {

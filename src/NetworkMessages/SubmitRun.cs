@@ -34,7 +34,7 @@ public class LevelClaimNotification : PlayerNotification
     public int column;
     
     public float newTimeRequirement;
-    public float newStyleRequirement;
+    public int newStyleRequirement;
     
 }
 
@@ -52,6 +52,6 @@ public static class LevelClaimHandler
         
         string broadcastString = response.username + " has <color=orange>" + actionType + response.levelname + "</color> for the " + response.team + " team.";
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(broadcastString);
-        GameManager.UpdateCards(response.row,response.column,response.team,response.username,(GameManager.CurrentGame.gameSettings.gameType == 0 ? response.newTimeRequirement : response.newStyleRequirement));
+        GameManager.UpdateCards(response.row,response.column,response.team,response.username,response.newTimeRequirement,response.newStyleRequirement);
     }
 }

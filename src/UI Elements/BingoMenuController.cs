@@ -52,7 +52,7 @@ public static class BingoMenuController
         GetGameObjectChild(bingoMenu.transform.parent.parent.gameObject,"Chapter Select").SetActive(true);
     }
     
-    public static async void CreateRoom()
+    public static void CreateRoom()
     {
         //Check if the websocket connection is up.
         if(!NetworkManager.isConnectionUp())

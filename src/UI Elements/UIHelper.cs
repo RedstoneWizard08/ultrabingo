@@ -84,9 +84,7 @@ public static class UIHelper
           text.GetComponent<RectTransform>().SetParent((Transform) button.GetComponent<RectTransform>());
           text.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
           text.GetComponent<TextMeshProUGUI>().text = buttonText;
-          Logging.Message(text.GetComponent<TMP_Text>().font.ToString());
           text.GetComponent<TextMeshProUGUI>().font = AssetLoader.gameFont;
-          Logging.Message(text.GetComponent<TMP_Text>().font.ToString());
           text.GetComponent<TextMeshProUGUI>().fontSize = fontSize;
           text.GetComponent<TextMeshProUGUI>().color = Color.white;
           text.GetComponent<TextMeshProUGUI>().enableWordWrapping = false;

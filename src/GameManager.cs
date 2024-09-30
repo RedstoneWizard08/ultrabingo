@@ -177,13 +177,12 @@ public static class GameManager
         BingoEncapsulator.BingoCardScreen.SetActive(true);
     }
     
-    public static void UpdateCards(int row, int column, string team, string playername, float newRequirement)
+    public static void UpdateCards(int row, int column, string team, string playername, float newTime, int newStyle)
     {
         string coordLookup = row+"-"+column;
-        
-        Logging.Message(coordLookup);
-        
         GameManager.CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
+        GameManager.CurrentGame.grid.levelTable[coordLookup].timeToBeat = newTime;
+        GameManager.CurrentGame.grid.levelTable[coordLookup].styleToBeat = newStyle;
         
         if(getSceneName() == "Main Menu")
         {
@@ -194,8 +193,8 @@ public static class GameManager
             GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
             GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
             
-            if(GameManager.CurrentGame.gameSettings.gameType == 0) {GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newRequirement;}
-            else{ {GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newRequirement;}}
+            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newTime;
+            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newStyle;
             
         }
         else

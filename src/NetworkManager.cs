@@ -70,7 +70,7 @@ public static class NetworkManager
         };
     }
     
-    public static async void handleError(ErrorEventArgs e)
+    public static void handleError(ErrorEventArgs e)
     {
         Logging.Warn("Network error happened");
         Logging.Error(e.Message);
@@ -122,7 +122,7 @@ public static class NetworkManager
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connected.");
         }
     }
-    public static async void setupHeartbeat()
+    public static void setupHeartbeat()
     {
         heartbeatTimer = new Timer(20000); //Ping once every 20 seconds
         heartbeatTimer.Elapsed += pingAttempt;
@@ -166,7 +166,6 @@ public static class NetworkManager
         jrr.steamId = Steamworks.SteamClient.SteamId.ToString();
         sendEncodedMessage(JsonConvert.SerializeObject(jrr));
         
-        Logging.Message("Request sent");
     }
     
     public static void SendStartGameSignal(int roomId)
@@ -195,10 +194,7 @@ public static class NetworkManager
     
     public static void onMessageRecieved(MessageEventArgs e)
     {
-        Logging.Message("Incoming message from server");
         EncapsulatedMessage em = JsonConvert.DeserializeObject<EncapsulatedMessage>(DecodeMessage(e.Data));
-        Logging.Message(em.header);
-        
         switch(em.header)
         {
             case "CreateRoomResponse":
@@ -236,7 +232,7 @@ public static class NetworkManager
             }
             case "StartGame":
             {
-                Logging.Message("Got signal from server to start game we're in!");
+                Logging.Message("Got start signal from server!");
                 StartGameResponse sgr = JsonConvert.DeserializeObject<StartGameResponse>(em.contents);
                 GameManager.currentTeam = sgr.teamColor;
                 GameManager.teammates = sgr.teammates;

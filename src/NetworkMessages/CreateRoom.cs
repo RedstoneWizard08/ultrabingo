@@ -37,7 +37,6 @@ public static class CreateRoomResponseHandler
 {
     public static void handle(CreateRoomResponse response)
     {
-        Logging.Message("Handling roomResponse");
         if(response.roomId == 0)
         {
             //Was unable to create room
@@ -46,7 +45,6 @@ public static class CreateRoomResponseHandler
         else
         {
             Logging.Message("Got details for room "+response.roomId);
-            Logging.Message(response.roomDetails.ToString());
                         
             //Once room details have been obtained: set up the lobby screen with the following:
             // Player list

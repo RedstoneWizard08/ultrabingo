@@ -72,7 +72,6 @@ namespace UltrakillBingoClient
             {
                 if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())
                 {
-                    Logging.Message("Game is over, showing end screen");
                     BingoEnd.ShowEndScreen();
                 }
             }

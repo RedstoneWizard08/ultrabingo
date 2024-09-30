@@ -64,10 +64,7 @@ public class FinalRankFanfare
         {
             float time = ___savedTime;
             int style = ___savedStyle;
-            
-            Logging.Message(""+time);
-            Logging.Message(""+style);
-            
+
             SubmitRunRequest srr = new SubmitRunRequest();
             
             srr.playerName = Steamworks.SteamClient.Name;
