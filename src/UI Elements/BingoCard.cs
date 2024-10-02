@@ -85,7 +85,7 @@ public class BingoCard
         {
             ButtonTemplate = new GameObject();
         }
-        ButtonTemplate = UIHelper.CreateButton("LevelExample","LevelButtonTemplate",275f,25f,24);
+        ButtonTemplate = UIHelper.CreateButtonNew("LevelExample","LevelButtonTemplate",275f,25f,24);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
         
@@ -93,7 +93,7 @@ public class BingoCard
         // I don't like doing it like this but trying to instantiate buttons at runtime causes the whole game to crash.
         // So we set it up at load time.
         // TODO: Apparantly it's cause by using TextMeshProGUI instead of using TMP_Text in CreateButton/Text? Will look into.
-        GameManager.SetupBingoCardAtLoad();
+        //GameManager.SetupBingoCardAtLoad();
         
         LeaveGame = UIHelper.CreateButton("LEAVE GAME","UltraBingoLeave",175f,85f,24);
         LeaveGame.transform.position = new Vector3(Screen.width*0.25f, Screen.height*0.25f, 0);

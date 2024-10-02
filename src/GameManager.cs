@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UltraBINGO.Components;
 using UltraBINGO.UI_Elements;
@@ -59,6 +60,48 @@ public static class GameManager
     public static void OnMouseExitLevel(PointerEventData data)
     {
         BingoCard.HideLevelData();
+    }
+    
+    public static void SetupBingoCardDynamic()
+    {
+        Logging.Message("Dynamic setup");
+        GameObject gridObj = GetGameObjectChild(BingoCard.Root,"BingoGrid");
+        
+        for(int x = 0; x < CurrentGame.grid.size; x++)
+        {
+            for(int y = 0; y < CurrentGame.grid.size; y++)
+            {
+                string lvlCoords = x+"-"+y;
+                Logging.Message(lvlCoords);
+                GameObject level = new GameObject();
+                level.name = lvlCoords;
+                level.transform.parent = gridObj.transform;
+
+                level.AddComponent<RectTransform>();
+                level.AddComponent<CanvasRenderer>();
+                level.AddComponent<Image>();
+          
+                //Add sprite to img
+                Logging.Message("Img");
+                level.GetComponent<Image>().sprite = AssetLoader.UISprite;
+                level.GetComponent<Image>().fillCenter = false;
+                level.GetComponent<Image>().fillClockwise = true;
+                level.GetComponent<Image>().type = Image.Type.Sliced;
+                
+                Logging.Message("Text");
+                GameObject text = new GameObject();
+                text.name = "Text";
+                text.transform.parent = level.transform;
+                text.AddComponent<Text>();
+                text.GetComponent<Text>().font = AssetLoader.gameFontLegacy;
+                text.GetComponent<Text>().fontSize = 24;
+                text.GetComponent<Text>().color = Color.white;
+                text.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+                text.GetComponent<Text>().text = lvlCoords;
+                
+                //level.SetActive(true); this causes to crash. Likely will have to iterate all objs outside of loop.
+            }
+        }
     }
     
     public static void SetupBingoCardAtLoad()
@@ -131,7 +174,7 @@ public static class GameManager
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
         
-        SetupBingoCard(game.grid);
+        //SetupBingoCard(game.grid);
     }
     
     public static void StartGame()

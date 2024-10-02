@@ -139,10 +139,10 @@ public static class UIHelper
           button.GetComponent<Image>().sprite = AssetLoader.UISprite;
           button.GetComponent<Image>().fillCenter = false;
           button.GetComponent<Image>().fillClockwise = true;
+          button.GetComponent<Image>().type = Image.Type.Sliced;
           
           button.AddComponent<Button>();
           button.GetComponent<RectTransform>().sizeDelta = new Vector2(rectX, rectY);
-          button.GetComponent<Image>().type = Image.Type.Sliced;
           button.GetComponent<Button>().targetGraphic = (Graphic) button.GetComponent<Image>();
           GameObject text = CreateText();
           button.GetComponent<Button>().colors = colors;
@@ -155,6 +155,48 @@ public static class UIHelper
           text.GetComponent<TMP_Text>().color = Color.white;
           text.GetComponent<TMP_Text>().enableWordWrapping = false;
           text.GetComponent<TMP_Text>().alignment = TextAlignmentOptions.Center;
+          return button;
+        }
+        
+        public static GameObject CreateButtonOld(string buttonText = "Text",string buttonName = "Button",float rectX = 200f, float rectY = 50f, int fontSize = 32)
+        {
+            ColorBlock colors = new ColorBlock()
+            {
+                normalColor = new Color(1,1,1,1),
+                highlightedColor = new Color(1,1,1,0.502f),
+                pressedColor = new Color(1,0,0,1),
+                selectedColor = new Color(1,1,1,1),
+                disabledColor = new Color(0,0,0,1f),
+                colorMultiplier = 1f,
+                fadeDuration = 0.1f
+            }; 
+            
+          GameObject button = new GameObject();
+          button.name = buttonName;
+          button.AddComponent<RectTransform>();
+          button.AddComponent<CanvasRenderer>();
+          button.AddComponent<Image>();
+          
+          //Add sprite to img
+          button.GetComponent<Image>().sprite = AssetLoader.UISprite;
+          button.GetComponent<Image>().fillCenter = false;
+          button.GetComponent<Image>().fillClockwise = true;
+          
+          button.AddComponent<Button>();
+          button.GetComponent<RectTransform>().sizeDelta = new Vector2(rectX, rectY);
+          button.GetComponent<Image>().type = Image.Type.Sliced;
+          button.GetComponent<Button>().targetGraphic = (Graphic) button.GetComponent<Image>();
+          GameObject text = CreateText();
+          button.GetComponent<Button>().colors = colors;
+          text.name = "Text";
+          text.GetComponent<RectTransform>().SetParent((Transform) button.GetComponent<RectTransform>());
+          text.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
+          text.GetComponent<Text>().text = buttonText;
+          //text.GetComponent<Text>().font = AssetLoader.gameFont;
+          text.GetComponent<Text>().fontSize = fontSize;
+          text.GetComponent<Text>().color = Color.white;
+          //text.GetComponent<Text>().enableWordWrapping = false;
+          text.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
           return button;
         }
         
