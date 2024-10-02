@@ -108,4 +108,71 @@ public static class UIHelper
           text.GetComponent<TextMeshProUGUI>().enableWordWrapping = false;
           return text;
         }
+        
+        /*
+         *
+         * Making some new methods here to make buttons/text with TMP_Text as suggested.
+         * May fix crashing problem with dynamic instantiation but to be confirmed.
+         * 
+         */
+        
+        public static GameObject CreateButtonNew(string buttonText = "Text",string buttonName = "Button",float rectX = 200f, float rectY = 50f, int fontSize = 32)
+        {
+            ColorBlock colors = new ColorBlock()
+            {
+                normalColor = new Color(1,1,1,1),
+                highlightedColor = new Color(1,1,1,0.502f),
+                pressedColor = new Color(1,0,0,1),
+                selectedColor = new Color(1,1,1,1),
+                disabledColor = new Color(0,0,0,1f),
+                colorMultiplier = 1f,
+                fadeDuration = 0.1f
+            }; 
+            
+          GameObject button = new GameObject();
+          button.name = buttonName;
+          button.AddComponent<RectTransform>();
+          button.AddComponent<CanvasRenderer>();
+          button.AddComponent<Image>();
+          
+          //Add sprite to img
+          button.GetComponent<Image>().sprite = AssetLoader.UISprite;
+          button.GetComponent<Image>().fillCenter = false;
+          button.GetComponent<Image>().fillClockwise = true;
+          
+          button.AddComponent<Button>();
+          button.GetComponent<RectTransform>().sizeDelta = new Vector2(rectX, rectY);
+          button.GetComponent<Image>().type = Image.Type.Sliced;
+          button.GetComponent<Button>().targetGraphic = (Graphic) button.GetComponent<Image>();
+          GameObject text = CreateText();
+          button.GetComponent<Button>().colors = colors;
+          text.name = "Text";
+          text.GetComponent<RectTransform>().SetParent((Transform) button.GetComponent<RectTransform>());
+          text.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
+          text.GetComponent<TMP_Text>().text = buttonText;
+          text.GetComponent<TMP_Text>().font = AssetLoader.gameFont;
+          text.GetComponent<TMP_Text>().fontSize = fontSize;
+          text.GetComponent<TMP_Text>().color = Color.white;
+          text.GetComponent<TMP_Text>().enableWordWrapping = false;
+          text.GetComponent<TMP_Text>().alignment = TextAlignmentOptions.Center;
+          return button;
+        }
+        
+        
+        public static GameObject CreateTextNew(string textString="Text", int fontSize=32,string idName="Text")
+        { 
+            GameObject text = new GameObject();
+            text.name = idName;
+            text.AddComponent<RectTransform>();
+            text.AddComponent<CanvasRenderer>();
+            text.GetComponent<RectTransform>().sizeDelta = new Vector2(200f, 50f);
+            text.AddComponent<TMP_Text>();
+            text.GetComponent<TMP_Text>().text = textString;
+            text.GetComponent<TMP_Text>().font = AssetLoader.gameFont;
+            text.GetComponent<TMP_Text>().fontSize = fontSize;
+            text.GetComponent<TMP_Text>().alignment = TextAlignmentOptions.Center;
+            text.GetComponent<TMP_Text>().color = Color.white;
+            text.GetComponent<TMP_Text>().enableWordWrapping = false;
+            return text;
+        }
 }
