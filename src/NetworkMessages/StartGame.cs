@@ -15,4 +15,6 @@ public class StartGameResponse : MessageResponse
 {
     public string teamColor;
     public List<string> teammates;
+    
+    public GameGrid grid;
 }
