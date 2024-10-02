@@ -14,6 +14,7 @@ public class UpdateRoomSettingsRequest : SendMessage
     public bool PRankRequired;
     public int gameType;
     public int difficulty;
+    public int levelRotation;
 }
 
 public class UpdateRoomSettingsNotification : MessageResponse
@@ -23,6 +24,7 @@ public class UpdateRoomSettingsNotification : MessageResponse
     public bool PRankRequired;
     public int gameType;
     public int difficulty;
+    public int levelRotation;
 }
 
 public static class UpdateRoomSettingsHandler

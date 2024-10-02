@@ -24,6 +24,7 @@ public static class BingoLobby
     public static Toggle RequirePRank;
     public static TMP_Dropdown GameType;
     public static TMP_Dropdown Difficulty;
+    public static TMP_Dropdown LevelSelection;
     
     public static void onMaxPlayerUpdate(string playerAmount)
     {
@@ -63,6 +64,13 @@ public static class BingoLobby
         UIManager.HandleGameSettingsUpdate();
     }
     
+    public static void onLevelSelectionUpdate(int value)
+    {
+        GameManager.CurrentGame.gameSettings.levelRotation = value;
+        LevelSelection.value = value;
+        UIManager.HandleGameSettingsUpdate();
+    }
+    
     public static void updateFromNotification(UpdateRoomSettingsNotification newSettings)
     {
         MaxPlayers.text = newSettings.maxPlayers.ToString();
@@ -70,12 +78,14 @@ public static class BingoLobby
         RequirePRank.isOn = newSettings.PRankRequired;
         GameType.value = newSettings.gameType;
         Difficulty.value = newSettings.difficulty;
+        LevelSelection.value = newSettings.levelRotation;
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
         GameManager.CurrentGame.gameSettings.maxTeams = newSettings.maxTeams;
         GameManager.CurrentGame.gameSettings.requiresPRank = newSettings.PRankRequired;
         GameManager.CurrentGame.gameSettings.gameType = newSettings.gameType;
         GameManager.CurrentGame.gameSettings.difficulty = newSettings.difficulty;
+        GameManager.CurrentGame.gameSettings.levelRotation = newSettings.levelRotation;
     }
     
     public static GameObject Init()
@@ -117,7 +127,7 @@ public static class BingoLobby
         //Game options
         GameOptions = GameObject.Instantiate(AssetLoader.BingoGameSettings,Root.transform);
         GameOptions.name = "BingoGameSettings";
-        GameOptions.transform.position = new Vector3(Screen.width*0.40f,Screen.height*0.65f,0f);
+        GameOptions.transform.position = new Vector3(Screen.width*0.40f,Screen.height*0.70f,0f);
         
         MaxPlayers = GetGameObjectChild(GetGameObjectChild(GameOptions,"MaxPlayers"),"Input").GetComponent<TMP_InputField>();
         MaxPlayers.onEndEdit.AddListener(onMaxPlayerUpdate);
@@ -125,14 +135,17 @@ public static class BingoLobby
         MaxTeams = GetGameObjectChild(GetGameObjectChild(GameOptions,"MaxTeams"),"Input").GetComponent<TMP_InputField>();
         MaxTeams.onEndEdit.AddListener(onMaxTeamUpdate);
         
-        RequirePRank = GetGameObjectChild(GetGameObjectChild(GameOptions,"RequirePRank"),"Input").GetComponent<Toggle>();
-        RequirePRank.onValueChanged.AddListener(onPRankRequiredUpdate);
-        
         GameType = GetGameObjectChild(GetGameObjectChild(GameOptions,"GameType"),"Dropdown").GetComponent<TMP_Dropdown>();
         GameType.onValueChanged.AddListener(onGameTypeUpdate);
         
         Difficulty = GetGameObjectChild(GetGameObjectChild(GameOptions,"Difficulty"),"Dropdown").GetComponent<TMP_Dropdown>();
         Difficulty.onValueChanged.AddListener(onDifficultyUpdate);
+        
+        LevelSelection = GetGameObjectChild(GetGameObjectChild(GameOptions,"CustomLevels"),"Dropdown").GetComponent<TMP_Dropdown>();
+        LevelSelection.onValueChanged.AddListener(onLevelSelectionUpdate);
+        
+        RequirePRank = GetGameObjectChild(GetGameObjectChild(GameOptions,"RequirePRank"),"Input").GetComponent<Toggle>();
+        RequirePRank.onValueChanged.AddListener(onPRankRequiredUpdate);
         
         Root.SetActive(false);
         return Root;

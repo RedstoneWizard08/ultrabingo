@@ -27,6 +27,7 @@ public static class UIManager
             urss.PRankRequired = BingoLobby.RequirePRank.isOn;
             urss.gameType = BingoLobby.GameType.value;
             urss.difficulty = BingoLobby.Difficulty.value;
+            urss.levelRotation = BingoLobby.LevelSelection.value;
         
             NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(urss));
         }

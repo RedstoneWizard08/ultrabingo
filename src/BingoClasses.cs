@@ -33,6 +33,7 @@ public class GameSettings
     public bool requiresPRank;
     public int gameType;
     public int difficulty;
+    public int levelRotation;
 }
 
 public class Game
