@@ -105,6 +105,7 @@ public static class GameManager
                 GameObject lvl =  GetGameObjectChild(GetGameObjectChild(BingoCard.ButtonTemplate.transform.parent.gameObject,"BingoGrid"),lvlCoords);
                 GameLevel levelObject = grid.levelTable[lvlCoords];
                 GetGameObjectChild(lvl,"Text").GetComponent<TextMeshProUGUI>().text = levelObject.levelName;
+                lvl.GetComponent<Button>().onClick.RemoveAllListeners();
                 lvl.GetComponent<Button>().onClick.AddListener(delegate
                 {
                     BingoMenuController.LoadBingoLevel(levelObject.levelName,lvlCoords);
@@ -145,6 +146,8 @@ public static class GameManager
         
         //When that's sent off, close the connection on our end.
         NetworkManager.DisconnectWebSocket(1000,"Normal close");
+        
+        clearGameVariables();
         
         if(!isInLevel)
         {
