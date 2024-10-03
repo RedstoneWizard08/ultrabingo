@@ -28,7 +28,6 @@ public static class BingoMainMenu
         //Show chapter select
         BingoEncapsulator.Root.SetActive(false);
         Root.SetActive(false);
-        //Root.transform.parent.gameObject.SetActive(false);
         Root.transform.parent.parent.gameObject.SetActive(true);
     }
     
@@ -38,7 +37,6 @@ public static class BingoMainMenu
         {
             Root = new GameObject();
             Root.name = "UltraBingoMenu";
-            
             
             //Host game button
             HostGame = UIHelper.CreateButton("HOST GAME","UltraBingoHost",250f,85f,38);
@@ -66,7 +64,6 @@ public static class BingoMainMenu
             });
             
             //Join game input field.
-            //JoinGameInput = UIHelper.CreateInput();
             JoinGameInput = GameObject.Instantiate(AssetLoader.searchBar,Root.transform);
             JoinGameInput.name = "Id Field";
             JoinGameInput.transform.position = new Vector3(Screen.width*0.45f, Screen.height*0.45f, 0);
@@ -84,8 +81,6 @@ public static class BingoMainMenu
                 BingoMenuController.ReturnToMenu(Root);
             });
         }
-        
         return Root;
-        
     }
 }

@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UltraBINGO.Components;
-using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -85,15 +84,11 @@ public class BingoCard
         {
             ButtonTemplate = new GameObject();
         }
-        ButtonTemplate = UIHelper.CreateButtonNew("LevelExample","LevelButtonTemplate",275f,25f,24);
+        
+        //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter component causes crashes.
+        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,24);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
-        
-        // Create the grid ahead of time.
-        // I don't like doing it like this but trying to instantiate buttons at runtime causes the whole game to crash.
-        // So we set it up at load time.
-        // TODO: Apparantly it's cause by using TextMeshProGUI instead of using TMP_Text in CreateButton/Text? Will look into.
-        //GameManager.SetupBingoCardAtLoad();
         
         LeaveGame = UIHelper.CreateButton("LEAVE GAME","UltraBingoLeave",175f,85f,24);
         LeaveGame.transform.position = new Vector3(Screen.width*0.25f, Screen.height*0.25f, 0);
@@ -102,9 +97,7 @@ public class BingoCard
         {
             GameManager.LeaveGame();
         });
-
         
-        //Root.transform.position = new Vector3(Screen.width*0.34f, Screen.height*0.60f, 0);
         Root.SetActive(false);
         
         TeamIndicator = UIHelper.CreateText("-- You are on the "+team+" team -- ",32,"TeamIndicator");
@@ -122,7 +115,6 @@ public class BingoCard
         LevelInformation.GetComponent<Image>().color = new Vector4(0.0f,0.0f,0.0f,1f);
         LevelInformation.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.3f,0f);
         LevelInformation.GetComponent<RectTransform>().sizeDelta = new Vector2(600f,100f);
-        
         LevelInformation.transform.SetParent(Root.transform);
         LevelInformation.SetActive(false);
         

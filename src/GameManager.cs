@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UltraBINGO.Components;
 using UltraBINGO.UI_Elements;
@@ -54,7 +53,7 @@ public static class GameManager
     
     public static void OnMouseOverLevel(PointerEventData data)
     {
-        BingoCard.ShowLevelData(data.pointerEnter.GetComponent<BingoLevelData>());
+        BingoCard.ShowLevelData(data.pointerEnter.transform.parent.gameObject.GetComponent<BingoLevelData>());
     }
     
     public static void OnMouseExitLevel(PointerEventData data)
@@ -71,35 +70,42 @@ public static class GameManager
         {
             for(int y = 0; y < CurrentGame.grid.size; y++)
             {
+                //Clone and set up the button and hover triggers.
+                //GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,BingoCard.ButtonTemplate.transform.parent.transform);
+                GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,gridObj.transform);
+                level.AddComponent<BingoLevelData>();
+                level.AddComponent<EventTrigger>();
+                EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
+                mouseEnter.eventID = EventTriggerType.PointerEnter;
+                mouseEnter.callback.AddListener((data) =>
+                {
+                    OnMouseOverLevel((PointerEventData)data);
+                });
+                level.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
+                
+                EventTrigger.Entry mouseExit = new EventTrigger.Entry();
+                mouseExit.eventID = EventTriggerType.PointerExit;
+                mouseExit.callback.AddListener((data) =>
+                {
+                    OnMouseExitLevel((PointerEventData)data);
+                });
+                level.GetComponent<EventTrigger>().triggers.Add(mouseExit);
+                
+                //Label the button and the onclick listener.
                 string lvlCoords = x+"-"+y;
-                Logging.Message(lvlCoords);
-                GameObject level = new GameObject();
                 level.name = lvlCoords;
-                level.transform.parent = gridObj.transform;
-
-                level.AddComponent<RectTransform>();
-                level.AddComponent<CanvasRenderer>();
-                level.AddComponent<Image>();
-          
-                //Add sprite to img
-                Logging.Message("Img");
-                level.GetComponent<Image>().sprite = AssetLoader.UISprite;
-                level.GetComponent<Image>().fillCenter = false;
-                level.GetComponent<Image>().fillClockwise = true;
-                level.GetComponent<Image>().type = Image.Type.Sliced;
+                level.transform.SetParent(BingoCard.Grid.transform);
+                GetGameObjectChild(level,"Text").GetComponent<Text>().text = "BingoCardButton";
                 
-                Logging.Message("Text");
-                GameObject text = new GameObject();
-                text.name = "Text";
-                text.transform.parent = level.transform;
-                text.AddComponent<Text>();
-                text.GetComponent<Text>().font = AssetLoader.gameFontLegacy;
-                text.GetComponent<Text>().fontSize = 24;
-                text.GetComponent<Text>().color = Color.white;
-                text.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
-                text.GetComponent<Text>().text = lvlCoords;
+                GameLevel levelObject = GameManager.CurrentGame.grid.levelTable[lvlCoords];
+                GetGameObjectChild(level,"Text").GetComponent<Text>().text = levelObject.levelName;
+                level.GetComponent<Button>().onClick.RemoveAllListeners();
+                level.GetComponent<Button>().onClick.AddListener(delegate
+                {
+                    BingoMenuController.LoadBingoLevel(levelObject.levelName,lvlCoords);
+                });
                 
-                //level.SetActive(true); this causes to crash. Likely will have to iterate all objs outside of loop.
+                level.SetActive(true);
             }
         }
     }
@@ -212,12 +218,17 @@ public static class GameManager
         returningFromBingoLevel = false;
         teammates = null;
         
+        //Cleanup the bingo grid.
+        foreach(Transform child in BingoCard.Grid.transform)
+        {
+            GameObject toRemove = child.gameObject;
+            GameObject.Destroy(toRemove);
+        }
     }
     
     public static void MoveToCard()
     {
         BingoCard.UpdateTitles();
-
         
         BingoEncapsulator.BingoLobbyScreen.SetActive(false);
         BingoEncapsulator.BingoCardScreen.SetActive(true);
