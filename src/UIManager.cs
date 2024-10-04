@@ -28,6 +28,7 @@ public static class UIManager
             urss.gameType = BingoLobby.GameType.value;
             urss.difficulty = BingoLobby.Difficulty.value;
             urss.levelRotation = BingoLobby.LevelSelection.value;
+            urss.gridSize = BingoLobby.GridSize.value;
         
             NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(urss));
         }

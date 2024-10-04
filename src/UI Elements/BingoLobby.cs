@@ -21,10 +21,11 @@ public static class BingoLobby
     public static GameObject GameOptions;
     public static TMP_InputField MaxPlayers;
     public static TMP_InputField MaxTeams;
-    public static Toggle RequirePRank;
+    public static TMP_Dropdown GridSize;
     public static TMP_Dropdown GameType;
     public static TMP_Dropdown Difficulty;
     public static TMP_Dropdown LevelSelection;
+    public static Toggle RequirePRank;
     
     public static void onMaxPlayerUpdate(string playerAmount)
     {
@@ -43,10 +44,10 @@ public static class BingoLobby
         UIManager.HandleGameSettingsUpdate();
     }
     
-    public static void onPRankRequiredUpdate(bool value)
+    public static void onGridSizeUpdate(int value)
     {
-        RequirePRank.isOn = value;
-        GameManager.CurrentGame.gameSettings.requiresPRank = value;
+        GridSize.value = value;
+        GameManager.CurrentGame.gameSettings.gridSize = value;
         UIManager.HandleGameSettingsUpdate();
     }
     
@@ -68,6 +69,13 @@ public static class BingoLobby
     {
         GameManager.CurrentGame.gameSettings.levelRotation = value;
         LevelSelection.value = value;
+        UIManager.HandleGameSettingsUpdate();
+    }
+    
+    public static void onPRankRequiredUpdate(bool value)
+    {
+        RequirePRank.isOn = value;
+        GameManager.CurrentGame.gameSettings.requiresPRank = value;
         UIManager.HandleGameSettingsUpdate();
     }
     
@@ -134,6 +142,9 @@ public static class BingoLobby
         
         MaxTeams = GetGameObjectChild(GetGameObjectChild(GameOptions,"MaxTeams"),"Input").GetComponent<TMP_InputField>();
         MaxTeams.onEndEdit.AddListener(onMaxTeamUpdate);
+        
+        GridSize = GetGameObjectChild(GetGameObjectChild(GameOptions,"GridSize"),"Dropdown").GetComponent<TMP_Dropdown>();
+        GridSize.onValueChanged.AddListener(onGridSizeUpdate);
         
         GameType = GetGameObjectChild(GetGameObjectChild(GameOptions,"GameType"),"Dropdown").GetComponent<TMP_Dropdown>();
         GameType.onValueChanged.AddListener(onGameTypeUpdate);

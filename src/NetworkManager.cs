@@ -234,11 +234,8 @@ public static class NetworkManager
             {
                 Logging.Message("Got start signal from server!");
                 StartGameResponse sgr = JsonConvert.DeserializeObject<StartGameResponse>(em.contents);
-                GameManager.currentTeam = sgr.teamColor;
-                GameManager.teammates = sgr.teammates;
-                Logging.Message("We are on the "+GameManager.currentTeam + " team");
-                
-                BingoMenuController.StartGame();
+                StartGameResponseHandler.handle(sgr);
+
                 break;
             }
             case "LevelClaimed":

@@ -15,6 +15,7 @@ public class UpdateRoomSettingsRequest : SendMessage
     public int gameType;
     public int difficulty;
     public int levelRotation;
+    public int gridSize;
 }
 
 public class UpdateRoomSettingsNotification : MessageResponse

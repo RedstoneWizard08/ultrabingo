@@ -91,7 +91,7 @@ public class BingoCard
         ButtonTemplate.SetActive(false);
         
         LeaveGame = UIHelper.CreateButton("LEAVE GAME","UltraBingoLeave",175f,85f,24);
-        LeaveGame.transform.position = new Vector3(Screen.width*0.25f, Screen.height*0.25f, 0);
+        LeaveGame.transform.position = new Vector3(Screen.width*0.22f, Screen.height*0.22f, 0);
         LeaveGame.transform.SetParent(Root.transform);
         LeaveGame.GetComponent<Button>().onClick.AddListener(delegate
         {

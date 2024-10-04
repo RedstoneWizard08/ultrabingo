@@ -30,10 +30,11 @@ public class GameSettings
 {
     public int maxPlayers;
     public int maxTeams;
-    public bool requiresPRank;
+    public int gridSize;
     public int gameType;
     public int difficulty;
     public int levelRotation;
+    public bool requiresPRank;
 }
 
 public class Game

@@ -17,6 +17,8 @@ public static class AssetLoader
     
     public static GameObject BingoGameSettings;
     
+    public static GameObject BingoPauseCard;
+    
     public static void LoadAssets()
     {
         AssetBundle assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"ultrabingo.resource"));
@@ -27,5 +29,6 @@ public static class AssetLoader
         UISprite = assets.LoadAsset<Sprite>("UISprite");
         searchBar = assets.LoadAsset<GameObject>("IdInput");
         BingoGameSettings = assets.LoadAsset<GameObject>("BingoGameSettings");
+        BingoPauseCard = assets.LoadAsset<GameObject>("BingoPauseCard");
     }
 }

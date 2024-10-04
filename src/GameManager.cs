@@ -61,10 +61,24 @@ public static class GameManager
         BingoCard.HideLevelData();
     }
     
+    
     public static void SetupBingoCardDynamic()
     {
-        Logging.Message("Dynamic setup");
+        //Resize the GridLayoutGroup based on the grid size.
+        
+        Logging.Message("Dynamic setup with size " + CurrentGame.grid.size);
         GameObject gridObj = GetGameObjectChild(BingoCard.Root,"BingoGrid");
+        
+        switch(CurrentGame.grid.size)
+        {
+            case 3: {gridObj.transform.position = new Vector3(Screen.width*0.33f,Screen.height*0.66f,0f);break;}
+            case 4: {gridObj.transform.position = new Vector3(Screen.width*0.25f,Screen.height*0.66f,0f);break;}
+            case 5: {gridObj.transform.position = new Vector3(Screen.width*0.15f,Screen.height*0.75f,0f);break;}
+            default:{break;}
+        }
+        
+        gridObj.GetComponent<GridLayoutGroup>().constraintCount = CurrentGame.grid.size;
+        gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30+(5*(CurrentGame.grid.size+1)),30+(5*(CurrentGame.grid.size+1)));
         
         for(int x = 0; x < CurrentGame.grid.size; x++)
         {
@@ -218,12 +232,16 @@ public static class GameManager
         returningFromBingoLevel = false;
         teammates = null;
         
-        //Cleanup the bingo grid.
-        foreach(Transform child in BingoCard.Grid.transform)
+        //Cleanup the bingo grid if on the main menu.
+        if(getSceneName() == "Main Menu")
         {
-            GameObject toRemove = child.gameObject;
-            GameObject.Destroy(toRemove);
+            foreach(Transform child in BingoCard.Grid.transform)
+            {
+                GameObject toRemove = child.gameObject;
+                GameObject.Destroy(toRemove);
+            }
         }
+
     }
     
     public static void MoveToCard()
@@ -256,7 +274,7 @@ public static class GameManager
         }
         else
         {
-            GetGameObjectChild(BingoCardPauseMenu.Root,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+            GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
         }
     }
 }

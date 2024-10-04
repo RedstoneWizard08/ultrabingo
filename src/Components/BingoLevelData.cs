@@ -15,4 +15,6 @@ public class BingoLevelData : MonoBehaviour
     public float styleRequirement = 0;
     
     public bool isCustomLevel = false;
+    
+    public string levelName = "";
 }
