@@ -103,7 +103,6 @@ public static class UIManager
         {
             ultrabingoEncapsulator = BingoEncapsulator.Init();
             ultrabingoEncapsulator.name = "UltraBingo";
-            
         }
 
         ultrabingoEncapsulator.transform.parent = __instance.transform;

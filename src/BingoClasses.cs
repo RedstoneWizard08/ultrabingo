@@ -11,6 +11,8 @@ public class Player
 public class GameLevel
 {
     public string levelName;
+    public string levelId;
+    
     public string claimedBy;
     public string personToBeat;
     public float timeToBeat;
@@ -18,6 +20,10 @@ public class GameLevel
     
     public int row;
     public int column;
+    
+    public bool isAngryLevel;
+    public string angryParentBundle;
+    public string angryLevelId;
 }
 
 public class GameGrid

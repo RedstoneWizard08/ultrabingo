@@ -9,10 +9,10 @@ using static UltraBINGO.CommonFunctions;
 namespace UltraBINGO.HarmonyPatches;
 
 [HarmonyPatch(typeof(ShopZone),"TurnOn")]
-public class ShopAddVRankInfo
+public class ShopAddLevelInfo
 {
     [HarmonyPostfix]
-    public static void AddVRankInfo(ShopZone __instance, Canvas ___shopCanvas)
+    public static void AddBingoLevelInfo(ShopZone __instance, Canvas ___shopCanvas)
     {
         if(GameManager.isInBingoLevel)
         {

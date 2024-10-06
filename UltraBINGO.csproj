@@ -42,6 +42,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Reference Include="AngryLevelLoader">
+          <HintPath>lib\AngryLevelLoader-publicized.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp">
             <HintPath>$(ManagedDir)\Assembly-CSharp.dll</HintPath>
             <Private>False</Private>
@@ -58,6 +61,12 @@
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
             <HintPath>lib\Newtonsoft.Json.dll</HintPath>
             <Private>False</Private>
+        </Reference>
+        <Reference Include="PluginConfigurator">
+          <HintPath>lib\PluginConfigurator.dll</HintPath>
+        </Reference>
+        <Reference Include="RudeLevelScripts.Essentials">
+          <HintPath>lib\RudeLevelScripts.Essentials.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />

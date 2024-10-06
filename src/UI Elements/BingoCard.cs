@@ -86,11 +86,11 @@ public class BingoCard
         }
         
         //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter component causes crashes.
-        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,24);
+        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,16);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
         
-        LeaveGame = UIHelper.CreateButton("LEAVE GAME","UltraBingoLeave",175f,85f,24);
+        LeaveGame = UIHelper.CreateButton("LEAVE GAME","UltraBingoLeave",175f,85f,16);
         LeaveGame.transform.position = new Vector3(Screen.width*0.22f, Screen.height*0.22f, 0);
         LeaveGame.transform.SetParent(Root.transform);
         LeaveGame.GetComponent<Button>().onClick.AddListener(delegate

@@ -41,7 +41,7 @@ public static class LevelEndChanger
     [HarmonyPrefix]
     public static bool handleBingoLevelChange(FinalRank __instance, float ___savedTime, int ___savedStyle, bool force = false)
     {
-        if(GameManager.isInBingoLevel)
+        if(GameManager.isInBingoLevel && !GameManager.CurrentGame.isGameFinished())
         {
             MonoSingleton<OptionsMenuToManager>.Instance.RestartMissionNoConfirm();
             return false;
@@ -53,14 +53,13 @@ public static class LevelEndChanger
     }
 }
 
-
 [HarmonyPatch(typeof(FinalRank),"Update")]
 public class FinalRankFanfare
 {
     [HarmonyPostfix]
     public static void sendResult(FinalRank __instance, float ___savedTime, int ___savedStyle)
     {
-        if(GameManager.isInBingoLevel && !GameManager.hasSent)
+        if(GameManager.isInBingoLevel && !GameManager.hasSent && !GameManager.CurrentGame.isGameFinished())
         {
             float time = ___savedTime;
             int style = ___savedStyle;
@@ -74,11 +73,11 @@ public class FinalRankFanfare
             srr.gameId = GameManager.CurrentGame.gameId;
             srr.time = time;
             srr.style = style;
-            srr.mapName = getSceneName();
+            srr.levelName = getSceneName();
+            srr.levelId = GameManager.CurrentGame.grid.levelTable[GameManager.currentRow+"-"+GameManager.currentColumn].levelId;
+            Logging.Message(srr.levelId);
             srr.column = GameManager.currentColumn;
             srr.row = GameManager.currentRow;
-
-            
             NetworkManager.SubmitRun(srr);
             
             GameManager.hasSent = true;

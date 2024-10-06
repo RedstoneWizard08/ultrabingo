@@ -14,7 +14,9 @@ public class BingoLevelData : MonoBehaviour
     public float timeRequirement = 0;
     public float styleRequirement = 0;
     
-    public bool isCustomLevel = false;
-    
     public string levelName = "";
+    
+    public bool isAngryLevel = false;
+    public string angryParentBundle = "";
+    public string angryLevelId = "";
 }

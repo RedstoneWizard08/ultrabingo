@@ -32,7 +32,7 @@ public static class BingoCardPauseMenu
     {
         string lvlName = data.pointerEnter.gameObject.GetComponent<BingoLevelData>().levelName;
         
-        GetGameObjectChild(GetGameObjectChild(Root,"SelectedLevel"),"Text (TMP)").GetComponent<TextMeshProUGUI>().text = GameManager.CurrentGame.grid.levelTable[lvlName].levelName;
+        GetGameObjectChild(GetGameObjectChild(Root,"SelectedLevel"),"Text (TMP)").GetComponent<TextMeshProUGUI>().text = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name].levelName;
     }
     
     public static void onMouseExitLevelSquare(PointerEventData data)
@@ -52,14 +52,19 @@ public static class BingoCardPauseMenu
             {
                 GameObject levelSquare = GameObject.Instantiate(templateSquare,templateSquare.transform.parent.transform);
                 levelSquare.name = x+"-"+y;
+                GameLevel levelObject = GameManager.CurrentGame.grid.levelTable[levelSquare.name];
                 
+                //Set up BingoLevelData
                 levelSquare.AddComponent<BingoLevelData>();
-                levelSquare.GetComponent<BingoLevelData>().levelName = levelSquare.name;
+                levelSquare.GetComponent<BingoLevelData>().levelName = levelObject.levelName;
+                levelSquare.GetComponent<BingoLevelData>().isAngryLevel = levelObject.isAngryLevel;
+                levelSquare.GetComponent<BingoLevelData>().angryParentBundle = levelObject.angryParentBundle;
+                levelSquare.GetComponent<BingoLevelData>().angryLevelId = levelObject.angryLevelId;
                 
                 levelSquare.AddComponent<Button>();
                 levelSquare.GetComponent<Button>().onClick.AddListener(delegate
                 {
-                    BingoMenuController.LoadBingoLevelFromPauseMenu(levelSquare.name);
+                    BingoMenuController.LoadBingoLevelFromPauseMenu(levelSquare.name,levelSquare.GetComponent<BingoLevelData>());
                 });
                 levelSquare.GetComponent<Image>().color = teamColors[currentGame.grid.levelTable[x+"-"+y].claimedBy];
                 
@@ -89,7 +94,6 @@ public static class BingoCardPauseMenu
                 levelSquare.SetActive(true);
             }
         }
-        
     }
     
     public static GameObject Init(ref OptionsManager __instance)

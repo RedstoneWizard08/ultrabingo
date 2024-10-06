@@ -13,7 +13,8 @@ public class SubmitRunRequest : SendMessage
     public int column;
     public int row;
     
-    public string mapName;
+    public string levelName;
+    public string levelId;
     public string playerName;
     public string steamId;
     

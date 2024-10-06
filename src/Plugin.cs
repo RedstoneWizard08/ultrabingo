@@ -1,6 +1,7 @@
 ﻿
 using System.IO;
 using System.Reflection;
+using AngryLevelLoader.Fields;
 using BepInEx;
 using HarmonyLib;
 using TMPro;
@@ -17,13 +18,16 @@ using static UltraBINGO.CommonFunctions;
 namespace UltrakillBingoClient
 {
     [BepInPlugin(Main.pluginId, Main.pluginName, Main.pluginVersion)]
+    [BepInDependency("com.eternalUnion.angryLevelLoader", BepInDependency.DependencyFlags.HardDependency)]
     public class Main : BaseUnityPlugin
-    {
+    {   
         public const string pluginId = "clearwater.ultrakillbingo.ultrakillbingo";
         public const string pluginName = "UltraBINGO";
         public const string pluginVersion = "0.0.1";
         
-        public static bool IsDevelopmentBuild = false;
+        public static bool IsDevelopmentBuild = true;
+        
+        
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
@@ -35,10 +39,8 @@ namespace UltrakillBingoClient
          * Created by Clearwater.
          * */
         
-        
         private void Awake()
         {
-            
             // Plugin startup logic
             Debug.unityLogger.filterLogType = LogType.Exception;
             
@@ -58,7 +60,6 @@ namespace UltrakillBingoClient
             Harmony harmony = new Harmony(pluginId);
             harmony.PatchAll();
             
-            
             SceneManager.sceneLoaded += onSceneLoaded;
             
             NetworkManager.initialise();
@@ -68,6 +69,7 @@ namespace UltrakillBingoClient
         public void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             GameManager.hasSent = false;
+            GameManager.enteringAngryLevel = false;
             if(getSceneName() == "Main Menu")
             {
                 if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())

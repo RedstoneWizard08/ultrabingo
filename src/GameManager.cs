@@ -26,6 +26,10 @@ public static class GameManager
     public static List<String> teammates;
     
     public static bool hasSent = false;
+    public static bool enteringAngryLevel = false;
+    
+    public static bool isDownloadingLevel = false;
+    public static GameObject levelBeingDownloaded = null;
     
     public static void ShowGameId()
     {
@@ -87,7 +91,7 @@ public static class GameManager
                 //Clone and set up the button and hover triggers.
                 //GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,BingoCard.ButtonTemplate.transform.parent.transform);
                 GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,gridObj.transform);
-                level.AddComponent<BingoLevelData>();
+                
                 level.AddComponent<EventTrigger>();
                 EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
                 mouseEnter.eventID = EventTriggerType.PointerEnter;
@@ -113,10 +117,19 @@ public static class GameManager
                 
                 GameLevel levelObject = GameManager.CurrentGame.grid.levelTable[lvlCoords];
                 GetGameObjectChild(level,"Text").GetComponent<Text>().text = levelObject.levelName;
+                
+                //Setup the BingoLevelData component.
+                level.AddComponent<BingoLevelData>();
+                level.GetComponent<BingoLevelData>().isAngryLevel = levelObject.isAngryLevel;
+                level.GetComponent<BingoLevelData>().angryParentBundle = levelObject.angryParentBundle;
+                level.GetComponent<BingoLevelData>().angryLevelId = levelObject.angryLevelId;
+                level.GetComponent<BingoLevelData>().levelName = levelObject.levelName;
+                
+                //Setup the click listener.
                 level.GetComponent<Button>().onClick.RemoveAllListeners();
                 level.GetComponent<Button>().onClick.AddListener(delegate
                 {
-                    BingoMenuController.LoadBingoLevel(levelObject.levelName,lvlCoords);
+                    BingoMenuController.LoadBingoLevel(levelObject.levelId,lvlCoords,level.GetComponent<BingoLevelData>());
                 });
                 
                 level.SetActive(true);
@@ -157,25 +170,6 @@ public static class GameManager
             }
         }
     }
-    
-    public static void SetupBingoCard(GameGrid grid)
-    {
-        for(int x = 0; x < grid.size; x++)
-        {
-            for(int y = 0; y < grid.size; y++)
-            {
-                string lvlCoords = x+"-"+y;
-                GameObject lvl =  GetGameObjectChild(GetGameObjectChild(BingoCard.ButtonTemplate.transform.parent.gameObject,"BingoGrid"),lvlCoords);
-                GameLevel levelObject = grid.levelTable[lvlCoords];
-                GetGameObjectChild(lvl,"Text").GetComponent<TextMeshProUGUI>().text = levelObject.levelName;
-                lvl.GetComponent<Button>().onClick.RemoveAllListeners();
-                lvl.GetComponent<Button>().onClick.AddListener(delegate
-                {
-                    BingoMenuController.LoadBingoLevel(levelObject.levelName,lvlCoords);
-                });
-            }
-        }
-    }
 
     public static void SetupGameDetails(Game game,bool isHost=true)
     {
@@ -193,8 +187,6 @@ public static class GameManager
         BingoLobby.GameType.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
-        
-        //SetupBingoCard(game.grid);
     }
     
     public static void StartGame()

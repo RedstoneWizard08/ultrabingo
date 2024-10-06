@@ -22,6 +22,20 @@ public static class LeaveBingoGame
     }
 }
 
+[HarmonyPatch(typeof(OptionsManager),"QuitMission")]
+public static class preventAngryQuit
+{
+    [HarmonyPrefix]
+    public static bool preventAngryQuitOverride()
+    {
+        if(GameManager.isInBingoLevel)
+        {
+            return false;
+        }
+        return true;
+    }
+}
+
 [HarmonyPatch(typeof(OptionsMenuToManager),"QuitMission")]
 public static class ConfirmLeaveGame
 {
