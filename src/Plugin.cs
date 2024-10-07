@@ -25,14 +25,12 @@ namespace UltrakillBingoClient
     public class Main : BaseUnityPlugin
     {   
         public const string pluginId = "clearwater.ultrakillbingo.ultrakillbingo";
-        public const string pluginName = "UltraBINGO";
-        public const string pluginVersion = "0.0.1";
+        public const string pluginName = "Baphomet's BINGO";
+        public const string pluginVersion = "0.1.0";
         
-        public static bool IsDevelopmentBuild = false;
+        public static bool IsDevelopmentBuild = true;
         
         public static bool isSteamAuthenticated = false;
-        
-        
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
@@ -49,7 +47,7 @@ namespace UltrakillBingoClient
             // Plugin startup logic
             Debug.unityLogger.filterLogType = LogType.Exception;
             
-            Logging.Message("--Now loading UltraBingo...--");
+            Logging.Message("--Now loading Baphomet's Bingo...--");
             if(Main.IsDevelopmentBuild)
             {
                 Logging.Warn("-- DEVELOPMENT BUILD. REQUESTS WILL BE SENT TO LOCALHOST. --");
@@ -59,7 +57,7 @@ namespace UltrakillBingoClient
                 Logging.Warn("-- RELEASE BUILD. REQUESTS WILL BE SENT TO REMOTE SERVER. --");
             }
             
-            Logging.Message("--Loading from assetbundle...--");
+            Logging.Message("--Loading assetbundle...--");
             AssetLoader.LoadAssets();
             
             Harmony harmony = new Harmony(pluginId);
@@ -90,7 +88,6 @@ namespace UltrakillBingoClient
             }
             return false;
         }
-        
         
         public void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {

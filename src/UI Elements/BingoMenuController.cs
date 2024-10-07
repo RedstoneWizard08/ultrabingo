@@ -147,7 +147,7 @@ public static class BingoMenuController
     {
         Logging.Message("Exiting menu");
         BingoEncapsulator.Root.SetActive(false);
-        GetGameObjectChild(bingoMenu.transform.parent.parent.gameObject,"Chapter Select").SetActive(true);
+        GetGameObjectChild(bingoMenu.transform.parent.parent.gameObject,"Difficulty Select (1)").SetActive(true);
     }
     
     public static void CreateRoom()

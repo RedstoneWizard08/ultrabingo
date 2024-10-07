@@ -57,6 +57,7 @@ public static class UIManager
     {
         RectTransform canvasRectTransform = __instance.GetComponent<RectTransform>();
         GameObject chapterSelectObject = canvasRectTransform.Find("Chapter Select").gameObject;
+        GameObject difficultySelectObject = canvasRectTransform.Find("Difficulty Select (1)").gameObject;
         if (chapterSelectObject == null)
         {
             Logging.Error("Chapter Select object is null");
@@ -73,7 +74,7 @@ public static class UIManager
         }
         if(ultrabingoButtonObject == null)
         {
-            ultrabingoButtonObject = GameObject.Instantiate(sandboxButtonObject, chapterSelectRectTransform);
+            ultrabingoButtonObject = GameObject.Instantiate(sandboxButtonObject, difficultySelectObject.transform);
             ultrabingoButtonObject.name = "UltraBingo Button";
         }
         Button sandboxButton = ultrabingoButtonObject.GetComponent<Button>();
@@ -85,15 +86,14 @@ public static class UIManager
 
         Button ultrabingoButton = ultrabingoButtonObject.AddComponent<Button>();
         ultrabingoButton.colors = oldColorBlock;
-
-
+        
         RectTransform ultrabingoButtonRectTransform = ultrabingoButtonObject.GetComponent<RectTransform>();
 
         Vector3 buttonPosition = ultrabingoButtonRectTransform.position;
-        buttonPosition.y = 750;
+        buttonPosition.y = 250;
         ultrabingoButtonRectTransform.position = buttonPosition;
 
-        ultrabingoButtonRectTransform.GetComponentInChildren<TextMeshProUGUI>().text = "ULTRABINGO";
+        ultrabingoButtonRectTransform.GetComponentInChildren<TextMeshProUGUI>().text = "BAPHOMET'S BINGO";
         ultrabingoButton.onClick.AddListener(Open);
         
         if(ultrabingoEncapsulator == null)
