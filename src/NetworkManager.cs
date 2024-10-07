@@ -234,13 +234,7 @@ public static class NetworkManager
                 LevelClaimHandler.handle(response);
                 break;
             }
-            case "HostLeftGame":
-            {
-                Logging.Message("Host left our game, ending");
-                HostLeftGameHandler.handle();
-                break;
-            }
-            case "Disconnect":
+            case "ServerDisconnection":
             {
                 Logging.Message("Received disconnect signal from server");
                 DisconnectSignal response = JsonConvert.DeserializeObject<DisconnectSignal>(em.contents);

@@ -17,10 +17,19 @@ public static class DisconnectSignalHandler
 {
     public static async void handle(DisconnectSignal response = null)
     {
+        string disconnectReason = "";
+        switch(response.disconnectMessage)
+        {
+            case "HOSTLEFTGAME": {disconnectReason = "The host has left the game. The game will be ended.";break;}
+            case "HOSTDROPPED": {disconnectReason = "The host has lost connection. The game will be ended.";break;}
+            default: {disconnectReason = "Disconnected for an unspecified reason (check console). The game will be ended.";break;}
+        }
+
+        GameManager.clearGameVariables();
         //If the player is in-game, warn them of returning to menu in 5 seconds.
         if(getSceneName() == "Main Menu")
         {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Disconnected.");
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(disconnectReason);
             BingoEncapsulator.BingoCardScreen.SetActive(false);
             BingoEncapsulator.BingoLobbyScreen.SetActive(false);
             BingoEncapsulator.BingoEndScreen.SetActive(false);
@@ -28,10 +37,7 @@ public static class DisconnectSignalHandler
         }
         else
         {
-            GameManager.returningFromBingoLevel = false;
-            GameManager.isInBingoLevel = false;
-            GameManager.CurrentGame = null;
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Disconnected.\nLeaving mission in 5 seconds.");
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(disconnectReason+"\nExiting in 5 seconds.");
             await Task.Delay(5000);
             SceneHelper.LoadScene("Main Menu");
         }
