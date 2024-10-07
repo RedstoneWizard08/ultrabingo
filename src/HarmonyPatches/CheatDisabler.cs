@@ -49,7 +49,7 @@ namespace UltraBINGO.HarmonyPatches;
         [HarmonyPostfix]
         public static void disableCheatingAttempts(GameObject ___consentScreen, int ___sequenceIndex)
         {
-            if(GameManager.isInBingoLevel && !Main.IsDevelopmentBuild)
+            if(GameManager.isInBingoLevel && !Main.IsDevelopmentBuild && !GameManager.triedToActivateCheats)
             {
                 if(___consentScreen.activeSelf)
                 {
@@ -73,6 +73,7 @@ namespace UltraBINGO.HarmonyPatches;
                 }
                 
                 GameManager.HumiliateSelf();
+                GameManager.triedToActivateCheats = true;
                 
             }
         }

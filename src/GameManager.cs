@@ -33,6 +33,8 @@ public static class GameManager
     public static bool isDownloadingLevel = false;
     public static GameObject levelBeingDownloaded = null;
     
+    public static bool triedToActivateCheats = false;
+    
     public static void ShowGameId()
     {
         BingoLobby.RoomIdDisplay.GetComponent<TextMeshProUGUI>().text = "Game ID: " + CurrentGame.gameId;

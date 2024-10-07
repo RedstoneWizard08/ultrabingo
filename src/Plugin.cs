@@ -96,6 +96,7 @@ namespace UltrakillBingoClient
         {
             GameManager.hasSent = false;
             GameManager.enteringAngryLevel = false;
+            GameManager.triedToActivateCheats = false;
             
             if(getSceneName() == "Main Menu")
             {
