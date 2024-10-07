@@ -57,14 +57,13 @@ public static class NetworkManager
         
         ws.OnClose += (sender,e) =>
         {
-            Logging.Message("Server closed connection.");
             if(e.WasClean)
             {
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Disconnected from server.");
+                Logging.Warn("Disconnected cleanly from server");
             }
             else
             {
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Server error, disconnected.");
+                Logging.Error("Network connection error.");
                 Logging.Error(e.Reason);
             }
             
@@ -260,6 +259,13 @@ public static class NetworkManager
                 Logging.Message("Game over!");
                 EndGameSignal response = JsonConvert.DeserializeObject<EndGameSignal>(em.contents);
                 EndGameSignalHandler.handle(response);
+                break;
+            }
+            case "CheatNotification":
+            {
+                Logging.Message("Someone in our game tried to activate cheats lol");
+                CheatNotification response = JsonConvert.DeserializeObject<CheatNotification>(em.contents);
+                CheatNotificationHandler.handle(response);
                 break;
             }
             case "Pong":

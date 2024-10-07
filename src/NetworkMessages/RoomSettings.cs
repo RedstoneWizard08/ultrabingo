@@ -26,6 +26,7 @@ public class UpdateRoomSettingsNotification : MessageResponse
     public int gameType;
     public int difficulty;
     public int levelRotation;
+    public int gridSize;
 }
 
 public static class UpdateRoomSettingsHandler

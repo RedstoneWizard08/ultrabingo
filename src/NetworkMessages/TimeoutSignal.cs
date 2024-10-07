@@ -1,5 +1,7 @@
 ﻿using UltrakillBingoClient;
 
+using static UltraBINGO.CommonFunctions;
+
 namespace UltraBINGO.NetworkMessages;
 
 public class TimeoutSignal : MessageResponse
@@ -14,6 +16,10 @@ public static class TimeoutSignalHandler
     {
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(GameManager.CurrentGame.currentPlayers[response.steamId].username + " has lost connection to the game.");
         GameManager.CurrentGame.currentPlayers.Remove(response.steamId);
-        GameManager.RefreshPlayerList();
+        if(getSceneName() == "Main Menu")
+        {
+            GameManager.RefreshPlayerList();
+        }
+
     }
 }

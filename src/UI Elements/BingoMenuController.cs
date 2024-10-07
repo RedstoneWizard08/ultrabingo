@@ -23,28 +23,32 @@ public static class BingoMenuController
     
     public static async void LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData)
     {
-        //Force disable cheats and major assists, set difficulty to difficulty of the game set by the host.
-        MonoSingleton<PrefsManager>.Instance.SetBool("majorAssist", false);
-        MonoSingleton<AssistController>.Instance.cheatsEnabled = false;
-        MonoSingleton<PrefsManager>.Instance.SetInt("difficulty", GameManager.CurrentGame.gameSettings.difficulty);
-        
-        int row = int.Parse(levelCoords[0].ToString());
-        int column = int.Parse(levelCoords[2].ToString());
-        GameManager.isInBingoLevel = true;
-        GameManager.currentRow = row;
-        GameManager.currentColumn = column;
-        
-        
-        //Check if the level we're going into is campaign or Angry.
-        //If it's Angry, we need to do some checks if the level is downloaded before going in.
-        if(levelData.isAngryLevel)
+        if(!GameManager.CurrentGame.isGameFinished())
         {
-            handleAngryLoad(levelData);
+            //Force disable cheats and major assists, set difficulty to difficulty of the game set by the host.
+            MonoSingleton<PrefsManager>.Instance.SetBool("majorAssist", false);
+            MonoSingleton<AssistController>.Instance.cheatsEnabled = false;
+            MonoSingleton<PrefsManager>.Instance.SetInt("difficulty", GameManager.CurrentGame.gameSettings.difficulty);
+        
+            int row = int.Parse(levelCoords[0].ToString());
+            int column = int.Parse(levelCoords[2].ToString());
+            GameManager.isInBingoLevel = true;
+            GameManager.currentRow = row;
+            GameManager.currentColumn = column;
+        
+        
+            //Check if the level we're going into is campaign or Angry.
+            //If it's Angry, we need to do some checks if the level is downloaded before going in.
+            if(levelData.isAngryLevel)
+            {
+                handleAngryLoad(levelData);
+            }
+            else
+            {
+                SceneHelper.LoadScene(levelName);
+            }
         }
-        else
-        {
-            SceneHelper.LoadScene(levelName);
-        }
+
     }
     
     public static async void handleAngryLoad(BingoLevelData angryLevelData,bool isInGame=false)
@@ -115,27 +119,28 @@ public static class BingoMenuController
     
     public static async void LoadBingoLevelFromPauseMenu(string levelCoords, BingoLevelData levelData)
     {
-        int row = int.Parse(levelCoords[0].ToString());
-        int column = int.Parse(levelCoords[2].ToString());
-        
-        GameManager.currentRow = row;
-        GameManager.currentColumn = column;
-        
-        string levelDisplayName = GameManager.CurrentGame.grid.levelTable[levelCoords].levelName;
-        string levelId = GameManager.CurrentGame.grid.levelTable[levelCoords].levelId;
-        
-        if(levelData.isAngryLevel)
+        if(!GameManager.CurrentGame.isGameFinished())
         {
-            handleAngryLoad(levelData);
-        }
-        else
-        {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to "+levelDisplayName + "...");
-            await Task.Delay(1000);
-            SceneHelper.LoadScene(levelId);
-        }
+            int row = int.Parse(levelCoords[0].ToString());
+            int column = int.Parse(levelCoords[2].ToString());
         
-
+            GameManager.currentRow = row;
+            GameManager.currentColumn = column;
+        
+            string levelDisplayName = GameManager.CurrentGame.grid.levelTable[levelCoords].levelName;
+            string levelId = GameManager.CurrentGame.grid.levelTable[levelCoords].levelId;
+        
+            if(levelData.isAngryLevel)
+            {
+                handleAngryLoad(levelData);
+            }
+            else
+            {
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to "+levelDisplayName + "...");
+                await Task.Delay(1000);
+                SceneHelper.LoadScene(levelId);
+            }
+        }
     }
     
     public static void ReturnToMenu(GameObject bingoMenu)

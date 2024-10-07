@@ -87,6 +87,7 @@ public static class BingoLobby
         GameType.value = newSettings.gameType;
         Difficulty.value = newSettings.difficulty;
         LevelSelection.value = newSettings.levelRotation;
+        GridSize.value = newSettings.gridSize;
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
         GameManager.CurrentGame.gameSettings.maxTeams = newSettings.maxTeams;
@@ -94,6 +95,7 @@ public static class BingoLobby
         GameManager.CurrentGame.gameSettings.gameType = newSettings.gameType;
         GameManager.CurrentGame.gameSettings.difficulty = newSettings.difficulty;
         GameManager.CurrentGame.gameSettings.levelRotation = newSettings.levelRotation;
+        GameManager.CurrentGame.gameSettings.gridSize = newSettings.gridSize;
     }
     
     public static GameObject Init()

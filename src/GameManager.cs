@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using TMPro;
 using UltraBINGO.Components;
+using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
 using UnityEngine;
@@ -52,7 +54,6 @@ public static class GameManager
         
         BingoLobby.PlayerList.GetComponent<TextMeshProUGUI>().text = players;
         BingoLobby.PlayerList.SetActive(true);
-        
     }
     
     public static void OnMouseOverLevel(PointerEventData data)
@@ -244,5 +245,14 @@ public static class GameManager
         {
             GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
         }
+    }
+    
+    public static void HumiliateSelf()
+    {
+        CheatActivation ca = new CheatActivation();
+        ca.username = sanitiseUsername(Steamworks.SteamClient.Name);
+        ca.gameId = CurrentGame.gameId;
+        
+        NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(ca));
     }
 }

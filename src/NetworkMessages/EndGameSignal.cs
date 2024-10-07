@@ -30,7 +30,7 @@ public static class EndGameSignalHandler
         {
             message += "\n Displaying results in 5 seconds...";
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(message);
-            
+            await Task.Delay(5000);
             BingoEnd.ShowEndScreen();
         }
         
