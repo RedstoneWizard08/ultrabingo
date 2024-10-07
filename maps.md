@@ -6,6 +6,8 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Darkcastle" by Grapes
 - "Limbo's Vault" by GGGamesXdLol
 - "Halls Of The Extremist" by Spelunky
+- "Primordial Hunger" by Willem & ballfartchungus43
+- "Blood Rush" by Dinky
 - "S1 - I Wonder" by RoundCat
 - "Convoy Catastrophe" by CEO Of Gaming
 - "The Training Range" by Frizou

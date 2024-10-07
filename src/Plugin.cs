@@ -110,6 +110,13 @@ namespace UltrakillBingoClient
                     BingoEnd.ShowEndScreen();
                 }
             }
+            else
+            {
+                if(GameManager.isInBingoLevel)
+                {
+                    UIManager.DisableMajorAssists(GetInactiveRootObject("Canvas"));
+                }
+            }
         }
     }
 }

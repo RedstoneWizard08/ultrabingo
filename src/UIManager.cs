@@ -104,11 +104,16 @@ public static class UIManager
 
         ultrabingoEncapsulator.transform.parent = __instance.transform;
         ultrabingoEncapsulator.SetActive(false);
+    }
+    
+    public static void DisableMajorAssists(GameObject canvas)
+    {
+        GameObject assistsList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(canvas,"OptionsMenu"),"Assist Options"),"Scroll Rect"),"Contents");
         
-        //ultrabingoLobby = BingoLobby.Init();
-        //ultrabingoLobby.transform.parent = ultrabingoEncapsulator.transform;
-        //GameObject lobbyMenu = BingoLobby.Init();
-        //lobbyMenu.transform.parent = ultrabingoButton.transform;
+        GetGameObjectChild(assistsList,"Text (6)").SetActive(false);
+        GetGameObjectChild(assistsList,"Major Assists").SetActive(false);
         
+        GameObject disabledNotification = UIHelper.CreateText("Major assists are <color=orange>disabled</color> while playing Baphomet's Bingo.",26,"TextDisabled");
+        disabledNotification.transform.SetParent(assistsList.transform);
     }
 }
