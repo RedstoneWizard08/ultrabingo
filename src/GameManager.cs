@@ -69,7 +69,6 @@ public static class GameManager
     public static void SetupBingoCardDynamic()
     {
         //Resize the GridLayoutGroup based on the grid size.
-        
         Logging.Message("Dynamic setup with size " + CurrentGame.grid.size);
         GameObject gridObj = GetGameObjectChild(BingoCard.Root,"BingoGrid");
         gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30,30);
@@ -94,7 +93,6 @@ public static class GameManager
             }
             default:{break;}
         }
-
         
         for(int x = 0; x < CurrentGame.grid.size; x++)
         {
@@ -144,40 +142,6 @@ public static class GameManager
                     BingoMenuController.LoadBingoLevel(levelObject.levelId,lvlCoords,level.GetComponent<BingoLevelData>());
                 });
                 
-                level.SetActive(true);
-            }
-        }
-    }
-    
-    public static void SetupBingoCardAtLoad()
-    {
-        for(int x = 0; x < 3; x++)
-        {
-            for(int y = 0; y < 3; y++)
-            {
-                GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,BingoCard.ButtonTemplate.transform.parent.transform);
-                level.AddComponent<BingoLevelData>();
-                level.AddComponent<EventTrigger>();
-                EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
-                mouseEnter.eventID = EventTriggerType.PointerEnter;
-                mouseEnter.callback.AddListener((data) =>
-                {
-                    OnMouseOverLevel((PointerEventData)data);
-                });
-                level.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
-                
-                EventTrigger.Entry mouseExit = new EventTrigger.Entry();
-                mouseExit.eventID = EventTriggerType.PointerExit;
-                mouseExit.callback.AddListener((data) =>
-                {
-                    OnMouseExitLevel((PointerEventData)data);
-                });
-                level.GetComponent<EventTrigger>().triggers.Add(mouseExit);
-                
-                string lvlCoords = x+"-"+y;
-                level.name = lvlCoords;
-                level.transform.SetParent(BingoCard.Grid.transform);
-                GetGameObjectChild(level,"Text").GetComponent<TextMeshProUGUI>().text = "BingoCardButton";
                 level.SetActive(true);
             }
         }
