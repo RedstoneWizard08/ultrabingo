@@ -28,6 +28,8 @@ public static class CheatNotificationHandler
         "They may have spontaneously imploded.",
         "Their death was a canon event.",
         "Jakito does not approve.",
+        "Their punishment is 1 hour of grinding 1-4.",
+        "Their attempt was a futile struggle, doomed from the very start."
         
     };
     

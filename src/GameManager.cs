@@ -254,6 +254,7 @@ public static class GameManager
         CheatActivation ca = new CheatActivation();
         ca.username = sanitiseUsername(Steamworks.SteamClient.Name);
         ca.gameId = CurrentGame.gameId;
+        ca.steamId = Steamworks.SteamClient.SteamId.ToString();
         
         NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(ca));
     }

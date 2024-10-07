@@ -70,11 +70,10 @@ namespace UltraBINGO.HarmonyPatches;
                     playerLogic.hp = 1;
                     
                     GameObject deathSplosion = UnityEngine.Object.Instantiate<GameObject>(playerShotgun.explosion, playerShotgun.transform.position,playerShotgun.transform.rotation);
+                    
+                    GameManager.HumiliateSelf();
+                    GameManager.triedToActivateCheats = true;
                 }
-                
-                GameManager.HumiliateSelf();
-                GameManager.triedToActivateCheats = true;
-                
             }
         }
     }
