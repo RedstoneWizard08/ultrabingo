@@ -12,7 +12,14 @@ namespace UltraBINGO.UI_Elements;
 
 public static class BingoMenuController
 {
-
+    public static bool checkSteamAuthentication()
+    {
+        if(!Main.isSteamAuthenticated)
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Unable to authenticate with Steam.\nYou must be connected to the Steam servers, and own a legal copy of ULTRAKILL to play Baphomet's Bingo.");
+        }
+        return Main.isSteamAuthenticated;
+    }
     
     public static async void LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData)
     {
@@ -140,6 +147,11 @@ public static class BingoMenuController
     
     public static void CreateRoom()
     {
+        if(!checkSteamAuthentication())
+        {
+            return;
+        }
+        
         //Check if the websocket connection is up.
         if(!NetworkManager.isConnectionUp())
         {
@@ -157,6 +169,11 @@ public static class BingoMenuController
     
     public static void JoinRoom(int roomId)
     {
+        if(!checkSteamAuthentication())
+        {
+            return;
+        }
+        
         if(!NetworkManager.isConnectionUp())
         {
             NetworkManager.ConnectWebSocket();

@@ -72,17 +72,29 @@ public static class GameManager
         
         Logging.Message("Dynamic setup with size " + CurrentGame.grid.size);
         GameObject gridObj = GetGameObjectChild(BingoCard.Root,"BingoGrid");
+        gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30,30);
+        gridObj.GetComponent<GridLayoutGroup>().constraintCount = CurrentGame.grid.size;
         
         switch(CurrentGame.grid.size)
         {
-            case 3: {gridObj.transform.position = new Vector3(Screen.width*0.33f,Screen.height*0.66f,0f);break;}
-            case 4: {gridObj.transform.position = new Vector3(Screen.width*0.25f,Screen.height*0.66f,0f);break;}
-            case 5: {gridObj.transform.position = new Vector3(Screen.width*0.15f,Screen.height*0.75f,0f);break;}
+            case 3:
+            {
+                gridObj.transform.position = new Vector3(Screen.width*0.33f,Screen.height*0.66f,0f);
+                break;
+            }
+            case 4:
+            {
+                gridObj.transform.position = new Vector3(Screen.width*0.25f,Screen.height*0.70f,0f);
+                break;
+            }
+            case 5:
+            {
+                gridObj.transform.position = new Vector3(Screen.width*0.20f,Screen.height*0.75f,0f);
+                break;
+            }
             default:{break;}
         }
-        
-        gridObj.GetComponent<GridLayoutGroup>().constraintCount = CurrentGame.grid.size;
-        gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30+(5*(CurrentGame.grid.size+1)),30+(5*(CurrentGame.grid.size+1)));
+
         
         for(int x = 0; x < CurrentGame.grid.size; x++)
         {

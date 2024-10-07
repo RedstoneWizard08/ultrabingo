@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using BepInEx;
 using HarmonyLib;
 using TMPro;
@@ -13,6 +14,11 @@ namespace UltraBINGO;
 
 public static class CommonFunctions
 {
+    public static string sanitiseUsername(string rawUsername)
+    {
+        return Regex.Replace(rawUsername,@"\p{Cs}", "");
+    }
+    
     public static string getSceneName()
     {
         return SceneHelper.CurrentScene;

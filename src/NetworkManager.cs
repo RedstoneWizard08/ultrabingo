@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Runtime.Remoting.Channels;
+using System.Threading.Tasks;
 using System.Timers;
 using Newtonsoft.Json;
 using UltraBINGO;
 using UltraBINGO.NetworkMessages;
-using UltraBINGO.UI_Elements;
-using UnityEngine.SceneManagement;
 using WebSocketSharp;
+
+using static UltraBINGO.CommonFunctions;
 
 namespace UltrakillBingoClient;
 
@@ -65,37 +65,26 @@ public static class NetworkManager
             else
             {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Server error, disconnected.");
+                Logging.Error(e.Reason);
             }
             
         };
     }
     
-    public static void handleError(ErrorEventArgs e)
+    public static async void handleError(ErrorEventArgs e)
     {
         Logging.Warn("Network error happened");
         Logging.Error(e.Message);
         Logging.Error(e.Exception.ToString());
         
-        //MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>Network error</color>");
-        
-        
-        /*if(ws.IsAlive)
+        if(GameManager.isInBingoLevel)
         {
-            Logging.Warn("Network error happened but our connection is still alive, so likely wasn't from us");
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nExitting in 5 seconds...");
+            GameManager.clearGameVariables();
+            await Task.Delay(5000);
+            Logging.Message("Trying to return to main menu");
+            SceneHelper.LoadScene("Main Menu");
         }
-        else
-        {
-            Logging.Error("Network error occurred on our end");
-
-            
-            if(GameManager.isInBingoLevel)
-            {
-                /*MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the server was lost.\nExitting in 5 seconds...");
-                await Task.Delay(5000);
-                Logging.Message("Trying to return to main menu");
-                SceneManager.LoadScene("Main Menu");
-            }
-        }*/
     }
     
     public static string DecodeMessage(string encodedMessage)
@@ -150,7 +139,7 @@ public static class NetworkManager
         crr.gameType = 1;
         crr.pRankRequired = false;
         
-        crr.hostSteamName = Steamworks.SteamClient.Name;
+        crr.hostSteamName = sanitiseUsername(Steamworks.SteamClient.Name);
         crr.hostSteamId = Steamworks.SteamClient.SteamId.ToString();
         
         sendEncodedMessage(JsonConvert.SerializeObject(crr));
@@ -162,7 +151,7 @@ public static class NetworkManager
         
         JoinRoomRequest jrr = new JoinRoomRequest();
         jrr.roomId = roomId;
-        jrr.username = Steamworks.SteamClient.Name;
+        jrr.username = sanitiseUsername(Steamworks.SteamClient.Name);
         jrr.steamId = Steamworks.SteamClient.SteamId.ToString();
         sendEncodedMessage(JsonConvert.SerializeObject(jrr));
         
@@ -185,7 +174,7 @@ public static class NetworkManager
     public static void SendLeaveGameRequest(int roomId)
     {
         LeaveGameRequest leaveRequest = new LeaveGameRequest();
-        leaveRequest.username = Steamworks.SteamClient.Name;
+        leaveRequest.username = sanitiseUsername(Steamworks.SteamClient.Name);
         leaveRequest.steamId = Steamworks.SteamClient.SteamId.ToString();
         leaveRequest.roomId = roomId;
         
@@ -287,5 +276,4 @@ public static class NetworkManager
             default: {Logging.Warn("Unknown or unimplemented packet received from server ("+em.header+"), discarding");break;}
         }
     }
-    
 }

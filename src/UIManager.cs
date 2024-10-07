@@ -37,13 +37,10 @@ public static class UIManager
     
     public static void Open()
     {
+        
         //Hide chapter select
         ultrabingoButtonObject.transform.parent.gameObject.SetActive(false);
         BingoEncapsulator.Root.SetActive(true);
-        
-        /*ultrabingoEncapsulator.transform.parent.gameObject.SetActive(false);
-        ultrabingoEncapsulator.SetActive(true);
-        GetGameObjectChild(ultrabingoEncapsulator,"UltraBingoMenu").SetActive(true);*/
         
     }
     

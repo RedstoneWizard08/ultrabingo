@@ -1,9 +1,12 @@
 ﻿
+using System;
 using System.IO;
 using System.Reflection;
 using AngryLevelLoader.Fields;
 using BepInEx;
 using HarmonyLib;
+using Steamworks;
+using Steamworks.Data;
 using TMPro;
 using UltraBINGO;
 using UltraBINGO.UI_Elements;
@@ -26,6 +29,8 @@ namespace UltrakillBingoClient
         public const string pluginVersion = "0.0.1";
         
         public static bool IsDevelopmentBuild = true;
+        
+        public static bool isSteamAuthenticated = false;
         
         
         
@@ -65,13 +70,40 @@ namespace UltrakillBingoClient
             NetworkManager.initialise();
         }
         
+        public bool Authenticate()
+        {
+            Logging.Message("Authenticating game ownership with Steam...");
+            try
+            {
+                AuthTicket ticket = SteamUser.GetAuthSessionTicket(new NetIdentity());
+                string ticketString = BitConverter.ToString(ticket.Data,0, ticket.Data.Length).Replace("-", string.Empty);
+                if(ticketString.Length > 0)
+                {
+                    isSteamAuthenticated = true;
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Logging.Error("Unable to authenticate with Steam!");
+                return false;
+            }
+            return false;
+        }
+        
         
         public void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             GameManager.hasSent = false;
             GameManager.enteringAngryLevel = false;
+            
             if(getSceneName() == "Main Menu")
             {
+                if(!isSteamAuthenticated)
+                {
+                    Authenticate();
+                }
+                
                 if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())
                 {
                     BingoEnd.ShowEndScreen();
