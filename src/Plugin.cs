@@ -18,6 +18,14 @@ using WebSocketSharp;
 
 using static UltraBINGO.CommonFunctions;
 
+/*
+ * Baphomet's Bingo
+ *
+ * Adds a bingo multiplayer gamemode.
+ *
+ * Created by Clearwater.
+ * */
+
 namespace UltrakillBingoClient
 {
     [BepInPlugin(Main.pluginId, Main.pluginName, Main.pluginVersion)]
@@ -33,14 +41,6 @@ namespace UltrakillBingoClient
         public static bool isSteamAuthenticated = false;
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        
-        /*
-         * UltraBINGO
-         *
-         * Adds a bingo multiplayer gamemode.
-         * 
-         * Created by Clearwater.
-         * */
         
         private void Awake()
         {

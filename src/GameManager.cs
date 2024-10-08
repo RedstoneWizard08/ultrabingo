@@ -166,6 +166,29 @@ public static class GameManager
         BingoLobby.GameType.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
+        
+        if(isHost)
+        {
+            //Reset field settings to default values.
+            BingoLobby.MaxPlayers.text = 8.ToString();
+            BingoLobby.MaxTeams.text = 4.ToString();
+            BingoLobby.GridSize.value = 0;
+            BingoLobby.GameType.value = 0;
+            BingoLobby.Difficulty.value = 2;
+            BingoLobby.LevelSelection.value = 0;
+            BingoLobby.RequirePRank.isOn = false;
+        }
+        else
+        {
+            BingoLobby.MaxPlayers.text = CurrentGame.gameSettings.maxPlayers.ToString();
+            BingoLobby.MaxTeams.text = CurrentGame.gameSettings.maxTeams.ToString();
+            BingoLobby.GridSize.value = CurrentGame.gameSettings.gridSize;
+            BingoLobby.GameType.value = CurrentGame.gameSettings.gameType;
+            BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;
+            BingoLobby.LevelSelection.value = CurrentGame.gameSettings.levelRotation;
+            BingoLobby.RequirePRank.isOn = CurrentGame.gameSettings.requiresPRank;
+        }
+
     }
     
     public static void StartGame()
@@ -190,6 +213,7 @@ public static class GameManager
             BingoEncapsulator.BingoLobbyScreen.SetActive(false);
             BingoEncapsulator.BingoEndScreen.SetActive(false);
             BingoEncapsulator.BingoMenu.SetActive(true);
+            
         }
     }
     
@@ -211,6 +235,7 @@ public static class GameManager
                 GameObject toRemove = child.gameObject;
                 GameObject.Destroy(toRemove);
             }
+            
         }
 
     }

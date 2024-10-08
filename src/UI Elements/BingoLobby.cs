@@ -32,7 +32,7 @@ public static class BingoLobby
         int amount = int.Parse(playerAmount);
         GameManager.CurrentGame.gameSettings.maxPlayers = amount;
         
-        MaxPlayers.text = Mathf.Clamp(amount,2f,8f).ToString();
+        MaxPlayers.text = Mathf.Clamp(amount,2f,16f).ToString();
         UIManager.HandleGameSettingsUpdate();
     }
     
@@ -40,7 +40,7 @@ public static class BingoLobby
     {
         int amount = int.Parse(teamAmount);
         GameManager.CurrentGame.gameSettings.maxTeams = amount;
-        MaxTeams.text = Mathf.Clamp(amount,2f,8f).ToString();
+        MaxTeams.text = Mathf.Clamp(amount,2f,4f).ToString();
         UIManager.HandleGameSettingsUpdate();
     }
     
