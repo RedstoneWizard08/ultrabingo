@@ -14,10 +14,9 @@ public static class AssetLoader
     public static Sprite UISprite;
     
     public static GameObject searchBar;
-    
     public static GameObject BingoGameSettings;
-    
     public static GameObject BingoPauseCard;
+    public static GameObject BingoTeammatesCard;
     
     public static void LoadAssets()
     {
@@ -25,10 +24,10 @@ public static class AssetLoader
         ultrabingoMenu = assets.LoadAsset<GameObject>("UltraBingoManager");
         gameFont = assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
         gameFontLegacy = assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");
-        Logging.Message(gameFontLegacy.ToString());
         UISprite = assets.LoadAsset<Sprite>("UISprite");
         searchBar = assets.LoadAsset<GameObject>("IdInput");
         BingoGameSettings = assets.LoadAsset<GameObject>("BingoGameSettings");
         BingoPauseCard = assets.LoadAsset<GameObject>("BingoPauseCard");
+        BingoTeammatesCard = assets.LoadAsset<GameObject>("BingoTeammateCard");
     }
 }

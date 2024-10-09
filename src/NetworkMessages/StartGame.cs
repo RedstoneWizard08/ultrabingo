@@ -14,6 +14,7 @@ public class StartGameRequest : SendMessage
 
 public class StartGameResponse : MessageResponse
 {
+    public Game game;
     public string teamColor;
     public List<string> teammates;
     

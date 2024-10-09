@@ -148,6 +148,14 @@ public static class GameManager
                 level.SetActive(true);
             }
         }
+        
+        //Display teammates.
+        Text teammates = GetGameObjectChild(GetGameObjectChild(BingoCard.Teammates,"Teammates"),"Text").GetComponent<Text>();
+        teammates.text = "";
+        foreach(string player in GameManager.teammates)
+        {
+            teammates.text += player + "\n";
+        }
     }
 
     public static void SetupGameDetails(Game game,bool isHost=true)

@@ -30,19 +30,20 @@ public static class JoinRoomResponseHandler
                 case -3:
                 {
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to join: Game does not exist.");
-                    return;
+                    break;
                 }
                 case -2:
                 {
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to join: Game is full.");
-                    return;
+                    break;
                 }
                 case -1:
                 {
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to join: Game has already started.");
-                    return;
+                    break;
                 }
             }
+            NetworkManager.DisconnectWebSocket(1000,"Normal close");
         }
         else
         {

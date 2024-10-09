@@ -21,6 +21,8 @@ public class BingoCard
     public static GameObject LevelInformation;
     public static GameObject LevelInformationText;
     
+    public static GameObject Teammates;
+    
     
     public static string team = "PLACEHOLDER";
     
@@ -86,7 +88,7 @@ public class BingoCard
         }
         
         //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter component causes crashes.
-        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,16);
+        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,14);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
         
@@ -122,6 +124,10 @@ public class BingoCard
         LevelInformationText = UIHelper.CreateText("BingoLevelData info here",26,"LevelInfoText");
         LevelInformationText.transform.SetParent(LevelInformation.transform);
         LevelInformationText.transform.localPosition = Vector3.zero;
+        
+        //Teammate panel
+        Teammates = GameObject.Instantiate(AssetLoader.BingoTeammatesCard,Root.transform);
+        Teammates.transform.localPosition = new Vector3(Screen.width*0.22f,Screen.height*0.5f,0f);
         
         return Root;
     }
