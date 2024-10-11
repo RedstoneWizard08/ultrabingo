@@ -32,7 +32,7 @@ namespace UltraBINGO.HarmonyPatches;
         {
             if (GameManager.isInBingoLevel)
             {
-                GameObject cheatManager = GetGameObjectChild(GetInactiveRootObject("Canvas"),"Cheat Menu");
+                GameObject cheatManager = MonoSingleton<CheatsManager>.Instance.gameObject;
                 cheatManager.GetComponentInChildren<SandboxHud>().enabled = false;
                 cheatManager.GetComponentInChildren<CheatsManager>().enabled = false;
                 cheatManager.SetActive(false);

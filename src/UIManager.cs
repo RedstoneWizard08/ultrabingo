@@ -107,9 +107,9 @@ public static class UIManager
     }
     
     public static void DisableMajorAssists(GameObject canvas)
-    {
-        GameObject assistsList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(canvas,"OptionsMenu"),"Assist Options"),"Scroll Rect"),"Contents");
-        
+    { 
+        GameObject optionsMenu = MonoSingleton<OptionsMenuToManager>.Instance.optionsMenu;
+        GameObject assistsList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(optionsMenu,"Assist Options"),"Scroll Rect"),"Contents");
         GetGameObjectChild(assistsList,"Text (6)").SetActive(false);
         GetGameObjectChild(assistsList,"Major Assists").SetActive(false);
         

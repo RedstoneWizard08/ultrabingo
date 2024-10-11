@@ -1,5 +1,8 @@
 ﻿using System;
+using AngryLevelLoader.Containers;
+using AngryLevelLoader.Managers;
 using HarmonyLib;
+using RudeLevelScript;
 using TMPro;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
@@ -22,6 +25,22 @@ public static class LeaveBingoGame
     }
 }
 
+//When finishing an Angry level in bingo, make sure we don't go to the next linked level if there is one.
+[HarmonyPatch(typeof(AngrySceneManager),"LoadLevel")]
+public static class preventAngryAutoloadLinkedLevel
+{
+    [HarmonyPrefix]
+    public static bool preventLoadLinkedLevel(AngryBundleContainer bundleContainer, LevelContainer levelContainer, RudeLevelData levelData, string levelPath, bool showBlocker = true)
+    {
+        if(GameManager.isInBingoLevel && getSceneName() != "Main Menu")
+        {
+            return false;
+        }
+        return true;
+    }
+}
+
+//When finishing an Angry level in bingo, make sure Angry doesn't override and quit to main menu.
 [HarmonyPatch(typeof(OptionsManager),"QuitMission")]
 public static class preventAngryQuit
 {

@@ -36,7 +36,7 @@ namespace UltrakillBingoClient
         public const string pluginName = "Baphomet's BINGO";
         public const string pluginVersion = "0.1.0";
         
-        public static bool IsDevelopmentBuild = false;
+        public static bool IsDevelopmentBuild = true;
         
         public static bool isSteamAuthenticated = false;
         
