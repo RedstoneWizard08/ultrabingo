@@ -20,7 +20,7 @@ public static class AssetLoader
     
     public static void LoadAssets()
     {
-        AssetBundle assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"ultrabingo.resource"));
+        AssetBundle assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
         ultrabingoMenu = assets.LoadAsset<GameObject>("UltraBingoManager");
         gameFont = assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
         gameFontLegacy = assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");

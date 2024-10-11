@@ -36,7 +36,7 @@ namespace UltrakillBingoClient
         public const string pluginName = "Baphomet's BINGO";
         public const string pluginVersion = "0.1.0";
         
-        public static bool IsDevelopmentBuild = true;
+        public static bool IsDevelopmentBuild = false;
         
         public static bool isSteamAuthenticated = false;
         
@@ -45,7 +45,7 @@ namespace UltrakillBingoClient
         private void Awake()
         {
             // Plugin startup logic
-            Debug.unityLogger.filterLogType = LogType.Exception;
+            //Debug.unityLogger.filterLogType = LogType.Exception;
             
             Logging.Message("--Now loading Baphomet's Bingo...--");
             if(Main.IsDevelopmentBuild)

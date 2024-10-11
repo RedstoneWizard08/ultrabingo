@@ -4,7 +4,7 @@ Baphomet's Bingo is a modification (mod) for ULTRAKILL that  adds a multiplayer 
 
 # Features
 
-- A new multiplayer gamemode
+- A new multiplayer gamemode centered aroundb bingo
 - Support for Angry custom maps for a bigger map pool, with additional maps regularly being added
 - Configuration of game settings and criteria (Time or style, requiring P-Ranks...)
 
@@ -36,6 +36,8 @@ View maps.md for full credits and information.
 # Credits & Contributors
 - Baphomet's Bingo created & maintained by Clearwater
 - Angry integration support and consultation by EternalUnion
+
+A **huge** thank you to the following members of the ULTRAKILL and Angry community who helped me test this mod out and helped me track down bugs and other problems: Frizou, FruitCircuit, JOE, LambCG, Lena, CEO of Gaming, Draghtnim
 
 ### Baphomet's Bingo uses the following libraries/dependencies:
 

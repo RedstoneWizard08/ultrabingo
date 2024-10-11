@@ -36,13 +36,12 @@ public static class NetworkManager
         return ws.IsAlive;
     }
     
-    
     public static void initialise()
     {
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
         ws.WaitTime = TimeSpan.FromSeconds(60);
-        //ws.Log.Level = LogLevel.Debug;
+        ws.Log.Level = LogLevel.Trace;
         
         ws.OnMessage += (sender,e) =>
         {
