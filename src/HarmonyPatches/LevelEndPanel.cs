@@ -1,4 +1,5 @@
-﻿using GameConsole.Commands;
+﻿using System.Linq;
+using GameConsole.Commands;
 using HarmonyLib;
 using TMPro;
 using UltraBINGO.NetworkMessages;
@@ -61,6 +62,30 @@ public class FinalRankFanfare
     {
         if(GameManager.isInBingoLevel && !GameManager.hasSent && !GameManager.CurrentGame.isGameFinished())
         {
+            if(GameManager.CurrentGame.gameSettings.requiresPRank)
+            {
+                Logging.Message("P-Rank required, checking validation");
+                StatsManager sman = MonoSingleton<StatsManager>.Instance;
+                if(sman != null)
+                {
+                    if(sman.seconds <= sman.timeRanks.Last() && sman.kills >= sman.killRanks.Last() && sman.stylePoints >= sman.styleRanks.Last() && sman.restarts == 0)
+                    {
+                        Logging.Message("P-Rank obtained, continuing");
+                    }
+                    else
+                    {
+                        Logging.Message("P-Rank not obtained, rejecting run");
+                        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You must finish the level with a <color=yellow>P</color>-Rank to claim it.");
+                        GameManager.hasSent = true;
+                        return;
+                    }
+                }
+                else
+                {
+                    Logging.Warn("Unable to get StatsManager?");
+                }
+            }
+            
             float time = ___savedTime;
             int style = ___savedStyle;
 
