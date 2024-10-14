@@ -12,6 +12,8 @@ namespace UltraBINGO.UI_Elements;
 
 public static class BingoMenuController
 {
+    public static string currentlyDownloadingLevel = "";
+    
     public static bool checkSteamAuthentication()
     {
         if(!Main.isSteamAuthenticated)
@@ -107,7 +109,8 @@ public static class BingoMenuController
                 Logging.Warn("Level does not already exist locally - Downloading from online repo");
                 GameManager.isDownloadingLevel = true;
                 
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("-- DOWNLOADING LEVEL BUNDLE - <color=orange>PLEASE WAIT A MOMENT...</color> --");
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("-- DOWNLOADING "+ angryLevelData.levelName + " --\n<color=orange>PLEASE WAIT A MOMENT...</color> --");
+                currentlyDownloadingLevel = angryLevelData.levelName;
                 OnlineLevelsManager.onlineLevels[angryLevelData.angryParentBundle].Download();
                 while(OnlineLevelsManager.onlineLevels[angryLevelData.angryParentBundle].downloading)
                 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using AngryLevelLoader.Containers;
 using HarmonyLib;
+using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
 
 namespace UltraBINGO.HarmonyPatches;
@@ -15,7 +16,10 @@ public static class Patch
 		{
 			Logging.Warn("Download done");
 			GameManager.isDownloadingLevel = false;
-			MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Download finished. Click level button again to enter!");
+			
+			MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>"+BingoMenuController.currentlyDownloadingLevel + "</color> has finished downloading.\nClick level button again to enter!");
+			
+			BingoMenuController.currentlyDownloadingLevel = "";
 		}
 	}
 }
