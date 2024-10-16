@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UltraBINGO.NetworkMessages;
+using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,6 @@ namespace UltraBINGO.UI_Elements;
 
 public static class BingoLobby 
 {
-    public static GameObject Root;
     public static GameObject PlayerList;
     public static GameObject ReturnToBingoMenu;
     public static GameObject StartGame;
@@ -98,47 +98,31 @@ public static class BingoLobby
         GameManager.CurrentGame.gameSettings.gridSize = newSettings.gridSize;
     }
     
-    public static GameObject Init()
+    public static void Init(ref GameObject BingoLobby)
     {
-        if(Root == null)
-        {
-            Root = new GameObject();
-        }
-        Root.name = "UltraBingoLobby";
-        
         //Player list
-        PlayerList = UIHelper.CreateText("Players:",18,"PlayerList");
-        PlayerList.transform.position = new Vector3(Screen.width*0.25f, Screen.height*0.75f, 0);
-        PlayerList.transform.SetParent(Root.transform);
+        PlayerList = GetGameObjectChild(BingoLobby,"BingoLobbyPlayers");
         
         //Leave game button
-        ReturnToBingoMenu = UIHelper.CreateButton("LEAVE GAME","UltraBingoLeave",175f,85f,24);
-        ReturnToBingoMenu.transform.position = new Vector3(Screen.width*0.25f, Screen.height*0.25f, 0);
-        ReturnToBingoMenu.transform.SetParent(Root.transform);
+        ReturnToBingoMenu = GetGameObjectChild(BingoLobby,"LeaveGame");
         ReturnToBingoMenu.GetComponent<Button>().onClick.AddListener(delegate
         {
             GameManager.LeaveGame();
         });
         
         //Start game button
-        StartGame = UIHelper.CreateButton("START GAME","UltraBingoStart",175f,85f,24);
-        StartGame.transform.position = new Vector3(Screen.width*0.75f, Screen.height*0.25f, 0);
-        StartGame.transform.SetParent(Root.transform);
+        StartGame = GetGameObjectChild(BingoLobby,"StartGame");
         StartGame.GetComponent<Button>().onClick.AddListener(delegate
         {
             GameManager.StartGame();
         });
         
         //Room id text
-        RoomIdDisplay = UIHelper.CreateText("Room ID:",18,"RoomId");
-        RoomIdDisplay.transform.position = new Vector3(Screen.width*0.75f, Screen.height*0.75f, 0);
-        RoomIdDisplay.transform.SetParent(Root.transform);
+        RoomIdDisplay = GetGameObjectChild(BingoLobby,"BingoGameID");
         
         //Game options
-        GameOptions = GameObject.Instantiate(AssetLoader.BingoGameSettings,Root.transform);
-        GameOptions.name = "BingoGameSettings";
-        GameOptions.transform.position = new Vector3(Screen.width*0.40f,Screen.height*0.70f,0f);
-        
+        GameOptions = GetGameObjectChild(BingoLobby,"BingoGameSettings");
+
         MaxPlayers = GetGameObjectChild(GetGameObjectChild(GameOptions,"MaxPlayers"),"Input").GetComponent<TMP_InputField>();
         MaxPlayers.onEndEdit.AddListener(onMaxPlayerUpdate);
         
@@ -159,8 +143,6 @@ public static class BingoLobby
         
         RequirePRank = GetGameObjectChild(GetGameObjectChild(GameOptions,"RequirePRank"),"Input").GetComponent<Toggle>();
         RequirePRank.onValueChanged.AddListener(onPRankRequiredUpdate);
-        
-        Root.SetActive(false);
-        return Root;
+        BingoLobby.SetActive(false);
     }
 }

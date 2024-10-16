@@ -7,7 +7,6 @@ using UltrakillBingoClient;
 using UnityEngine;
 using static UltraBINGO.CommonFunctions;
 
-
 namespace UltraBINGO.UI_Elements;
 
 public static class BingoMenuController
@@ -146,11 +145,10 @@ public static class BingoMenuController
         }
     }
     
-    public static void ReturnToMenu(GameObject bingoMenu)
+    public static void ReturnToMenu()
     {
-        Logging.Message("Exiting menu");
         BingoEncapsulator.Root.SetActive(false);
-        GetGameObjectChild(bingoMenu.transform.parent.parent.gameObject,"Difficulty Select (1)").SetActive(true);
+        GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").SetActive(true);
     }
     
     public static void CreateRoom()

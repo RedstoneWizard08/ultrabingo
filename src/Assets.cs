@@ -7,27 +7,33 @@ namespace UltraBINGO;
 
 public static class AssetLoader
 {
-    public static GameObject ultrabingoMenu;
     public static TMP_FontAsset gameFont;
     public static Font gameFontLegacy;
     
     public static Sprite UISprite;
     
-    public static GameObject searchBar;
-    public static GameObject BingoGameSettings;
+    public static GameObject BingoEntryButton;
     public static GameObject BingoPauseCard;
     public static GameObject BingoTeammatesCard;
+    
+    public static GameObject BingoMainMenu;
+    public static GameObject BingoLobbyMenu;
+    public static GameObject BingoCardElements;
     
     public static void LoadAssets()
     {
         AssetBundle assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
-        ultrabingoMenu = assets.LoadAsset<GameObject>("UltraBingoManager");
         gameFont = assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
         gameFontLegacy = assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");
         UISprite = assets.LoadAsset<Sprite>("UISprite");
-        searchBar = assets.LoadAsset<GameObject>("IdInput");
-        BingoGameSettings = assets.LoadAsset<GameObject>("BingoGameSettings");
+        BingoEntryButton = assets.LoadAsset<GameObject>("BingoEntryButton");
         BingoPauseCard = assets.LoadAsset<GameObject>("BingoPauseCard");
         BingoTeammatesCard = assets.LoadAsset<GameObject>("BingoTeammateCard");
+        
+        BingoMainMenu = assets.LoadAsset<GameObject>("BingoMainMenu");
+        BingoLobbyMenu = assets.LoadAsset<GameObject>("BingoLobbyMenu");
+        BingoCardElements = assets.LoadAsset<GameObject>("BingoCard");
+        
+
     }
 }

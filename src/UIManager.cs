@@ -37,11 +37,10 @@ public static class UIManager
     
     public static void Open()
     {
-        
         //Hide chapter select
         ultrabingoButtonObject.transform.parent.gameObject.SetActive(false);
         BingoEncapsulator.Root.SetActive(true);
-        
+        BingoEncapsulator.BingoMenu.SetActive(true);
     }
     
     public static void Close()
@@ -51,8 +50,6 @@ public static class UIManager
         ultrabingoButtonObject.transform.parent.gameObject.SetActive(true);
     }
     
-    
-    //Borrowed and repurposed this code from Hydra's BossRush mod, cheers man :D
     public static void SetupElements(CanvasController __instance)
     {
         RectTransform canvasRectTransform = __instance.GetComponent<RectTransform>();
@@ -64,45 +61,20 @@ public static class UIManager
             return;
         }
         
-        RectTransform chapterSelectRectTransform = chapterSelectObject.GetComponent<RectTransform>();
-        GameObject sandboxButtonObject = chapterSelectObject.transform.Find("Sandbox").gameObject;
-
-        if (sandboxButtonObject == null)
-        {
-            Logging.Error("Sandbox button is null");
-            return;
-        }
         if(ultrabingoButtonObject == null)
         {
-            ultrabingoButtonObject = GameObject.Instantiate(sandboxButtonObject, difficultySelectObject.transform);
-            ultrabingoButtonObject.name = "UltraBingo Button";
+            ultrabingoButtonObject = GameObject.Instantiate(AssetLoader.BingoEntryButton,difficultySelectObject.transform);
+            ultrabingoButtonObject.name = "UltraBingoButton";
         }
-        Button sandboxButton = ultrabingoButtonObject.GetComponent<Button>();
-
-        ColorBlock oldColorBlock = sandboxButton.colors;
-        //Have to destroy old button component because of Unity's persistent listener calls.
-        //They can't be removed at runtime so the component must be replaced.
-        GameObject.DestroyImmediate(sandboxButton);
-
-        Button ultrabingoButton = ultrabingoButtonObject.AddComponent<Button>();
-        ultrabingoButton.colors = oldColorBlock;
-        
-        RectTransform ultrabingoButtonRectTransform = ultrabingoButtonObject.GetComponent<RectTransform>();
-
-        Vector3 buttonPosition = ultrabingoButtonRectTransform.position;
-        buttonPosition.y = 250;
-        ultrabingoButtonRectTransform.position = buttonPosition;
-
-        ultrabingoButtonRectTransform.GetComponentInChildren<TextMeshProUGUI>().text = "BAPHOMET'S BINGO";
-        ultrabingoButton.onClick.AddListener(Open);
-        
+        Button bingoButton = ultrabingoButtonObject.GetComponent<Button>();
+        bingoButton.onClick.AddListener(Open);
         if(ultrabingoEncapsulator == null)
         {
             ultrabingoEncapsulator = BingoEncapsulator.Init();
             ultrabingoEncapsulator.name = "UltraBingo";
+            ultrabingoEncapsulator.transform.parent = __instance.transform;
+            ultrabingoEncapsulator.transform.localPosition = Vector3.zero;
         }
-
-        ultrabingoEncapsulator.transform.parent = __instance.transform;
         ultrabingoEncapsulator.SetActive(false);
     }
     

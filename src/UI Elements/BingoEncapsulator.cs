@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+using static UltraBINGO.CommonFunctions;
+
 namespace UltraBINGO.UI_Elements;
 
 public static class BingoEncapsulator
 {
-    public static GameObject background;
-    
     public static GameObject Root;
     public static GameObject BingoMenu;
     public static GameObject BingoLobbyScreen;
     public static GameObject BingoCardScreen;
     public static GameObject BingoEndScreen;
-    
     
     public static GameObject Init()
     {
@@ -22,19 +21,15 @@ public static class BingoEncapsulator
         }
         Root.name = "UltraBingo";
         
-        background = new GameObject();
-        background.transform.SetParent(Root.transform);
-        background.name = "Background";
-        background.AddComponent<Image>();
-        background.GetComponent<Image>().color = new Vector4(0,0,0,0.33f);
-        background.transform.position = new Vector3(960f,540f,0f);
-        background.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width,Screen.height);
-        
-        
-        BingoMenu = BingoMainMenu.Init();
+        BingoMenu = GameObject.Instantiate(AssetLoader.BingoMainMenu,Root.transform);
+        BingoMainMenu.Init(ref BingoMenu);
+        BingoMenu.name = "BingoMainMenu";
+        BingoMenu.AddComponent<MenuEsc>();
+        BingoMenu.GetComponent<MenuEsc>().previousPage = GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)");
         BingoMenu.transform.SetParent(Root.transform);
         
-        BingoLobbyScreen = BingoLobby.Init();
+        BingoLobbyScreen = GameObject.Instantiate(AssetLoader.BingoLobbyMenu,Root.transform);
+        BingoLobby.Init(ref BingoLobbyScreen);
         BingoLobbyScreen.transform.SetParent(Root.transform);
         
         BingoCardScreen = BingoCard.Init();
@@ -42,8 +37,6 @@ public static class BingoEncapsulator
         
         BingoEndScreen = BingoEnd.Init();
         BingoEndScreen.transform.SetParent(Root.transform);
-            
-
         
         return Root;
     }

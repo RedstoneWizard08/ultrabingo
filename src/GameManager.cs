@@ -37,7 +37,8 @@ public static class GameManager
     
     public static void ShowGameId()
     {
-        BingoLobby.RoomIdDisplay.GetComponent<TextMeshProUGUI>().text = "Game ID: " + CurrentGame.gameId;
+        GetGameObjectChild(GetGameObjectChild(BingoLobby.RoomIdDisplay,"Title"),"Text").GetComponent<Text>().text = "Game ID: " + CurrentGame.gameId;
+        //BingoLobby.RoomIdDisplay.GetComponent<TextMeshProUGUI>().text = "Game ID: " + CurrentGame.gameId;
     }
     
     public static bool playerIsHost()
@@ -48,13 +49,13 @@ public static class GameManager
     public static void RefreshPlayerList()
     {
         BingoLobby.PlayerList.SetActive(false);
-        string players = "Players:<br>";
+        string players = "";
         foreach(Player player in CurrentGame.getPlayers())
         {
-            players += player.username + "<br>";
+            players += player.username + "\n";
         }
         
-        BingoLobby.PlayerList.GetComponent<TextMeshProUGUI>().text = players;
+        GetGameObjectChild(BingoLobby.PlayerList,"Players").GetComponent<TextMeshProUGUI>().text = players;
         BingoLobby.PlayerList.SetActive(true);
     }
     
@@ -77,6 +78,9 @@ public static class GameManager
         gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30,30);
         gridObj.GetComponent<GridLayoutGroup>().constraintCount = CurrentGame.grid.size;
         
+        Logging.Message("Card size");
+        gridObj.transform.position = Vector3.zero;
+        gridObj.transform.localPosition = Vector3.zero;
         switch(CurrentGame.grid.size)
         {
             case 3:
@@ -97,6 +101,7 @@ public static class GameManager
             default:{break;}
         }
         
+        Logging.Message("Loop");
         for(int x = 0; x < CurrentGame.grid.size; x++)
         {
             for(int y = 0; y < CurrentGame.grid.size; y++)
@@ -150,7 +155,7 @@ public static class GameManager
         }
         
         //Display teammates.
-        Text teammates = GetGameObjectChild(GetGameObjectChild(BingoCard.Teammates,"Teammates"),"Text").GetComponent<Text>();
+        TextMeshProUGUI teammates = GetGameObjectChild(BingoCard.Teammates,"Players").GetComponent<TextMeshProUGUI>();
         teammates.text = "";
         foreach(string player in GameManager.teammates)
         {

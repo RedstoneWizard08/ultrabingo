@@ -1,7 +1,10 @@
 ﻿using TMPro;
 using UltraBINGO.Components;
+using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.UI;
+
+using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.UI_Elements;
 
@@ -22,6 +25,8 @@ public class BingoCard
     public static GameObject LevelInformationText;
     
     public static GameObject Teammates;
+    
+    public static GameObject CardElements;
     
     
     public static string team = "PLACEHOLDER";
@@ -82,6 +87,8 @@ public class BingoCard
         Grid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150f,50f);
         Grid.transform.position = new Vector3(Screen.width*0.35f,Screen.height*0.65f,0f);
         
+        CardElements = GameObject.Instantiate(AssetLoader.BingoCardElements,Root.transform);
+        
         if(ButtonTemplate == null)
         {
             ButtonTemplate = new GameObject();
@@ -92,43 +99,30 @@ public class BingoCard
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
         
-        LeaveGame = UIHelper.CreateButton("LEAVE GAME","UltraBingoLeave",175f,85f,16);
-        LeaveGame.transform.position = new Vector3(Screen.width*0.22f, Screen.height*0.22f, 0);
-        LeaveGame.transform.SetParent(Root.transform);
+        LeaveGame = GetGameObjectChild(CardElements,"LeaveGame");
         LeaveGame.GetComponent<Button>().onClick.AddListener(delegate
         {
             GameManager.LeaveGame();
         });
         
-        Root.SetActive(false);
+
+        TeamIndicator = GetGameObjectChild(CardElements,"TeamIndicator");
+        TeamIndicator.GetComponent<TextMeshProUGUI>().text = ("-- You are on the "+team+" team -- ");
         
-        TeamIndicator = UIHelper.CreateText("-- You are on the "+team+" team -- ",32,"TeamIndicator");
-        TeamIndicator.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.8f,0f);
-        TeamIndicator.transform.SetParent(Root.transform);
         
-        ObjectiveIndicator = UIHelper.CreateText("Objective here",18,"Objective Indicator");
-        ObjectiveIndicator.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.75f,0f);
-        ObjectiveIndicator.transform.SetParent(Root.transform);
+        ObjectiveIndicator = GetGameObjectChild(CardElements,"ObjectiveIndicator");
         
         //Bingo Level Information panel
-        LevelInformation = new GameObject();
-        LevelInformation.name = "Background";
-        LevelInformation.AddComponent<Image>();
-        LevelInformation.GetComponent<Image>().color = new Vector4(0.0f,0.0f,0.0f,1f);
-        LevelInformation.transform.position = new Vector3(Screen.width*0.5f,Screen.height*0.3f,0f);
-        LevelInformation.GetComponent<RectTransform>().sizeDelta = new Vector2(600f,100f);
-        LevelInformation.transform.SetParent(Root.transform);
+        LevelInformation = GetGameObjectChild(CardElements,"LevelInfo");
         LevelInformation.SetActive(false);
         
         //Level Information text
-        LevelInformationText = UIHelper.CreateText("BingoLevelData info here",26,"LevelInfoText");
-        LevelInformationText.transform.SetParent(LevelInformation.transform);
-        LevelInformationText.transform.localPosition = Vector3.zero;
+        LevelInformationText = GetGameObjectChild(LevelInformation,"Text");
         
         //Teammate panel
-        Teammates = GameObject.Instantiate(AssetLoader.BingoTeammatesCard,Root.transform);
-        Teammates.transform.localPosition = new Vector3(Screen.width*0.22f,Screen.height*0.5f,0f);
+        Teammates = GetGameObjectChild(CardElements,"Teammates");
         
+        Root.SetActive(false);
         return Root;
     }
 }
