@@ -105,6 +105,8 @@ namespace UltrakillBingoClient
                 if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())
                 {
                     BingoEnd.ShowEndScreen();
+                    MonoSingleton<AssistController>.Instance.majorEnabled = false;
+                    MonoSingleton<AssistController>.Instance.gameSpeed = 1f;
                 }
             }
             else

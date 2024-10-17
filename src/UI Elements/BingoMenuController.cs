@@ -22,8 +22,14 @@ public static class BingoMenuController
         return Main.isSteamAuthenticated;
     }
     
-    public static async void LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData)
+    public static void LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData)
     {
+        //Make sure the game hasn't ended.
+        if(GameManager.CurrentGame.isGameFinished())
+        {
+            return;
+        }
+        
         if(!GameManager.CurrentGame.isGameFinished())
         {
             //Force disable cheats and major assists, set difficulty to difficulty of the game set by the host.
@@ -54,6 +60,12 @@ public static class BingoMenuController
     
     public static async void handleAngryLoad(BingoLevelData angryLevelData,bool isInGame=false)
     {
+            //Make sure the game hasn't ended.
+            if(GameManager.CurrentGame.isGameFinished())
+            {
+                return;
+            }
+        
             //Prevent changing levels while downloading to avoid problems.
             if(GameManager.isDownloadingLevel == true)
             {
@@ -121,6 +133,12 @@ public static class BingoMenuController
     
     public static async void LoadBingoLevelFromPauseMenu(string levelCoords, BingoLevelData levelData)
     {
+        //Make sure the game hasn't ended.
+        if(GameManager.CurrentGame.isGameFinished())
+        {
+            return;
+        }
+        
         if(!GameManager.CurrentGame.isGameFinished())
         {
             int row = int.Parse(levelCoords[0].ToString());

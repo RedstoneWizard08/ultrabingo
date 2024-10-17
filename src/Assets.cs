@@ -2,6 +2,7 @@
 using TMPro;
 using UltrakillBingoClient;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace UltraBINGO;
 
@@ -20,6 +21,8 @@ public static class AssetLoader
     public static GameObject BingoLobbyMenu;
     public static GameObject BingoCardElements;
     
+    public static AudioClip GameOverSound;
+    
     public static void LoadAssets()
     {
         AssetBundle assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
@@ -33,7 +36,8 @@ public static class AssetLoader
         BingoMainMenu = assets.LoadAsset<GameObject>("BingoMainMenu");
         BingoLobbyMenu = assets.LoadAsset<GameObject>("BingoLobbyMenu");
         BingoCardElements = assets.LoadAsset<GameObject>("BingoCard");
-        
+         
+        GameOverSound = Addressables.LoadAssetAsync<AudioClip>("Assets/Music/Hits/Versus2Outro.wav").WaitForCompletion();
 
     }
 }
