@@ -264,6 +264,13 @@ public static class GameManager
     public static void UpdateCards(int row, int column, string team, string playername, float newTime, int newStyle)
     {
         string coordLookup = row+"-"+column;
+        if(!CurrentGame.grid.levelTable.ContainsKey(coordLookup))
+        {
+            Logging.Warn("RECEIVED AN INVALID GRID POSITION TO UPDATE!");
+            Logging.Warn(coordLookup);
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but an <color=orange>invalid grid position</color> was given.\nCheck the console and report it to Clearwater!");
+            return;
+        }
         GameManager.CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
         GameManager.CurrentGame.grid.levelTable[coordLookup].timeToBeat = newTime;
         GameManager.CurrentGame.grid.levelTable[coordLookup].styleToBeat = newStyle;
