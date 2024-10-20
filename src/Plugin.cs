@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using AngryLevelLoader.Fields;
@@ -40,7 +41,11 @@ namespace UltrakillBingoClient
         
         public static bool isSteamAuthenticated = false;
         
+        public static List<String> missingMaps = new List<string>();
+        
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        
+        public static string CatalogFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"bingocatalog.toml");
         
         private void Awake()
         {
@@ -60,6 +65,7 @@ namespace UltrakillBingoClient
             Logging.Message("--Loading assetbundle...--");
             AssetLoader.LoadAssets();
             
+            Logging.Message("--Applying patches...--");
             Harmony harmony = new Harmony(pluginId);
             harmony.PatchAll();
             

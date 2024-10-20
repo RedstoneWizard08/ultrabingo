@@ -4,7 +4,7 @@ Baphomet's Bingo is a modification (mod) for ULTRAKILL that  adds a multiplayer 
 
 # Features
 
-- A new multiplayer gamemode centered aroundb bingo
+- A new multiplayer gamemode centered around bingo
 - Support for Angry custom maps for a bigger map pool, with additional maps regularly being added
 - Configuration of game settings and criteria (Time or style, requiring P-Ranks...)
 
@@ -26,12 +26,11 @@ I will investigate possibilities for support for trending map loader mods in fut
 # Troubleshooting
 
 ### I am receiving an error when the mod attempts to download, or load a custom level.
-Inform me of the level name you're attempting to load and I will investigate ASAP. This may point to the level bundle in question being moved or deleted from the Angry level catalogue, and can no longer be used.
+Inform me of the level name you're attempting to load and I will investigate ASAP. This may point to the level bundle in question being moved or deleted from the Angry level catalogue and can no longer be used, and I will need to update the catalog on the server.
  
 
 # Map credits & usage
 View maps.md for full credits and information.
-
 
 # Credits & Contributors
 - Baphomet's Bingo created & maintained by Clearwater
@@ -39,11 +38,12 @@ View maps.md for full credits and information.
 
 A **huge** thank you to the following members of the ULTRAKILL and Angry community who helped me test this mod out and helped me track down bugs and other problems: Frizou, FruitCircuit, JOE, LambCG, Lena, CEO of Gaming, Draghtnim
 
-### Baphomet's Bingo uses the following libraries/dependencies:
+### Baphomet's Bingo uses the following libraries and dependencies:
 
 - Client:
   - [JSON.Net](https://github.com/JamesNK/Newtonsoft.Json) by [NewtonSoft](https://www.newtonsoft.com/json), licenced under the MIT Licence.
   - [WebSocketSharp](https://github.com/sta/websocket-sharp) by [sta](https://github.com/sta), licenced under the MIT Licence.
+  - [Tommy](https://github.com/dezhidki/Tommy) by [dezhidki](https://github.com/dezhidki), licenced under the MIT Licence.
   -  [AngryLevelLoader](https://github.com/eternalUnion/AngryLevelLoader) by [EternalUnion](https://github.com/eternalUnion), licenced under the MIT Licence.
 
 - Server:

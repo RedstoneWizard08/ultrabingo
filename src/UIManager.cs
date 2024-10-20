@@ -39,6 +39,8 @@ public static class UIManager
     {
         //Hide chapter select
         ultrabingoButtonObject.transform.parent.gameObject.SetActive(false);
+        
+        NetworkManager.analyseCatalog();
         BingoEncapsulator.Root.SetActive(true);
         BingoEncapsulator.BingoMenu.SetActive(true);
     }

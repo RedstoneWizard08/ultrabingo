@@ -15,6 +15,10 @@ public static class BingoMainMenu
     public static GameObject JoinGameInput;
     public static GameObject Back;
     
+    public static GameObject MapCheck;
+    public static GameObject MapWarn;
+    public static GameObject MissingMapsList;
+    
     public static void Open()
     {
         //Hide chapter select
@@ -47,6 +51,17 @@ public static class BingoMainMenu
         });
         
         JoinGameInput = GetGameObjectChild(JoinGame,"IdInput");
+        
+        MapCheck = GetGameObjectChild(BingoMenu,"MapCheck");
+        MapCheck.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            MapWarn.SetActive(true);
+        });
+        
+        
+        MapWarn = GetGameObjectChild(BingoMenu,"MapWarn");
+        MapWarn.SetActive(false);
+        MissingMapsList = GetGameObjectChild(GetGameObjectChild(MapWarn,"Panel"),"MissingMapList");
         
         Back = GetGameObjectChild(BingoMenu,"Back");
         Back.GetComponent<Button>().onClick.AddListener(delegate

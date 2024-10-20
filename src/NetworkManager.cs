@@ -1,12 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Xml.Linq;
+using AngryLevelLoader.Fields;
+using AngryLevelLoader.Managers;
 using Newtonsoft.Json;
+using TMPro;
+using Tommy;
 using UltraBINGO;
 using UltraBINGO.NetworkMessages;
+using UltraBINGO.UI_Elements;
+using UnityEngine;
+using UnityEngine.UI;
 using WebSocketSharp;
 
 using static UltraBINGO.CommonFunctions;
+using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
+using Object = System.Object;
 
 namespace UltrakillBingoClient;
 
@@ -28,8 +41,95 @@ public static class NetworkManager
 {
     public static string serverURL = Main.IsDevelopmentBuild ? "ws://127.0.0.1:2052" : "ws://vranks.uk:2052";
     
+    private static readonly HttpClient Client = new HttpClient();
+    
+    public static string serverCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoCatalog.toml" : "http://vranks.uk/bingoCatalog.toml";
+    
     static WebSocket ws;
     static Timer heartbeatTimer;
+    
+    public static void prepareHttpRequest()
+    {
+        Client.DefaultRequestHeaders.Accept.Add( new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/plain"));
+        Client.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
+        Client.Timeout = TimeSpan.FromSeconds(10);
+    } 
+    
+        
+    public async static Task<string> fetchCatalog()
+    {
+        string url = serverCatalogURL;
+        try
+        {
+            string responseTomlRaw = await Client.GetStringAsync(url);
+            return responseTomlRaw;
+        }
+        catch (Exception e)
+        {
+            Logging.Error("Something went wrong while fetching the catalog");
+            Logging.Error(e.ToString());
+            GetGameObjectChild(BingoMainMenu.MapCheck,"Text").GetComponent<TextMeshProUGUI>().text = "Unable to retrieve level catalog. Please check your connection.";
+            GetGameObjectChild(BingoMainMenu.MapCheck,"Button").GetComponent<Button>().interactable = false;
+            
+        }
+        return null;
+    }
+    
+    public static async void analyseCatalog()
+    {
+        Logging.Message("--Verifying level catalog...--");
+        
+        List<String> missingMaps = new List<string>();
+
+        string catalogString = await fetchCatalog();
+        StringReader read = new StringReader(catalogString);
+        
+        TomlTable catalog = TOML.Parse(read);
+        foreach(TomlNode node in catalog["catalog"]["levelCatalog"])
+        { 
+            TomlNode subNode = node.AsArray;
+            if(OnlineLevelsManager.onlineLevels[subNode[1]].status != OnlineLevelField.OnlineLevelStatus.installed)
+            { 
+                missingMaps.Add(subNode[0]);
+            }
+        }
+        
+        Main.missingMaps = missingMaps;
+        
+        if(missingMaps.Count > 0)
+        {
+            Logging.Message(missingMaps.Count + " maps missing from the map pool");
+            populateMissingMaps();
+        }
+        else
+        {
+            Logging.Message("All maps downloaded, good to go");
+            BingoMainMenu.MapCheck.SetActive(false);
+        }
+        
+    }
+    
+    public static void populateMissingMaps()
+    {
+        GameObject template = GetGameObjectChild(BingoMainMenu.MissingMapsList,"MapName");
+        template.SetActive(false);
+        
+        //Clear out the previous list before displaying the new one.
+        foreach(Transform child in BingoMainMenu.MissingMapsList.transform)
+        {
+            if(child.gameObject.name != "MapName")
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+        
+        foreach(string map in Main.missingMaps)
+        {
+            GameObject mapToAdd = GameObject.Instantiate(template,template.transform.parent);
+            mapToAdd.GetComponent<Text>().text = map;
+            mapToAdd.SetActive(true);
+        }
+    }
     
     public static bool isConnectionUp()
     {
@@ -68,6 +168,7 @@ public static class NetworkManager
             
         };
     }
+
     
     public static async void handleError(ErrorEventArgs e)
     {
