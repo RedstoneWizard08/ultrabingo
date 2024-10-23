@@ -28,16 +28,30 @@ public static class BingoCardPauseMenu
     
     public static GameObject LevelSquareTemplate;
     
+    
+    
     public static void onMouseEnterLevelSquare(PointerEventData data)
     {
-        string lvlName = data.pointerEnter.gameObject.GetComponent<BingoLevelData>().levelName;
+        string angryLevelName = data.pointerEnter.gameObject.GetComponent<BingoLevelData>().levelName.ToLower();
+        string campaignLevelName = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name].levelId.ToLower();
         
+        string path = "assets/bingo/lvlimg/" + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? "angry" : "campaign") + "/"
+            + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? angryLevelName : campaignLevelName) + ".png";
+        
+        Texture2D levelImg = AssetLoader.assets.LoadAsset<Texture2D>(path);    
+        Sprite levelSprite = Sprite.Create(levelImg, new Rect(0.0f, 0.0f, levelImg.width, levelImg.height), new Vector2(0.5f, 0.5f), 100.0f);
+        
+        GetGameObjectChild(Root,"SelectedLevelImage").GetComponent<Image>().overrideSprite = levelSprite;
         GetGameObjectChild(GetGameObjectChild(Root,"SelectedLevel"),"Text (TMP)").GetComponent<TextMeshProUGUI>().text = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name].levelName;
+        
+        GetGameObjectChild(Root,"SelectedLevel").SetActive(true);
+        GetGameObjectChild(Root,"SelectedLevelImage").SetActive(true);
     }
     
     public static void onMouseExitLevelSquare(PointerEventData data)
     {
         Logging.Message("Exit");
+        GetGameObjectChild(Root,"SelectedLevelImage").SetActive(false);
     }
     
     public static void ShowBingoCardInPauseMenu(ref OptionsManager __instance)

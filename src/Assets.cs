@@ -8,6 +8,8 @@ namespace UltraBINGO;
 
 public static class AssetLoader
 {
+    public static AssetBundle assets;
+    
     public static TMP_FontAsset gameFont;
     public static Font gameFontLegacy;
     
@@ -20,12 +22,13 @@ public static class AssetLoader
     public static GameObject BingoMainMenu;
     public static GameObject BingoLobbyMenu;
     public static GameObject BingoCardElements;
+    public static GameObject BingoEndScreen;
     
     public static AudioClip GameOverSound;
     
     public static void LoadAssets()
     {
-        AssetBundle assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
+        assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
         gameFont = assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
         gameFontLegacy = assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");
         UISprite = assets.LoadAsset<Sprite>("UISprite");
@@ -36,6 +39,7 @@ public static class AssetLoader
         BingoMainMenu = assets.LoadAsset<GameObject>("BingoMainMenu");
         BingoLobbyMenu = assets.LoadAsset<GameObject>("BingoLobbyMenu");
         BingoCardElements = assets.LoadAsset<GameObject>("BingoCard");
+        BingoEndScreen = assets.LoadAsset<GameObject>("BingoEndScreen");
          
         GameOverSound = Addressables.LoadAssetAsync<AudioClip>("Assets/Music/Hits/Versus2Outro.wav").WaitForCompletion();
 

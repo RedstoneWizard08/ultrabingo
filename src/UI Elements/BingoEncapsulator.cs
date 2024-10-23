@@ -35,8 +35,12 @@ public static class BingoEncapsulator
         BingoCardScreen = BingoCard.Init();
         BingoCardScreen.transform.SetParent(Root.transform);
         
-        BingoEndScreen = BingoEnd.Init();
-        BingoEndScreen.transform.SetParent(Root.transform);
+        //BingoEndScreen = BingoEnd.Init();
+        //BingoEndScreen.transform.SetParent(Root.transform);
+        
+        BingoEndScreen = GameObject.Instantiate(AssetLoader.BingoEndScreen,Root.transform);
+        BingoEnd.Init(ref BingoEndScreen);
+        
         
         return Root;
     }

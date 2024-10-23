@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UltraBINGO.UI_Elements;
+using UltrakillBingoClient;
 using UnityEngine;
 
 using static UltraBINGO.CommonFunctions;
@@ -9,6 +12,11 @@ namespace UltraBINGO.NetworkMessages;
 public class EndGameSignal
 {
     public string winningTeam;
+    public List<String> winningPlayers;
+    public string timeElapsed;
+    public int claims;
+    public string firstMapClaimed;
+    public string lastMapClaimed;
 }
 
 public static class EndGameSignalHandler
@@ -26,7 +34,14 @@ public static class EndGameSignalHandler
     
     public static async void handle(EndGameSignal response)
     {
-        await Task.Delay(500);
+        BingoEnd.winningTeam = response.winningTeam;
+        BingoEnd.winningPlayers = string.Join(",",response.winningPlayers);
+        BingoEnd.timeElapsed = response.timeElapsed;
+        BingoEnd.numOfClaims = response.claims;
+        BingoEnd.firstMap = response.firstMapClaimed;
+        BingoEnd.lastMap = response.lastMapClaimed;
+        
+        await Task.Delay(250);
 
         GameManager.CurrentGame.gameState = 2; // State 2 = game finished
 
