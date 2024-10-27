@@ -15,6 +15,8 @@ public static class UIManager
     public static GameObject ultrabingoButtonObject = null;
     public static GameObject ultrabingoEncapsulator = null;
     
+    public static GameObject ultrabingoLockedPanel = null;
+    
     public static void HandleGameSettingsUpdate()
     {
         //Only send if we're the host.
@@ -37,12 +39,21 @@ public static class UIManager
     
     public static void Open()
     {
-        //Hide chapter select
-        ultrabingoButtonObject.transform.parent.gameObject.SetActive(false);
+        if(Main.hasUnlocked)
+        {
+            //Hide chapter select
+            ultrabingoButtonObject.transform.parent.gameObject.SetActive(false);
         
-        NetworkManager.analyseCatalog();
-        BingoEncapsulator.Root.SetActive(true);
-        BingoEncapsulator.BingoMenu.SetActive(true);
+            NetworkManager.analyseCatalog();
+            BingoEncapsulator.Root.SetActive(true);
+            BingoEncapsulator.BingoMenu.SetActive(true);
+        }
+        else
+        {
+            //Show locked panel
+            ultrabingoLockedPanel.SetActive(true);
+        }
+
     }
     
     public static void Close()

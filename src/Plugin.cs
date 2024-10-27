@@ -40,8 +40,10 @@ namespace UltrakillBingoClient
         public static bool IsDevelopmentBuild = true;
         
         public static bool isSteamAuthenticated = false;
+        public static bool hasUnlocked = true;
         
         public static List<String> missingMaps = new List<string>();
+        
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
@@ -103,6 +105,7 @@ namespace UltrakillBingoClient
             
             if(getSceneName() == "Main Menu")
             {
+                hasUnlocked = hasUnlockedMod();
                 if(!isSteamAuthenticated)
                 {
                     Authenticate();
@@ -114,6 +117,9 @@ namespace UltrakillBingoClient
                     MonoSingleton<AssistController>.Instance.majorEnabled = false;
                     MonoSingleton<AssistController>.Instance.gameSpeed = 1f;
                 }
+                
+                UIManager.ultrabingoLockedPanel = GameObject.Instantiate(AssetLoader.BingoLockedPanel,GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").transform);
+                UIManager.ultrabingoLockedPanel.SetActive(false);
             }
             else
             {

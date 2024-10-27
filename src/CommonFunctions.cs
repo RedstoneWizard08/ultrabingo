@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using BepInEx;
 using HarmonyLib;
 using TMPro;
+using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,23 @@ public static class CommonFunctions
     public static string sanitiseUsername(string rawUsername)
     {
         return Regex.Replace(rawUsername,@"\p{Cs}", "");
+    }
+    
+    public static bool checkIfLevelSaveExists(string savePath, string fileName)
+    {
+        string fullPath = Path.Combine(savePath, string.Format("Slot{0}/" + fileName, GameProgressSaver.currentSlot + 1));
+        Logging.Message(fullPath);
+        return File.Exists(fullPath);
+    }
+    
+    public static bool hasUnlockedMod()
+    {
+        string savePath = Path.Combine((SystemInfo.deviceType == DeviceType.Desktop) ? Directory.GetParent(Application.dataPath).FullName : Application.persistentDataPath, "Saves");
+            
+        bool _74Beat = checkIfLevelSaveExists(savePath,"lvl29progress.bepis");
+        bool _P2Beat = checkIfLevelSaveExists(savePath,"lvl667progress.bepis");
+
+        return _74Beat && _P2Beat;
     }
     
     public static string getSceneName()

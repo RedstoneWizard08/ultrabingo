@@ -17,6 +17,9 @@ public class EndGameSignal
     public int claims;
     public string firstMapClaimed;
     public string lastMapClaimed;
+    
+    public float bestStatValue;
+    public string bestStatMap;
 }
 
 public static class EndGameSignalHandler
@@ -40,6 +43,9 @@ public static class EndGameSignalHandler
         BingoEnd.numOfClaims = response.claims;
         BingoEnd.firstMap = response.firstMapClaimed;
         BingoEnd.lastMap = response.lastMapClaimed;
+        
+        BingoEnd.bestStatValue = response.bestStatValue;
+        BingoEnd.bestStatName = response.bestStatMap;
         
         await Task.Delay(250);
 

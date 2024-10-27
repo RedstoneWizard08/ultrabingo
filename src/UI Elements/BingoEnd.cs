@@ -25,6 +25,9 @@ public static class BingoEnd
     public static string firstMap;
     public static string lastMap;
     
+    public static float bestStatValue;
+    public static string bestStatName;
+    
     public static async void ShowEndScreen()
     { 
         await Task.Delay(50); //Give the game a moment to fully load back into the menu before displaying
@@ -41,6 +44,9 @@ public static class BingoEnd
         GetGameObjectChild(GetGameObjectChild(Stats,"TotalClaims"),"Value").GetComponent<TextMeshProUGUI>().text = "<color=orange>"+numOfClaims+"</color>";
         GetGameObjectChild(GetGameObjectChild(Stats,"FirstMap"),"Value").GetComponent<TextMeshProUGUI>().text = "<color=orange>"+firstMap+"</color>";
         GetGameObjectChild(GetGameObjectChild(Stats,"LastMap"),"Value").GetComponent<TextMeshProUGUI>().text = "<color=orange>"+lastMap+"</color>";
+        
+        GetGameObjectChild(GetGameObjectChild(Stats,"HighestStat"),"Value").GetComponent<TextMeshProUGUI>().text =
+            "<color=orange>" + bestStatValue + " </color>(<color=orange>" + bestStatName + "</color>)";
         Root.SetActive(true);
         
     }

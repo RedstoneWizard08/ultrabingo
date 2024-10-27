@@ -24,7 +24,10 @@ public static class AssetLoader
     public static GameObject BingoCardElements;
     public static GameObject BingoEndScreen;
     
+    public static GameObject BingoLockedPanel;
+    
     public static AudioClip GameOverSound;
+    
     
     public static void LoadAssets()
     {
@@ -40,6 +43,8 @@ public static class AssetLoader
         BingoLobbyMenu = assets.LoadAsset<GameObject>("BingoLobbyMenu");
         BingoCardElements = assets.LoadAsset<GameObject>("BingoCard");
         BingoEndScreen = assets.LoadAsset<GameObject>("BingoEndScreen");
+        
+        BingoLockedPanel = assets.LoadAsset<GameObject>("BingoLocked");
          
         GameOverSound = Addressables.LoadAssetAsync<AudioClip>("Assets/Music/Hits/Versus2Outro.wav").WaitForCompletion();
 
