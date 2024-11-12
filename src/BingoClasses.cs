@@ -36,6 +36,7 @@ public class GameSettings
 {
     public int maxPlayers;
     public int maxTeams;
+    public int teamComposition;
     public int gridSize;
     public int gameType;
     public int difficulty;

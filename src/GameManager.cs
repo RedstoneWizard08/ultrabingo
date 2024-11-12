@@ -175,6 +175,7 @@ public static class GameManager
         
         BingoLobby.MaxPlayers.interactable = isHost;
         BingoLobby.MaxTeams.interactable = isHost;
+        BingoLobby.TeamComposition.interactable = isHost;
         BingoLobby.RequirePRank.interactable = isHost;
         BingoLobby.GameType.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
@@ -185,6 +186,7 @@ public static class GameManager
             //Reset field settings to default values.
             BingoLobby.MaxPlayers.text = 8.ToString();
             BingoLobby.MaxTeams.text = 4.ToString();
+            BingoLobby.TeamComposition.value = 0;
             BingoLobby.GridSize.value = 0;
             BingoLobby.GameType.value = 0;
             BingoLobby.Difficulty.value = 2;
@@ -195,6 +197,7 @@ public static class GameManager
         {
             BingoLobby.MaxPlayers.text = CurrentGame.gameSettings.maxPlayers.ToString();
             BingoLobby.MaxTeams.text = CurrentGame.gameSettings.maxTeams.ToString();
+            BingoLobby.TeamComposition.value = CurrentGame.gameSettings.teamComposition;
             BingoLobby.GridSize.value = CurrentGame.gameSettings.gridSize;
             BingoLobby.GameType.value = CurrentGame.gameSettings.gameType;
             BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;

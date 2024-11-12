@@ -67,7 +67,7 @@ public static class NetworkManager
         catch (Exception e)
         {
             Logging.Error("Something went wrong while fetching the catalog");
-            Logging.Error(e.ToString());
+            Logging.Error(e.Message);
             GetGameObjectChild(BingoMainMenu.MapCheck,"Text").GetComponent<TextMeshProUGUI>().text = "Unable to retrieve level catalog. Please check your connection.";
             GetGameObjectChild(BingoMainMenu.MapCheck,"Button").GetComponent<Button>().interactable = false;
             
@@ -309,6 +309,13 @@ public static class NetworkManager
                 Logging.Message("Player has joined our room");
                 PlayerJoiningMessage response = JsonConvert.DeserializeObject<PlayerJoiningMessage>(em.contents);
                 PlayerJoiningResponseHandler.handle(response);
+                break;
+            }
+            case "UpdateTeamsNotif":
+            {
+                Logging.Message("Teams in our room were updated");
+                UpdateTeamsNotification response = JsonConvert.DeserializeObject<UpdateTeamsNotification>(em.contents);
+                UpdateTeamsNotificationHandler.handle(response);
                 break;
             }
             case "RoomUpdate":

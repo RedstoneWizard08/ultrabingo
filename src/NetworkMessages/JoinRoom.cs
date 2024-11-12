@@ -23,26 +23,34 @@ public static class JoinRoomResponseHandler
 {
     public static void handle(JoinRoomResponse response)
     {
+        string msg = "Failed to join: ";
+        
         if(response.status < 0)
         {
             switch(response.status)
             {
+                case -4:
+                {
+                    msg += "Game has already started.";
+                    break;
+                }
                 case -3:
                 {
-                    MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to join: Game does not exist.");
+                    msg += "Game is not accepting new players.";
                     break;
                 }
                 case -2:
                 {
-                    MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to join: Game is full.");
+                    msg += "Game has already started.";
                     break;
                 }
                 case -1:
                 {
-                    MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to join: Game has already started.");
+                    msg += "Game does not exist.";
                     break;
                 }
             }
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
             NetworkManager.DisconnectWebSocket(1000,"Normal close");
         }
         else

@@ -94,7 +94,7 @@ public static class BingoMenuController
                 {
                     //...if it does, gather all the necessary data and ask Angry to load it.
                     Logging.Message("Loading specified Angry level");
-                    string msg = (getSceneName() != "Main Menu" ? "Moving to " + angryLevelData.levelName + "..." : "Loading " + angryLevelData.levelName + "...");
+                    string msg = (getSceneName() != "Main Menu" ? "Moving to <color=orange>" + angryLevelData.levelName + "</color>..." : "Loading <color=orange>" + angryLevelData.levelName + "</color>...");
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
 
                     AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.gameSettings.difficulty;
@@ -156,7 +156,7 @@ public static class BingoMenuController
             }
             else
             {
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to "+levelDisplayName + "...");
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to <color=orange>"+levelDisplayName + "</color>...");
                 await Task.Delay(1000);
                 SceneHelper.LoadScene(levelId);
             }
