@@ -263,6 +263,7 @@ public static class GameManager
         isInBingoLevel = false;
         returningFromBingoLevel = false;
         teammates = null;
+        BingoMapSelection.HasAlreadyFetched = false;
         
         //Cleanup the bingo grid if on the main menu.
         if(getSceneName() == "Main Menu")
