@@ -44,6 +44,7 @@ public static class NetworkManager
     private static readonly HttpClient Client = new HttpClient();
     
     public static string serverCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoCatalog.toml" : "http://vranks.uk/bingoCatalog.toml";
+    public static string serverMapPoolCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoMapPool.toml" : "http://vranks.uk/bingoMapPool.toml";
     
     static WebSocket ws;
     static Timer heartbeatTimer;
@@ -55,10 +56,9 @@ public static class NetworkManager
         Client.Timeout = TimeSpan.FromSeconds(10);
     } 
     
-        
-    public async static Task<string> fetchCatalog()
+    public static async Task<string> FetchCatalog(string urlToRequest)
     {
-        string url = serverCatalogURL;
+        string url = urlToRequest;
         try
         {
             string responseTomlRaw = await Client.GetStringAsync(url);
@@ -66,10 +66,10 @@ public static class NetworkManager
         }
         catch (Exception e)
         {
-            Logging.Error("Something went wrong while fetching the catalog");
+            Logging.Error("Something went wrong while fetching from the URL");
             Logging.Error(e.Message);
-            GetGameObjectChild(BingoMainMenu.MapCheck,"Text").GetComponent<TextMeshProUGUI>().text = "Unable to retrieve level catalog. Please check your connection.";
-            GetGameObjectChild(BingoMainMenu.MapCheck,"Button").GetComponent<Button>().interactable = false;
+            //GetGameObjectChild(BingoMainMenu.MapCheck,"Text").GetComponent<TextMeshProUGUI>().text = "Unable to retrieve level catalog. Please check your connection.";
+            //GetGameObjectChild(BingoMainMenu.MapCheck,"Button").GetComponent<Button>().interactable = false;
             
         }
         return null;
@@ -81,7 +81,7 @@ public static class NetworkManager
         
         List<String> missingMaps = new List<string>();
 
-        string catalogString = await fetchCatalog();
+        string catalogString = await FetchCatalog(NetworkManager.serverURL);
         StringReader read = new StringReader(catalogString);
         
         TomlTable catalog = TOML.Parse(read);

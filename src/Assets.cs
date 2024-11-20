@@ -24,6 +24,7 @@ public static class AssetLoader
     public static GameObject BingoCardElements;
     public static GameObject BingoEndScreen;
     public static GameObject BingoSetTeams;
+    public static GameObject BingoMapSelectionMenu;
     
     public static GameObject BingoLockedPanel;
     
@@ -35,7 +36,9 @@ public static class AssetLoader
         assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
         gameFont = assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
         gameFontLegacy = assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");
+        
         UISprite = assets.LoadAsset<Sprite>("UISprite");
+        
         BingoEntryButton = assets.LoadAsset<GameObject>("BingoEntryButton");
         BingoPauseCard = assets.LoadAsset<GameObject>("BingoPauseCard");
         BingoTeammatesCard = assets.LoadAsset<GameObject>("BingoTeammateCard");
@@ -45,10 +48,10 @@ public static class AssetLoader
         BingoCardElements = assets.LoadAsset<GameObject>("BingoCard");
         BingoEndScreen = assets.LoadAsset<GameObject>("BingoEndScreen");
         BingoSetTeams = assets.LoadAsset<GameObject>("BingoSetTeams");
+        BingoMapSelectionMenu = assets.LoadAsset<GameObject>("BingoMapSelection");
         
         BingoLockedPanel = assets.LoadAsset<GameObject>("BingoLocked");
          
         GameOverSound = Addressables.LoadAssetAsync<AudioClip>("Assets/Music/Hits/Versus2Outro.wav").WaitForCompletion();
-
     }
 }

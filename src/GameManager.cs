@@ -35,6 +35,22 @@ public static class GameManager
     
     public static bool triedToActivateCheats = false;
     
+    public static bool PreStartChecks()
+    {
+        //Check if the amount of selected maps is enough to fill the grid.
+        int gridSize = GameManager.CurrentGame.gameSettings.gridSize+3;
+        int requiredMaps = gridSize*gridSize;
+        
+        if(BingoMapSelection.NumOfMapsTotal < requiredMaps)
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Not enough maps selected. Add more map pools, or reduce the grid size.\n" +
+                                                                      "(<color=orange>" + requiredMaps + " </color>required, <color=orange>" + BingoMapSelection.NumOfMapsTotal + "</color> selected)");
+            return false;
+        }
+        
+        return true;
+    }
+    
     public static void ShowGameId()
     {
         GetGameObjectChild(GetGameObjectChild(BingoLobby.RoomIdDisplay,"Title"),"Text").GetComponent<Text>().text = "Game ID: " + CurrentGame.gameId;
@@ -78,7 +94,6 @@ public static class GameManager
         gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30,30);
         gridObj.GetComponent<GridLayoutGroup>().constraintCount = CurrentGame.grid.size;
         
-        Logging.Message("Card size");
         gridObj.transform.position = Vector3.zero;
         gridObj.transform.localPosition = Vector3.zero;
         switch(CurrentGame.grid.size)
@@ -107,7 +122,6 @@ public static class GameManager
             for(int y = 0; y < CurrentGame.grid.size; y++)
             {
                 //Clone and set up the button and hover triggers.
-                //GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,BingoCard.ButtonTemplate.transform.parent.transform);
                 GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,gridObj.transform);
                 
                 level.AddComponent<EventTrigger>();
@@ -192,6 +206,15 @@ public static class GameManager
             BingoLobby.Difficulty.value = 2;
             BingoLobby.LevelSelection.value = 0;
             BingoLobby.RequirePRank.isOn = false;
+            
+            BingoMapSelection.NumOfMapsTotal = 0;
+            BingoMapSelection.UpdateNumber();
+            BingoMapSelection.SelectedIds.Clear();
+            foreach(GameObject mapPoolButton in BingoMapSelection.MapPoolButtons)
+            {
+                GetGameObjectChild(mapPoolButton,"Image").GetComponent<Image>().color = new Color(1,1,1,0);
+                mapPoolButton.GetComponent<MapPoolData>().mapPoolEnabled = false;
+            }
         }
         else
         {

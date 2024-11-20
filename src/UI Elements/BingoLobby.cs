@@ -15,9 +15,11 @@ public static class BingoLobby
 {
     public static GameObject PlayerList;
     public static GameObject ReturnToBingoMenu;
+    public static GameObject SelectMaps;
+    public static GameObject SetTeams;
     public static GameObject StartGame;
     public static GameObject RoomIdDisplay;
-    public static GameObject SetTeams;
+
     
     public static GameObject GameOptions;
     public static TMP_InputField MaxPlayers;
@@ -121,6 +123,14 @@ public static class BingoLobby
             GameManager.LeaveGame();
         });
         
+        SelectMaps = GetGameObjectChild(BingoLobby,"SelectMaps");
+        SelectMaps.GetComponent<Button>().onClick.AddListener( delegate
+        {
+            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+            BingoEncapsulator.BingoMapSelectionMenu.SetActive(true);
+            BingoMapSelection.Setup();
+        });
+        
         SetTeams = GetGameObjectChild(BingoLobby,"SetTeams");
         SetTeams.GetComponent<Button>().onClick.AddListener(delegate
         {
@@ -133,7 +143,11 @@ public static class BingoLobby
         StartGame = GetGameObjectChild(BingoLobby,"StartGame");
         StartGame.GetComponent<Button>().onClick.AddListener(delegate
         {
-            GameManager.StartGame();
+            if(GameManager.PreStartChecks())
+            {
+                GameManager.StartGame();
+            }
+            
         });
         
         //Room id text

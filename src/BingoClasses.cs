@@ -3,6 +3,24 @@ using System.Linq;
 
 namespace UltraBINGO;
 
+public class MapPoolContainer
+{
+    public string mapPoolId;
+    public string mapPoolName;
+    public string description;
+    public int numOfMaps;
+    public List<string> mapList;
+    
+    public MapPoolContainer(string mapPoolId, string mapPoolName, string description, int numOfMaps, List<string> mapList)
+    {
+        this.mapPoolId = mapPoolId;
+        this.mapPoolName = mapPoolName;
+        this.description = description;
+        this.numOfMaps = numOfMaps;
+        this.mapList = mapList;
+    }
+}
+
 public class Player
 {
     public string username;
