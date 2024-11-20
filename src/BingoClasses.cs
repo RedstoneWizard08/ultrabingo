@@ -58,7 +58,6 @@ public class GameSettings
     public int gridSize;
     public int gameType;
     public int difficulty;
-    public int levelRotation;
     public bool requiresPRank;
 }
 

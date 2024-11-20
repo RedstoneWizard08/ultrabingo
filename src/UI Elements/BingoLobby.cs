@@ -28,7 +28,6 @@ public static class BingoLobby
     public static TMP_Dropdown GridSize;
     public static TMP_Dropdown GameType;
     public static TMP_Dropdown Difficulty;
-    public static TMP_Dropdown LevelSelection;
     public static Toggle RequirePRank;
     
     public static void onMaxPlayerUpdate(string playerAmount)
@@ -76,13 +75,6 @@ public static class BingoLobby
         UIManager.HandleGameSettingsUpdate();
     }
     
-    public static void onLevelSelectionUpdate(int value)
-    {
-        GameManager.CurrentGame.gameSettings.levelRotation = value;
-        LevelSelection.value = value;
-        UIManager.HandleGameSettingsUpdate();
-    }
-    
     public static void onPRankRequiredUpdate(bool value)
     {
         RequirePRank.isOn = value;
@@ -98,7 +90,6 @@ public static class BingoLobby
         RequirePRank.isOn = newSettings.PRankRequired;
         GameType.value = newSettings.gameType;
         Difficulty.value = newSettings.difficulty;
-        LevelSelection.value = newSettings.levelRotation;
         GridSize.value = newSettings.gridSize;
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
@@ -107,7 +98,6 @@ public static class BingoLobby
         GameManager.CurrentGame.gameSettings.requiresPRank = newSettings.PRankRequired;
         GameManager.CurrentGame.gameSettings.gameType = newSettings.gameType;
         GameManager.CurrentGame.gameSettings.difficulty = newSettings.difficulty;
-        GameManager.CurrentGame.gameSettings.levelRotation = newSettings.levelRotation;
         GameManager.CurrentGame.gameSettings.gridSize = newSettings.gridSize;
     }
     
@@ -173,9 +163,6 @@ public static class BingoLobby
         
         Difficulty = GetGameObjectChild(GetGameObjectChild(GameOptions,"Difficulty"),"Dropdown").GetComponent<TMP_Dropdown>();
         Difficulty.onValueChanged.AddListener(onDifficultyUpdate);
-        
-        LevelSelection = GetGameObjectChild(GetGameObjectChild(GameOptions,"CustomLevels"),"Dropdown").GetComponent<TMP_Dropdown>();
-        LevelSelection.onValueChanged.AddListener(onLevelSelectionUpdate);
         
         RequirePRank = GetGameObjectChild(GetGameObjectChild(GameOptions,"RequirePRank"),"Input").GetComponent<Toggle>();
         RequirePRank.onValueChanged.AddListener(onPRankRequiredUpdate);

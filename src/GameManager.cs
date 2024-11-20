@@ -204,7 +204,6 @@ public static class GameManager
             BingoLobby.GridSize.value = 0;
             BingoLobby.GameType.value = 0;
             BingoLobby.Difficulty.value = 2;
-            BingoLobby.LevelSelection.value = 0;
             BingoLobby.RequirePRank.isOn = false;
             
             BingoMapSelection.NumOfMapsTotal = 0;
@@ -224,7 +223,6 @@ public static class GameManager
             BingoLobby.GridSize.value = CurrentGame.gameSettings.gridSize;
             BingoLobby.GameType.value = CurrentGame.gameSettings.gameType;
             BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;
-            BingoLobby.LevelSelection.value = CurrentGame.gameSettings.levelRotation;
             BingoLobby.RequirePRank.isOn = CurrentGame.gameSettings.requiresPRank;
         }
 
