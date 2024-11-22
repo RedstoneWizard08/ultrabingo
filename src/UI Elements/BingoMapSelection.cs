@@ -50,6 +50,12 @@ public class BingoMapSelection
     public static void ClearList()
     {
         SelectedIds.Clear();
+        if(getSceneName() != "Main Menu")
+        {
+            MapPoolButtons.Clear();
+            AvailableMapPools.Clear();
+            HasAlreadyFetched = false;
+        }
     }
     
     public static void UpdateNumber()
