@@ -32,9 +32,8 @@ public static class CommonFunctions
         string savePath = Path.Combine((SystemInfo.deviceType == DeviceType.Desktop) ? Directory.GetParent(Application.dataPath).FullName : Application.persistentDataPath, "Saves");
             
         bool _74Beat = checkIfLevelSaveExists(savePath,"lvl29progress.bepis");
-        bool _P2Beat = checkIfLevelSaveExists(savePath,"lvl667progress.bepis");
 
-        return _74Beat && _P2Beat;
+        return _74Beat;
     }
     
     public static string getSceneName()

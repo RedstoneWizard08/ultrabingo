@@ -47,6 +47,11 @@ public class BingoMapSelection
         BingoEncapsulator.BingoLobbyScreen.SetActive(true);
     }
     
+    public static void ClearList()
+    {
+        SelectedIds.Clear();
+    }
+    
     public static void UpdateNumber()
     {
         SelectedMapsTotal.GetComponent<TextMeshProUGUI>().text = "Total maps in pool: <color=orange>"+NumOfMapsTotal+"</color>";

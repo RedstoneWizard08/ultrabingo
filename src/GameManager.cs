@@ -209,10 +209,14 @@ public static class GameManager
             BingoMapSelection.NumOfMapsTotal = 0;
             BingoMapSelection.UpdateNumber();
             BingoMapSelection.SelectedIds.Clear();
-            foreach(GameObject mapPoolButton in BingoMapSelection.MapPoolButtons)
+            if(BingoMapSelection.MapPoolButtons.Count > 0)
             {
-                GetGameObjectChild(mapPoolButton,"Image").GetComponent<Image>().color = new Color(1,1,1,0);
-                mapPoolButton.GetComponent<MapPoolData>().mapPoolEnabled = false;
+                Logging.Message(BingoMapSelection.MapPoolButtons.Count.ToString());
+                foreach(GameObject mapPoolButton in BingoMapSelection.MapPoolButtons)
+                {
+                    GetGameObjectChild(mapPoolButton,"Image").GetComponent<Image>().color = new Color(1,1,1,0);
+                    mapPoolButton.GetComponent<MapPoolData>().mapPoolEnabled = false;
+                }
             }
         }
         else
@@ -263,7 +267,8 @@ public static class GameManager
         isInBingoLevel = false;
         returningFromBingoLevel = false;
         teammates = null;
-        BingoMapSelection.HasAlreadyFetched = false;
+
+        BingoMapSelection.ClearList();
         
         //Cleanup the bingo grid if on the main menu.
         if(getSceneName() == "Main Menu")
