@@ -141,7 +141,7 @@ public static class NetworkManager
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
         ws.WaitTime = TimeSpan.FromSeconds(60);
-        ws.Log.Level = LogLevel.Trace;
+        //ws.Log.Level = LogLevel.Trace;
         
         ws.OnMessage += (sender,e) =>
         {

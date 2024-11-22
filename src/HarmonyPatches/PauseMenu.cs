@@ -32,7 +32,7 @@ public static class preventAngryAutoloadLinkedLevel
     [HarmonyPrefix]
     public static bool preventLoadLinkedLevel(AngryBundleContainer bundleContainer, LevelContainer levelContainer, RudeLevelData levelData, string levelPath, bool showBlocker = true)
     {
-        if(GameManager.isInBingoLevel && getSceneName() != "Main Menu")
+        if(GameManager.isInBingoLevel && getSceneName() != "Main Menu" && !GameManager.enteringAngryLevel)
         {
             return false;
         }
