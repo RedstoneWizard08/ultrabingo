@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AngryLevelLoader.Containers;
 using AngryLevelLoader.Managers;
+using AngryLevelLoader.Notifications;
 using UltraBINGO.Components;
 using UltrakillBingoClient;
 using UnityEngine;
@@ -43,7 +44,6 @@ public static class BingoMenuController
             GameManager.currentRow = row;
             GameManager.currentColumn = column;
         
-        
             //Check if the level we're going into is campaign or Angry.
             //If it's Angry, we need to do some checks if the level is downloaded before going in.
             if(levelData.isAngryLevel)
@@ -55,7 +55,33 @@ public static class BingoMenuController
                 SceneHelper.LoadScene(levelName);
             }
         }
-
+    }
+    
+    public static ScriptManager.LoadScriptResult loadAngryScript(string scriptName)
+    {
+        return ScriptManager.AttemptLoadScriptWithCertificate(scriptName);
+    }
+    
+    public static async Task<bool> DownloadAngryScript(string scriptName)
+    {
+        ScriptUpdateNotification.ScriptUpdateProgressField field = new ScriptUpdateNotification.ScriptUpdateProgressField();
+        field.scriptName = scriptName;
+        field.scriptStatus = ScriptUpdateNotification.ScriptUpdateProgressField.ScriptStatus.Download;
+        field.StartDownload();
+        while(field.downloading)
+        {
+            await Task.Delay(500);
+        }
+        if(field.isDone)
+        {
+            Logging.Warn("Download finished");
+            return true;
+        }
+        else
+        {
+            Logging.Error("Download failed!");
+            return false;
+        }
     }
     
     public static async void handleAngryLoad(BingoLevelData angryLevelData,bool isInGame=false)
@@ -98,7 +124,42 @@ public static class BingoMenuController
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
 
                     AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.gameSettings.difficulty;
-                    AngrySceneManager.LoadLevel(bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath,true);
+                    
+                    //Before loading, check if the level uses any custom scripts.
+                    List<string> requiredAngryScripts = ScriptManager.GetRequiredScriptsFromBundle(bundleContainer);
+                    if(requiredAngryScripts.Count > 0)
+                    {
+                        Logging.Warn("Level requires custom scripts, checking if locally loaded");
+                        
+                        //If they do, check if the scripts are already downloaded and loaded locally.
+                        foreach(string scriptName in requiredAngryScripts)
+                        {
+                            if(!ScriptManager.ScriptExists(scriptName))
+                            {
+                                Logging.Warn("Asking Angry to download " + scriptName);
+                                 bool downloadResult = await DownloadAngryScript(scriptName);
+                                 if(downloadResult == true)
+                                 {
+                                     ScriptManager.LoadScriptResult res = loadAngryScript(scriptName);
+                                     if(res != ScriptManager.LoadScriptResult.Loaded)
+                                     {
+                                         Logging.Error("Failed to load script with reason: ");
+                                         Logging.Error(res.ToString());
+                                     }
+                                 }
+                                
+                            }
+                            else
+                            {
+                                Logging.Message(scriptName + " is already downloaded");
+                            }
+                        }
+                        AngrySceneManager.LoadLevelWithScripts(requiredAngryScripts,bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath);
+                    }
+                    else
+                    {   
+                        AngrySceneManager.LoadLevel(bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath,true);
+                    }
                 }
                 else
                 {
@@ -110,7 +171,7 @@ public static class BingoMenuController
             else
             {
                 //Prevent multiple downloads.
-                if(GameManager.isDownloadingLevel == true)
+                if(GameManager.isDownloadingLevel)
                 {
                     Logging.Warn("Trying to download a level but another one is already in progress!");
                     return;
@@ -120,12 +181,11 @@ public static class BingoMenuController
                 Logging.Warn("Level does not already exist locally - Downloading from online repo");
                 GameManager.isDownloadingLevel = true;
                 
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("-- DOWNLOADING "+ angryLevelData.levelName + " --\n<color=orange>PLEASE WAIT A MOMENT...</color> --");
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("-- DOWNLOADING "+ angryLevelData.levelName + " --\nYou can continue to play in the meantime.");
                 currentlyDownloadingLevel = angryLevelData.levelName;
                 OnlineLevelsManager.onlineLevels[angryLevelData.angryParentBundle].Download();
                 while(OnlineLevelsManager.onlineLevels[angryLevelData.angryParentBundle].downloading)
                 {
-                    Logging.Message("Waiting");
                     await Task.Delay(500);
                 }
             }
