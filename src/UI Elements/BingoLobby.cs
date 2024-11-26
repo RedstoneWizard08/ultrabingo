@@ -30,6 +30,7 @@ public static class BingoLobby
     public static TMP_Dropdown Difficulty;
     public static Toggle RequirePRank;
     
+    
     public static void onMaxPlayerUpdate(string playerAmount)
     {
         int amount = int.Parse(playerAmount);

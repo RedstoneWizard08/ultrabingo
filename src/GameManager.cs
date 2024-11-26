@@ -15,30 +15,101 @@ namespace UltraBINGO;
 
 public static class GameManager
 {
-    
     public static Game CurrentGame;
     
-    public static bool isInBingoLevel = false;
-    public static bool returningFromBingoLevel = false;
+    public static bool IsInBingoLevel = false;
+    public static bool ReturningFromBingoLevel = false;
     
-    public static int currentRow = 0;
-    public static int currentColumn = 0;
+    public static int CurrentRow = 0;
+    public static int CurrentColumn = 0;
     
-    public static string currentTeam = "";
-    public static List<String> teammates;
+    public static string CurrentTeam = "";
+    public static List<String> Teammates;
     
-    public static bool hasSent = false;
-    public static bool enteringAngryLevel = false;
+    public static bool HasSent = false;
+    public static bool EnteringAngryLevel = false;    
+    public static bool TriedToActivateCheats = false;
+    public static bool IsDownloadingLevel = false;
     
-    public static bool isDownloadingLevel = false;
-    public static GameObject levelBeingDownloaded = null;
+    public static GameObject LevelBeingDownloaded = null;
     
-    public static bool triedToActivateCheats = false;
+    public static void ClearGameVariables()
+    {
+        CurrentGame = null;
+        CurrentTeam = null;
+        CurrentRow = 0;
+        CurrentColumn = 0;
+        IsInBingoLevel = false;
+        ReturningFromBingoLevel = false;
+        Teammates = null;
+
+        BingoMapSelection.ClearList();
+        
+        //Cleanup the bingo grid if on the main menu.
+        if(getSceneName() == "Main Menu")
+        {
+            BingoCard.Cleanup();
+        }
+    }
     
+    public static void HumiliateSelf()
+    {
+        CheatActivation ca = new CheatActivation();
+        ca.username = sanitiseUsername(Steamworks.SteamClient.Name);
+        ca.gameId = CurrentGame.gameId;
+        ca.steamId = Steamworks.SteamClient.SteamId.ToString();
+        
+        NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ca));
+    }
+    
+    public static void LeaveGame(bool isInLevel=false)
+    {
+        //Send a request to the server saying we want to leave.
+        NetworkManager.SendLeaveGameRequest(CurrentGame.gameId);
+        
+        //When that's sent off, close the connection on our end.
+        NetworkManager.DisconnectWebSocket(1000,"Normal close");
+        
+        ClearGameVariables();
+        
+        if(!isInLevel)
+        {
+            //If dc'ing from lobby/card/end screen, return to the bingo menu.
+            BingoEncapsulator.BingoCardScreen.SetActive(false);
+            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+            BingoEncapsulator.BingoEndScreen.SetActive(false);
+            BingoEncapsulator.BingoMenu.SetActive(true);
+        }
+    }
+    
+    public static void MoveToCard()
+    {
+        BingoCard.UpdateTitles();
+        
+        BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+        BingoEncapsulator.BingoCardScreen.SetActive(true);
+    }
+    
+    public static void OnMouseOverLevel(PointerEventData data)
+    {
+        BingoCard.ShowLevelData(data.pointerEnter.transform.parent.gameObject.GetComponent<BingoLevelData>());
+    }
+    
+    public static void OnMouseExitLevel(PointerEventData data)
+    {
+        BingoCard.HideLevelData();
+    }
+    
+    //Check if we're the host of the game we're in.
+    public static bool PlayerIsHost()
+    {
+        return Steamworks.SteamClient.SteamId.ToString() == CurrentGame.gameHost;
+    }
+        
+    //Check if the amount of selected maps is enough to fill the grid.
     public static bool PreStartChecks()
     {
-        //Check if the amount of selected maps is enough to fill the grid.
-        int gridSize = GameManager.CurrentGame.gameSettings.gridSize+3;
+        int gridSize = CurrentGame.gameSettings.gridSize+3;
         int requiredMaps = gridSize*gridSize;
         
         if(BingoMapSelection.NumOfMapsTotal < requiredMaps)
@@ -47,21 +118,18 @@ public static class GameManager
                                                                       "(<color=orange>" + requiredMaps + " </color>required, <color=orange>" + BingoMapSelection.NumOfMapsTotal + "</color> selected)");
             return false;
         }
-        
         return true;
     }
     
-    public static void ShowGameId()
+    //Reset temporary vars on level change.
+    public static void ResetVars()
     {
-        GetGameObjectChild(GetGameObjectChild(BingoLobby.RoomIdDisplay,"Title"),"Text").GetComponent<Text>().text = "Game ID: " + CurrentGame.gameId;
-        //BingoLobby.RoomIdDisplay.GetComponent<TextMeshProUGUI>().text = "Game ID: " + CurrentGame.gameId;
+        HasSent = false;
+        EnteringAngryLevel = false;
+        TriedToActivateCheats = false;
     }
     
-    public static bool playerIsHost()
-    {
-        return Steamworks.SteamClient.SteamId.ToString() == CurrentGame.gameHost;
-    }
-    
+    //Update displayed player list when a player joins/leaves game.
     public static void RefreshPlayerList()
     {
         BingoLobby.PlayerList.SetActive(false);
@@ -75,17 +143,7 @@ public static class GameManager
         BingoLobby.PlayerList.SetActive(true);
     }
     
-    public static void OnMouseOverLevel(PointerEventData data)
-    {
-        BingoCard.ShowLevelData(data.pointerEnter.transform.parent.gameObject.GetComponent<BingoLevelData>());
-    }
-    
-    public static void OnMouseExitLevel(PointerEventData data)
-    {
-        BingoCard.HideLevelData();
-    }
-    
-    
+    //Setup the bingo grid.
     public static void SetupBingoCardDynamic()
     {
         //Resize the GridLayoutGroup based on the grid size.
@@ -116,7 +174,6 @@ public static class GameManager
             default:{break;}
         }
         
-        Logging.Message("Loop");
         for(int x = 0; x < CurrentGame.grid.size; x++)
         {
             for(int y = 0; y < CurrentGame.grid.size; y++)
@@ -124,30 +181,23 @@ public static class GameManager
                 //Clone and set up the button and hover triggers.
                 GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,gridObj.transform);
                 
+                //Mouse enter
                 level.AddComponent<EventTrigger>();
                 EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
                 mouseEnter.eventID = EventTriggerType.PointerEnter;
-                mouseEnter.callback.AddListener((data) =>
-                {
-                    OnMouseOverLevel((PointerEventData)data);
-                });
+                mouseEnter.callback.AddListener((data) => { OnMouseOverLevel((PointerEventData)data); });
                 level.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
                 
+                //Mouse exit
                 EventTrigger.Entry mouseExit = new EventTrigger.Entry();
                 mouseExit.eventID = EventTriggerType.PointerExit;
-                mouseExit.callback.AddListener((data) =>
-                {
-                    OnMouseExitLevel((PointerEventData)data);
-                });
+                mouseExit.callback.AddListener((data) => { OnMouseExitLevel((PointerEventData)data); });
                 level.GetComponent<EventTrigger>().triggers.Add(mouseExit);
                 
-                //Label the button and the onclick listener.
+                //Label the button.
                 string lvlCoords = x+"-"+y;
                 level.name = lvlCoords;
-                level.transform.SetParent(BingoCard.Grid.transform);
-                GetGameObjectChild(level,"Text").GetComponent<Text>().text = "BingoCardButton";
-                
-                GameLevel levelObject = GameManager.CurrentGame.grid.levelTable[lvlCoords];
+                GameLevel levelObject = CurrentGame.grid.levelTable[lvlCoords];
                 GetGameObjectChild(level,"Text").GetComponent<Text>().text = levelObject.levelName;
                 
                 //Setup the BingoLevelData component.
@@ -164,6 +214,7 @@ public static class GameManager
                     BingoMenuController.LoadBingoLevel(levelObject.levelId,lvlCoords,level.GetComponent<BingoLevelData>());
                 });
                 
+                level.transform.SetParent(BingoCard.Grid.transform);
                 level.SetActive(true);
             }
         }
@@ -171,7 +222,7 @@ public static class GameManager
         //Display teammates.
         TextMeshProUGUI teammates = GetGameObjectChild(BingoCard.Teammates,"Players").GetComponent<TextMeshProUGUI>();
         teammates.text = "";
-        foreach(string player in GameManager.teammates)
+        foreach(string player in Teammates)
         {
             teammates.text += player + "\n";
         }
@@ -194,6 +245,8 @@ public static class GameManager
         BingoLobby.GameType.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
+        BingoLobby.SetTeams.GetComponent<Button>().interactable = isHost;
+        BingoLobby.SelectMaps.GetComponent<Button>().interactable = isHost;
         
         if(isHost)
         {
@@ -211,7 +264,6 @@ public static class GameManager
             BingoMapSelection.SelectedIds.Clear();
             if(BingoMapSelection.MapPoolButtons.Count > 0)
             {
-                Logging.Message(BingoMapSelection.MapPoolButtons.Count.ToString());
                 foreach(GameObject mapPoolButton in BingoMapSelection.MapPoolButtons)
                 {
                     GetGameObjectChild(mapPoolButton,"Image").GetComponent<Image>().color = new Color(1,1,1,0);
@@ -229,7 +281,10 @@ public static class GameManager
             BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;
             BingoLobby.RequirePRank.isOn = CurrentGame.gameSettings.requiresPRank;
         }
-
+    }
+    public static void ShowGameId()
+    {
+        GetGameObjectChild(GetGameObjectChild(BingoLobby.RoomIdDisplay,"Title"),"Text").GetComponent<Text>().text = "Game ID: " + CurrentGame.gameId;
     }
     
     public static void StartGame()
@@ -237,73 +292,19 @@ public static class GameManager
         NetworkManager.SendStartGameSignal(CurrentGame.gameId);
     }
     
-    public static void LeaveGame(bool isInLevel=false)
-    {
-        //Send a request to the server saying we want to leave.
-        NetworkManager.SendLeaveGameRequest(CurrentGame.gameId);
-        
-        //When that's sent off, close the connection on our end.
-        NetworkManager.DisconnectWebSocket(1000,"Normal close");
-        
-        clearGameVariables();
-        
-        if(!isInLevel)
-        {
-            //If dc'ing from lobby/card/end screen, return to the bingo menu.
-            BingoEncapsulator.BingoCardScreen.SetActive(false);
-            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
-            BingoEncapsulator.BingoEndScreen.SetActive(false);
-            BingoEncapsulator.BingoMenu.SetActive(true);
-            
-        }
-    }
-    
-    public static void clearGameVariables()
-    {
-        CurrentGame = null;
-        currentTeam = null;
-        currentRow = 0;
-        currentColumn = 0;
-        isInBingoLevel = false;
-        returningFromBingoLevel = false;
-        teammates = null;
-
-        BingoMapSelection.ClearList();
-        
-        //Cleanup the bingo grid if on the main menu.
-        if(getSceneName() == "Main Menu")
-        {
-            foreach(Transform child in BingoCard.Grid.transform)
-            {
-                GameObject toRemove = child.gameObject;
-                GameObject.Destroy(toRemove);
-            }
-            
-        }
-
-    }
-    
-    public static void MoveToCard()
-    {
-        BingoCard.UpdateTitles();
-        
-        BingoEncapsulator.BingoLobbyScreen.SetActive(false);
-        BingoEncapsulator.BingoCardScreen.SetActive(true);
-    }
-    
     public static void UpdateCards(int row, int column, string team, string playername, float newTime, int newStyle)
     {
         string coordLookup = row+"-"+column;
         if(!CurrentGame.grid.levelTable.ContainsKey(coordLookup))
         {
-            Logging.Warn("RECEIVED AN INVALID GRID POSITION TO UPDATE!");
-            Logging.Warn(coordLookup);
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but an <color=orange>invalid grid position</color> was given.\nCheck the console and report it to Clearwater!");
+            Logging.Error("RECEIVED AN INVALID GRID POSITION TO UPDATE!");
+            Logging.Error(coordLookup);
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but an <color=orange>invalid grid position</color> was given.\nCheck BepInEx console and report it to Clearwater!");
             return;
         }
-        GameManager.CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
-        GameManager.CurrentGame.grid.levelTable[coordLookup].timeToBeat = newTime;
-        GameManager.CurrentGame.grid.levelTable[coordLookup].styleToBeat = newStyle;
+        CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
+        CurrentGame.grid.levelTable[coordLookup].timeToBeat = newTime;
+        CurrentGame.grid.levelTable[coordLookup].styleToBeat = newStyle;
         
         if(getSceneName() == "Main Menu")
         {
@@ -313,24 +314,12 @@ public static class GameManager
             GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().isClaimed = true;
             GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
             GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
-            
             GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newTime;
             GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newStyle;
-            
         }
         else
         {
             GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
         }
-    }
-    
-    public static void HumiliateSelf()
-    {
-        CheatActivation ca = new CheatActivation();
-        ca.username = sanitiseUsername(Steamworks.SteamClient.Name);
-        ca.gameId = CurrentGame.gameId;
-        ca.steamId = Steamworks.SteamClient.SteamId.ToString();
-        
-        NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(ca));
     }
 }

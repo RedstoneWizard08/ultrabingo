@@ -15,7 +15,7 @@ public static class LevelEndPanel
 {
     public static bool displayUltraBingoTitle(DifficultyTitle __instance, ref TMP_Text ___txt2)
     {
-        if(GameManager.isInBingoLevel)
+        if(GameManager.IsInBingoLevel)
         {
             string text = "-- ULTRABINGO -- ";
             if(!___txt2)
@@ -42,7 +42,7 @@ public static class LevelEndChanger
     [HarmonyPrefix]
     public static bool handleBingoLevelChange(FinalRank __instance, float ___savedTime, int ___savedStyle, bool force = false)
     {
-        if(GameManager.isInBingoLevel && !GameManager.CurrentGame.isGameFinished())
+        if(GameManager.IsInBingoLevel && !GameManager.CurrentGame.isGameFinished())
         {
             MonoSingleton<OptionsMenuToManager>.Instance.RestartMissionNoConfirm();
             return false;
@@ -60,7 +60,7 @@ public class FinalRankFanfare
     [HarmonyPostfix]
     public static void sendResult(FinalRank __instance, float ___savedTime, int ___savedStyle)
     {
-        if(GameManager.isInBingoLevel && !GameManager.hasSent && !GameManager.CurrentGame.isGameFinished())
+        if(GameManager.IsInBingoLevel && !GameManager.HasSent && !GameManager.CurrentGame.isGameFinished())
         {
             if(GameManager.CurrentGame.gameSettings.requiresPRank)
             {
@@ -76,7 +76,7 @@ public class FinalRankFanfare
                     {
                         Logging.Message("P-Rank not obtained, rejecting run");
                         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You must finish the level with a <color=yellow>P</color>-Rank to claim it.");
-                        GameManager.hasSent = true;
+                        GameManager.HasSent = true;
                         return;
                     }
                 }
@@ -93,19 +93,19 @@ public class FinalRankFanfare
             
             srr.playerName = sanitiseUsername(Steamworks.SteamClient.Name);
             srr.steamId = Steamworks.SteamClient.SteamId.ToString();
-            srr.team = GameManager.currentTeam;
+            srr.team = GameManager.CurrentTeam;
             
             srr.gameId = GameManager.CurrentGame.gameId;
             srr.time = time;
             srr.style = style;
             srr.levelName = getSceneName();
-            srr.levelId = GameManager.CurrentGame.grid.levelTable[GameManager.currentRow+"-"+GameManager.currentColumn].levelId;
+            srr.levelId = GameManager.CurrentGame.grid.levelTable[GameManager.CurrentRow+"-"+GameManager.CurrentColumn].levelId;
             Logging.Message(srr.levelId);
-            srr.column = GameManager.currentColumn;
-            srr.row = GameManager.currentRow;
+            srr.column = GameManager.CurrentColumn;
+            srr.row = GameManager.CurrentRow;
             NetworkManager.SubmitRun(srr);
             
-            GameManager.hasSent = true;
+            GameManager.HasSent = true;
             
         }
     }

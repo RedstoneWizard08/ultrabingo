@@ -12,10 +12,10 @@ public static class Patch
 	[HarmonyPostfix]
 	public static void notifyDownloadComplete(AngryBundleContainer __instance)
 	{
-		if(GameManager.CurrentGame != null && !GameManager.enteringAngryLevel)
+		if(GameManager.CurrentGame != null && !GameManager.EnteringAngryLevel)
 		{
 			Logging.Warn("Download done");
-			GameManager.isDownloadingLevel = false;
+			GameManager.IsDownloadingLevel = false;
 			
 			MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>"+BingoMenuController.currentlyDownloadingLevel + "</color> has finished downloading.\nClick level button again to enter!");
 			

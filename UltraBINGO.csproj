@@ -166,5 +166,7 @@
 
     <ItemGroup>
       <None Remove="Server\**" />
+      <None Remove="lib\AngryLevelLoader.dll" />
+      <None Remove="lib\AngryLevelLoader-publicized.dll" />
     </ItemGroup>
 </Project>

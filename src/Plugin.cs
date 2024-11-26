@@ -1,21 +1,15 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using AngryLevelLoader.Fields;
 using BepInEx;
 using HarmonyLib;
 using Steamworks;
 using Steamworks.Data;
-using TMPro;
 using UltraBINGO;
 using UltraBINGO.UI_Elements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using LogType = UnityEngine.LogType;
-
-using WebSocketSharp;
 
 using static UltraBINGO.CommonFunctions;
 
@@ -29,33 +23,29 @@ using static UltraBINGO.CommonFunctions;
 
 namespace UltrakillBingoClient
 {
-    [BepInPlugin(Main.pluginId, Main.pluginName, Main.pluginVersion)]
+    [BepInPlugin(pluginId, pluginName, pluginVersion)]
     [BepInDependency("com.eternalUnion.angryLevelLoader", BepInDependency.DependencyFlags.HardDependency)]
     public class Main : BaseUnityPlugin
     {   
         public const string pluginId = "clearwater.ultrakillbingo.ultrakillbingo";
         public const string pluginName = "Baphomet's BINGO";
-        public const string pluginVersion = "0.1.0";
-        
-        public static bool IsDevelopmentBuild = true;
-        
-        public static bool isSteamAuthenticated = false;
-        public static bool hasUnlocked = true;
-        
-        public static List<String> missingMaps = new List<string>();
-        
+        public const string pluginVersion = "0.2.0";
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
+        public static bool IsDevelopmentBuild = true;
+        public static bool IsSteamAuthenticated = false;
+        public static bool HasUnlocked = true;
+        
+        public static List<String> missingMaps = new List<string>();
+         
         public static string CatalogFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"bingocatalog.toml");
         
+        //Mod init logic
         private void Awake()
         {
-            // Plugin startup logic
-            //Debug.unityLogger.filterLogType = LogType.Exception;
-            
-            Logging.Message("--Now loading Baphomet's Bingo...--");
-            if(Main.IsDevelopmentBuild)
+            Logging.Warn("--Now loading Baphomet's Bingo...--");
+            if(IsDevelopmentBuild)
             {
                 Logging.Warn("-- DEVELOPMENT BUILD. REQUESTS WILL BE SENT TO LOCALHOST. --");
             }
@@ -64,18 +54,21 @@ namespace UltrakillBingoClient
                 Logging.Warn("-- RELEASE BUILD. REQUESTS WILL BE SENT TO REMOTE SERVER. --");
             }
             
-            Logging.Message("--Loading assetbundle...--");
+            Logging.Message("--Loading asset bundle...--");
             AssetLoader.LoadAssets();
             
             Logging.Message("--Applying patches...--");
             Harmony harmony = new Harmony(pluginId);
             harmony.PatchAll();
             
-            SceneManager.sceneLoaded += onSceneLoaded;
+            Logging.Message("--Network manager init...--");
+            NetworkManager.Initialise();
             
-            NetworkManager.initialise();
+            Logging.Message("--Done!--");
+            SceneManager.sceneLoaded += onSceneLoaded;
         }
         
+        //Make sure the client is running a legit copy of the game
         public bool Authenticate()
         {
             Logging.Message("Authenticating game ownership with Steam...");
@@ -85,7 +78,7 @@ namespace UltrakillBingoClient
                 string ticketString = BitConverter.ToString(ticket.Data,0, ticket.Data.Length).Replace("-", string.Empty);
                 if(ticketString.Length > 0)
                 {
-                    isSteamAuthenticated = true;
+                    IsSteamAuthenticated = true;
                     return true;
                 }
             }
@@ -97,16 +90,15 @@ namespace UltrakillBingoClient
             return false;
         }
         
+        //Scene switch
         public void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            GameManager.hasSent = false;
-            GameManager.enteringAngryLevel = false;
-            GameManager.triedToActivateCheats = false;
-            
+            GameManager.ResetVars();
+
             if(getSceneName() == "Main Menu")
             {
-                hasUnlocked = hasUnlockedMod();
-                if(!isSteamAuthenticated)
+                HasUnlocked = hasUnlockedMod();
+                if(!IsSteamAuthenticated)
                 {
                     Authenticate();
                 }
@@ -123,9 +115,9 @@ namespace UltrakillBingoClient
             }
             else
             {
-                if(GameManager.isInBingoLevel)
+                if(GameManager.IsInBingoLevel)
                 {
-                    UIManager.DisableMajorAssists(GetInactiveRootObject("Canvas"));
+                    UIManager.DisableMajorAssists();
                 }
             }
         }

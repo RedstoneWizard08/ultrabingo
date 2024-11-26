@@ -86,7 +86,7 @@ public class BingoMapSelection
         UpdateMapPool ump = new UpdateMapPool();
         ump.gameId = GameManager.CurrentGame.gameId;
         ump.mapPoolIds = BingoMapSelection.SelectedIds.ToList();
-        NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(ump));
+        NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ump));
     }
     
     public static void ShowMapPoolData(PointerEventData data)

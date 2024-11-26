@@ -8,50 +8,45 @@ namespace UltraBINGO;
 
 public static class AssetLoader
 {
-    public static AssetBundle assets;
+    public static AssetBundle Assets;
     
-    public static TMP_FontAsset gameFont;
-    public static Font gameFontLegacy;
+    public static TMP_FontAsset GameFont;
+    public static Font GameFontLegacy;
     
     public static Sprite UISprite;
     
     public static GameObject BingoEntryButton;
     public static GameObject BingoPauseCard;
     public static GameObject BingoTeammatesCard;
-    
     public static GameObject BingoMainMenu;
     public static GameObject BingoLobbyMenu;
     public static GameObject BingoCardElements;
     public static GameObject BingoEndScreen;
     public static GameObject BingoSetTeams;
     public static GameObject BingoMapSelectionMenu;
-    
     public static GameObject BingoLockedPanel;
     
     public static AudioClip GameOverSound;
     
-    
     public static void LoadAssets()
     {
-        assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
-        gameFont = assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
-        gameFontLegacy = assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");
+        Assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder,"bingo.resource"));
         
-        UISprite = assets.LoadAsset<Sprite>("UISprite");
+        GameFont = Assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
+        GameFontLegacy = Assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");
         
-        BingoEntryButton = assets.LoadAsset<GameObject>("BingoEntryButton");
-        BingoPauseCard = assets.LoadAsset<GameObject>("BingoPauseCard");
-        BingoTeammatesCard = assets.LoadAsset<GameObject>("BingoTeammateCard");
-        
-        BingoMainMenu = assets.LoadAsset<GameObject>("BingoMainMenu");
-        BingoLobbyMenu = assets.LoadAsset<GameObject>("BingoLobbyMenu");
-        BingoCardElements = assets.LoadAsset<GameObject>("BingoCard");
-        BingoEndScreen = assets.LoadAsset<GameObject>("BingoEndScreen");
-        BingoSetTeams = assets.LoadAsset<GameObject>("BingoSetTeams");
-        BingoMapSelectionMenu = assets.LoadAsset<GameObject>("BingoMapSelection");
-        
-        BingoLockedPanel = assets.LoadAsset<GameObject>("BingoLocked");
+        BingoEntryButton = Assets.LoadAsset<GameObject>("BingoEntryButton");
+        BingoPauseCard = Assets.LoadAsset<GameObject>("BingoPauseCard");
+        BingoTeammatesCard = Assets.LoadAsset<GameObject>("BingoTeammateCard");
+        BingoMainMenu = Assets.LoadAsset<GameObject>("BingoMainMenu");
+        BingoLobbyMenu = Assets.LoadAsset<GameObject>("BingoLobbyMenu");
+        BingoCardElements = Assets.LoadAsset<GameObject>("BingoCard");
+        BingoEndScreen = Assets.LoadAsset<GameObject>("BingoEndScreen");
+        BingoSetTeams = Assets.LoadAsset<GameObject>("BingoSetTeams");
+        BingoMapSelectionMenu = Assets.LoadAsset<GameObject>("BingoMapSelection");
+        BingoLockedPanel = Assets.LoadAsset<GameObject>("BingoLocked");
          
+        UISprite = Assets.LoadAsset<Sprite>("UISprite");
         GameOverSound = Addressables.LoadAssetAsync<AudioClip>("Assets/Music/Hits/Versus2Outro.wav").WaitForCompletion();
     }
 }

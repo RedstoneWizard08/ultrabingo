@@ -38,7 +38,7 @@ public static class BingoCardPauseMenu
         string path = "assets/bingo/lvlimg/" + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? "angry" : "campaign") + "/"
             + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? angryLevelName : campaignLevelName) + ".png";
         
-        Texture2D levelImg = AssetLoader.assets.LoadAsset<Texture2D>(path);    
+        Texture2D levelImg = AssetLoader.Assets.LoadAsset<Texture2D>(path);    
         Sprite levelSprite = Sprite.Create(levelImg, new Rect(0.0f, 0.0f, levelImg.width, levelImg.height), new Vector2(0.5f, 0.5f), 100.0f);
         
         GetGameObjectChild(Root,"SelectedLevelImage").GetComponent<Image>().overrideSprite = levelSprite;
@@ -82,7 +82,7 @@ public static class BingoCardPauseMenu
                 });
                 levelSquare.GetComponent<Image>().color = teamColors[currentGame.grid.levelTable[x+"-"+y].claimedBy];
                 
-                if(GameManager.currentRow == x && GameManager.currentColumn == y)
+                if(GameManager.CurrentRow == x && GameManager.CurrentColumn == y)
                 {
                     levelSquare.AddComponent<Outline>();
                     levelSquare.GetComponent<Outline>().effectColor = Color.yellow;

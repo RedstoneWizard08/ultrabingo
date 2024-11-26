@@ -14,13 +14,13 @@ public class ShopAddLevelInfo
     [HarmonyPostfix]
     public static void AddBingoLevelInfo(ShopZone __instance, Canvas ___shopCanvas)
     {
-        if(GameManager.isInBingoLevel)
+        if(GameManager.IsInBingoLevel)
         {
             if(___shopCanvas != null)
             {
-                TextMeshProUGUI origTip = getTextMeshProGUI(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"TipBox"),"Panel"),"TipText"));
+                TextMeshProUGUI origTip = GetTextMeshProGUI(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"TipBox"),"Panel"),"TipText"));
                 
-                string coords = GameManager.currentRow + "-" + GameManager.currentColumn;
+                string coords = GameManager.CurrentRow + "-" + GameManager.CurrentColumn;
                 
                 string teamClaim = GameManager.CurrentGame.grid.levelTable[coords].claimedBy;
                 float time = GameManager.CurrentGame.grid.levelTable[coords].timeToBeat;
@@ -47,7 +47,7 @@ public class ShopAddLevelInfo
                 {
                     origTip.text = "Claimed by: " + teamClaim + "\n\n" +
                     (GameManager.CurrentGame.gameSettings.gameType == 0 ? "TIME" : "STYLE") + " TO BEAT: <color=orange>" + (GameManager.CurrentGame.gameSettings.gameType == 0 ? formattedTime : style) + "</color>\n\n" +
-                    (teamClaim == GameManager.currentTeam ? claimedByOwnTeam : claimedByOtherTeam);
+                    (teamClaim == GameManager.CurrentTeam ? claimedByOwnTeam : claimedByOtherTeam);
                 }
                 
                 //Hide the CG and sandbox buttons

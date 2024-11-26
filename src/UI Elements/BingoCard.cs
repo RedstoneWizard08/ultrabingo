@@ -31,9 +31,18 @@ public class BingoCard
     
     public static string team = "PLACEHOLDER";
     
+    public static void Cleanup()
+    {
+        foreach(Transform child in Grid.transform)
+        {
+            GameObject toRemove = child.gameObject;
+            GameObject.Destroy(toRemove);
+        }
+    }
+    
     public static void UpdateTitles()
     {
-        TeamIndicator.GetComponent<TMP_Text>().text = "-- You are on the <color=" + GameManager.currentTeam.ToLower() + ">" + GameManager.currentTeam + " team</color> --";
+        TeamIndicator.GetComponent<TMP_Text>().text = "-- You are on the <color=" + GameManager.CurrentTeam.ToLower() + ">" + GameManager.CurrentTeam + " team</color> --";
         ObjectiveIndicator.GetComponent<TMP_Text>().text =
             (GameManager.CurrentGame.gameSettings.gameType == 0
                 ? "Race to <color=orange>obtain the fastest time</color> for your team on each level."

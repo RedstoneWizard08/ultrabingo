@@ -12,7 +12,7 @@ namespace UltraBINGO.HarmonyPatches;
         [HarmonyPrefix]
         public static bool disableCheatFunctions()
         {
-            if (GameManager.isInBingoLevel)
+            if (GameManager.IsInBingoLevel)
             {
                 GameObject cheatManager = GetGameObjectChild(GetInactiveRootObject("Canvas"),"Cheat Menu");
                 cheatManager.GetComponentInChildren<SandboxHud>().enabled = false;
@@ -30,7 +30,7 @@ namespace UltraBINGO.HarmonyPatches;
         [HarmonyPrefix]
         public static bool disableCheatFunctions()
         {
-            if (GameManager.isInBingoLevel)
+            if (GameManager.IsInBingoLevel)
             {
                 GameObject cheatManager = MonoSingleton<CheatsManager>.Instance.gameObject;
                 cheatManager.GetComponentInChildren<SandboxHud>().enabled = false;
@@ -49,7 +49,7 @@ namespace UltraBINGO.HarmonyPatches;
         [HarmonyPostfix]
         public static void disableCheatingAttempts(GameObject ___consentScreen, int ___sequenceIndex)
         {
-            if(GameManager.isInBingoLevel && !Main.IsDevelopmentBuild && !GameManager.triedToActivateCheats)
+            if(GameManager.IsInBingoLevel && !Main.IsDevelopmentBuild && !GameManager.TriedToActivateCheats)
             {
                 if(___consentScreen.activeSelf)
                 {
@@ -72,7 +72,7 @@ namespace UltraBINGO.HarmonyPatches;
                     GameObject deathSplosion = UnityEngine.Object.Instantiate<GameObject>(playerShotgun.explosion, playerShotgun.transform.position,playerShotgun.transform.rotation);
                     
                     GameManager.HumiliateSelf();
-                    GameManager.triedToActivateCheats = true;
+                    GameManager.TriedToActivateCheats = true;
                 }
             }
         }

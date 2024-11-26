@@ -35,7 +35,5 @@ namespace UltrakillBingoClient
         {
             BingoLogger.LogInfo(text);
         }
-
-        
     }
 }

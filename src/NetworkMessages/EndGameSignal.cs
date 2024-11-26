@@ -53,7 +53,7 @@ public static class EndGameSignalHandler
 
         string message = "<color=orange>GAME OVER!</color> The " + response.winningTeam + " team has won the game!";
         GameManager.CurrentGame.winningTeam = response.winningTeam;
-        if(getSceneName() != "Main Menu" && GameManager.isInBingoLevel)
+        if(getSceneName() != "Main Menu" && GameManager.IsInBingoLevel)
         {
             PlayEndSound();
             

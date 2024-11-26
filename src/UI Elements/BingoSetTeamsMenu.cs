@@ -65,7 +65,7 @@ public class BingoSetTeamsMenu
         ClearTeamSettings cts = new ClearTeamSettings();
         cts.gameId = GameManager.CurrentGame.gameId;
         
-        NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(cts));
+        NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(cts));
         ReturnToLobbyMenu();
         
     }
@@ -82,7 +82,7 @@ public class BingoSetTeamsMenu
         ts.gameId = GameManager.CurrentGame.gameId;
         ts.teams = currentTeamChanges;
         
-        NetworkManager.sendEncodedMessage(JsonConvert.SerializeObject(ts));
+        NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ts));
         
         ReturnToLobbyMenu();
     }

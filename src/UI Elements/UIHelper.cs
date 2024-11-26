@@ -44,7 +44,7 @@ public static class UIHelper
         text.GetComponent<RectTransform>().SetParent((Transform) button.GetComponent<RectTransform>());
         text.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
         text.GetComponent<TextMeshProUGUI>().text = buttonText;
-        text.GetComponent<TextMeshProUGUI>().font = AssetLoader.gameFont;
+        text.GetComponent<TextMeshProUGUI>().font = AssetLoader.GameFont;
         text.GetComponent<TextMeshProUGUI>().fontSize = fontSize;
         text.GetComponent<TextMeshProUGUI>().color = Color.white;
         text.GetComponent<TextMeshProUGUI>().enableWordWrapping = false;
@@ -61,7 +61,7 @@ public static class UIHelper
         text.GetComponent<RectTransform>().sizeDelta = new Vector2(200f, 50f);
         text.AddComponent<TextMeshProUGUI>(); //Crashes here?
         text.GetComponent<TextMeshProUGUI>().text = textString;
-        text.GetComponent<TextMeshProUGUI>().font = AssetLoader.gameFont;
+        text.GetComponent<TextMeshProUGUI>().font = AssetLoader.GameFont;
         text.GetComponent<TextMeshProUGUI>().fontSize = fontSize;
         text.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
         text.GetComponent<TextMeshProUGUI>().color = Color.white;
@@ -114,7 +114,7 @@ public static class UIHelper
         text.GetComponent<RectTransform>().sizeDelta = new Vector2(200f, 50f);
         text.AddComponent<Text>();
         text.GetComponent<Text>().text = textString;
-        text.GetComponent<Text>().font = AssetLoader.gameFontLegacy;
+        text.GetComponent<Text>().font = AssetLoader.GameFontLegacy;
         text.GetComponent<Text>().fontSize = fontSize;
         text.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
         text.GetComponent<Text>().color = Color.white;

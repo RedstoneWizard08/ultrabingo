@@ -16,7 +16,7 @@ public class StatWindowStart
     [HarmonyPostfix]
     public static void setupStatWindow(ref LevelStats __instance)
     {
-        if(GameManager.isInBingoLevel)
+        if(GameManager.IsInBingoLevel)
         {
             
             GameObject secrets = __instance.secrets[0].transform.parent.gameObject;
@@ -55,9 +55,9 @@ public class StatWindow
     [HarmonyPostfix]
     public static void showRequirements(ref LevelStats __instance)
     {
-        if(GameManager.isInBingoLevel)
+        if(GameManager.IsInBingoLevel)
         {
-            string coords = GameManager.currentRow + "-" + GameManager.currentColumn;
+            string coords = GameManager.CurrentRow + "-" + GameManager.CurrentColumn;
             string currentTeamClaim = GameManager.CurrentGame.grid.levelTable[coords].claimedBy;
             
             float secs = GameManager.CurrentGame.grid.levelTable[coords].timeToBeat;

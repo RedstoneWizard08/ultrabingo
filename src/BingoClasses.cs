@@ -81,6 +81,6 @@ public class Game
     
     public bool isGameFinished()
     {
-        return this.gameState == 2; // State 2 = game finished
+        return this.gameState == 2;
     }
 }

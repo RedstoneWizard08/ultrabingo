@@ -16,11 +16,11 @@ public static class BingoMenuController
     
     public static bool checkSteamAuthentication()
     {
-        if(!Main.isSteamAuthenticated)
+        if(!Main.IsSteamAuthenticated)
         {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Unable to authenticate with Steam.\nYou must be connected to the Steam servers, and own a legal copy of ULTRAKILL to play Baphomet's Bingo.");
         }
-        return Main.isSteamAuthenticated;
+        return Main.IsSteamAuthenticated;
     }
     
     public static void LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData)
@@ -40,9 +40,9 @@ public static class BingoMenuController
         
             int row = int.Parse(levelCoords[0].ToString());
             int column = int.Parse(levelCoords[2].ToString());
-            GameManager.isInBingoLevel = true;
-            GameManager.currentRow = row;
-            GameManager.currentColumn = column;
+            GameManager.IsInBingoLevel = true;
+            GameManager.CurrentRow = row;
+            GameManager.CurrentColumn = column;
         
             //Check if the level we're going into is campaign or Angry.
             //If it's Angry, we need to do some checks if the level is downloaded before going in.
@@ -93,7 +93,7 @@ public static class BingoMenuController
             }
         
             //Prevent changing levels while downloading to avoid problems.
-            if(GameManager.isDownloadingLevel == true)
+            if(GameManager.IsDownloadingLevel == true)
             {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Please wait for the current download to complete before switching to a different level.");
                 return;
@@ -109,7 +109,7 @@ public static class BingoMenuController
             {
                 //Need to (re)load the bundle before accessing it to make sure the level fields are accessible.
                 Logging.Message("Level bundle exists locally, loading bundle");
-                GameManager.enteringAngryLevel = true;
+                GameManager.EnteringAngryLevel = true;
                 await bundleContainer.UpdateScenes(true,false);
                 await Task.Delay(250);
                 
@@ -171,7 +171,7 @@ public static class BingoMenuController
             else
             {
                 //Prevent multiple downloads.
-                if(GameManager.isDownloadingLevel)
+                if(GameManager.IsDownloadingLevel)
                 {
                     Logging.Warn("Trying to download a level but another one is already in progress!");
                     return;
@@ -179,7 +179,7 @@ public static class BingoMenuController
                 
                 //If level does not already exist locally, get Angry to download it first.
                 Logging.Warn("Level does not already exist locally - Downloading from online repo");
-                GameManager.isDownloadingLevel = true;
+                GameManager.IsDownloadingLevel = true;
                 
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("-- DOWNLOADING "+ angryLevelData.levelName + " --\nYou can continue to play in the meantime.");
                 currentlyDownloadingLevel = angryLevelData.levelName;
@@ -204,8 +204,8 @@ public static class BingoMenuController
             int row = int.Parse(levelCoords[0].ToString());
             int column = int.Parse(levelCoords[2].ToString());
         
-            GameManager.currentRow = row;
-            GameManager.currentColumn = column;
+            GameManager.CurrentRow = row;
+            GameManager.CurrentColumn = column;
         
             string levelDisplayName = GameManager.CurrentGame.grid.levelTable[levelCoords].levelName;
             string levelId = GameManager.CurrentGame.grid.levelTable[levelCoords].levelId;
@@ -237,12 +237,12 @@ public static class BingoMenuController
         }
         
         //Check if the websocket connection is up.
-        if(!NetworkManager.isConnectionUp())
+        if(!NetworkManager.IsConnectionUp())
         {
             NetworkManager.ConnectWebSocket();
         }
         
-        if(!NetworkManager.isConnectionUp())
+        if(!NetworkManager.IsConnectionUp())
         {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
             return;
@@ -258,11 +258,11 @@ public static class BingoMenuController
             return;
         }
         
-        if(!NetworkManager.isConnectionUp())
+        if(!NetworkManager.IsConnectionUp())
         {
             NetworkManager.ConnectWebSocket();
         }
-        if(!NetworkManager.isConnectionUp())
+        if(!NetworkManager.IsConnectionUp())
         {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
             return;

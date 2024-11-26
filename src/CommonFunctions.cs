@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using BepInEx;
-using HarmonyLib;
 using TMPro;
 using UltrakillBingoClient;
 using UnityEngine;
@@ -40,15 +37,6 @@ public static class CommonFunctions
     {
         return SceneHelper.CurrentScene;
     }
-    public static bool isOnViolentDifficulty()
-    {
-        return (MonoSingleton<PrefsManager>.Instance.GetInt("difficulty") == 3);
-    }
-     
-    public static TextMeshProUGUI GetTextMeshProUGUI(GameObject objectToUse)
-    {
-        return objectToUse.GetComponent<TextMeshProUGUI>();
-    }
     
     public static GameObject GetInactiveRootObject(string objectName)
     {
@@ -75,7 +63,7 @@ public static class CommonFunctions
         return childToReturn;
     }
 
-    public static TextMeshProUGUI getTextMeshProGUI(GameObject objectToUse)
+    public static TextMeshProUGUI GetTextMeshProGUI(GameObject objectToUse)
     {
         return objectToUse.GetComponent<TextMeshProUGUI>();
     }

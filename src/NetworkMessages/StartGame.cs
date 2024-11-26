@@ -26,10 +26,10 @@ public static class StartGameResponseHandler
 {
     public static void handle(StartGameResponse response)
     {
-        GameManager.currentTeam = response.teamColor;
-        GameManager.teammates = response.teammates;
+        GameManager.CurrentTeam = response.teamColor;
+        GameManager.Teammates = response.teammates;
         GameManager.CurrentGame.grid = response.grid;
-        Logging.Message("We are on the "+GameManager.currentTeam + " team");
+        Logging.Message("We are on the "+GameManager.CurrentTeam + " team");
                 
         BingoMenuController.StartGame();
     }

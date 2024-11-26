@@ -25,7 +25,7 @@ public static class DisconnectSignalHandler
             default: {disconnectReason = "Disconnected for an unspecified reason (check console). The game will be ended.";break;}
         }
 
-        GameManager.clearGameVariables();
+        GameManager.ClearGameVariables();
         //If the player is in-game, warn them of returning to menu in 5 seconds.
         if(getSceneName() == "Main Menu")
         {
@@ -55,7 +55,7 @@ public static class DisconnectNotificationHandler
     public static void handle(DisconnectNotification response)
     {
         string message = response.username + " has left the game.";
-        if(GameManager.playerIsHost() && BingoLobby.TeamComposition.value == 1) {message += "\n Please recalibrate teams.";}
+        if(GameManager.PlayerIsHost() && BingoLobby.TeamComposition.value == 1) {message += "\n Please recalibrate teams.";}
         
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(message);
         GameManager.CurrentGame.currentPlayers.Remove(response.steamId);
@@ -70,7 +70,7 @@ public static class HostLeftGameHandler
         string message = "The host has left the game.";
 
         Logging.Message("Clearing game data from client cache");
-        GameManager.clearGameVariables();
+        GameManager.ClearGameVariables();
         
         if(getSceneName() != "Main Menu")
         {

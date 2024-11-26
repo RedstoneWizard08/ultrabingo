@@ -24,7 +24,7 @@ public static class UpdateTeamsNotificationHandler
     {
         string msg;
         
-        if(GameManager.playerIsHost())
+        if(GameManager.PlayerIsHost())
         { 
             msg = (response.status == 0 ? "Teams have been set. The room has been locked." : "Teams have been cleared. The room has been unlocked.");
         }
