@@ -138,7 +138,6 @@ public static class BingoLobby
             {
                 GameManager.StartGame();
             }
-            
         });
         
         //Room id text

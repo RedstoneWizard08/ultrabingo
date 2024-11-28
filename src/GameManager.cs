@@ -118,6 +118,13 @@ public static class GameManager
                                                                       "(<color=orange>" + requiredMaps + " </color>required, <color=orange>" + BingoMapSelection.NumOfMapsTotal + "</color> selected)");
             return false;
         }
+        
+        if(CurrentGame.gameSettings.teamComposition == 1 && CurrentGame.gameSettings.hasManuallySetTeams == false)
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Teams must be set before starting the game.");
+            return false;
+        }
+        
         return true;
     }
     

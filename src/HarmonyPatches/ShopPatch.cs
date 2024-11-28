@@ -16,7 +16,7 @@ public class ShopAddLevelInfo
     {
         if(GameManager.IsInBingoLevel)
         {
-            if(___shopCanvas != null)
+            if(___shopCanvas != null && !___shopCanvas.gameObject.name.Contains("Shop"))
             {
                 TextMeshProUGUI origTip = GetTextMeshProGUI(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"TipBox"),"Panel"),"TipText"));
                 

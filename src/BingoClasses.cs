@@ -59,6 +59,7 @@ public class GameSettings
     public int gameType;
     public int difficulty;
     public bool requiresPRank;
+    public bool hasManuallySetTeams;
 }
 
 public class Game
