@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using TMPro;
 using UltraBINGO.Components;
@@ -252,8 +253,9 @@ public static class GameManager
         BingoLobby.GameType.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
+        BingoLobby.SelectMaps.SetActive(isHost);
         BingoLobby.SetTeams.GetComponent<Button>().interactable = isHost;
-        BingoLobby.SelectMaps.GetComponent<Button>().interactable = isHost;
+        
         
         if(isHost)
         {
@@ -302,6 +304,12 @@ public static class GameManager
     public static void UpdateCards(int row, int column, string team, string playername, float newTime, int newStyle)
     {
         string coordLookup = row+"-"+column;
+        Logging.Warn(coordLookup);
+        
+        List<string> dictKeys = CurrentGame.grid.levelTable.Keys.ToList();
+        Logging.Warn(string.Join(",",dictKeys));
+        
+        
         if(!CurrentGame.grid.levelTable.ContainsKey(coordLookup))
         {
             Logging.Error("RECEIVED AN INVALID GRID POSITION TO UPDATE!");
@@ -309,24 +317,34 @@ public static class GameManager
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but an <color=orange>invalid grid position</color> was given.\nCheck BepInEx console and report it to Clearwater!");
             return;
         }
-        CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
-        CurrentGame.grid.levelTable[coordLookup].timeToBeat = newTime;
-        CurrentGame.grid.levelTable[coordLookup].styleToBeat = newStyle;
+
+        try
+        {
+            CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
+            CurrentGame.grid.levelTable[coordLookup].timeToBeat = newTime;
+            CurrentGame.grid.levelTable[coordLookup].styleToBeat = newStyle;
         
-        if(getSceneName() == "Main Menu")
-        {
-            GameObject bingoGrid = GetGameObjectChild(BingoEncapsulator.BingoCardScreen,"BingoGrid");
+            if(getSceneName() == "Main Menu")
+            {
+                GameObject bingoGrid = GetGameObjectChild(BingoEncapsulator.BingoCardScreen,"BingoGrid");
             
-            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
-            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().isClaimed = true;
-            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
-            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
-            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newTime;
-            GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newStyle;
+                GetGameObjectChild(bingoGrid,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+                GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().isClaimed = true;
+                GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
+                GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
+                GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newTime;
+                GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newStyle;
+            }
+            else
+            {
+                GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+            }
         }
-        else
+        catch (Exception e)
         {
-            GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+            Logging.Error("THREW AN INVALID GRID POSITION TO UPDATE!");
+            Logging.Error(coordLookup);
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but the grid could not be updated.\nCheck BepInEx console and report it to Clearwater!");
         }
     }
 }

@@ -51,7 +51,7 @@ public static class BingoLobby
     public static void onTeamCompositionUpdate(int value)
     {
         GameManager.CurrentGame.gameSettings.teamComposition = value;
-        SetTeams.SetActive(value == 1);
+        SetTeams.SetActive(value == 1 && GameManager.PlayerIsHost());
         UIManager.HandleGameSettingsUpdate();
     }
     
