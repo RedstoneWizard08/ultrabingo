@@ -85,18 +85,19 @@ public class BingoCard
         }
         Root.name = "UltraBingoCard";
         
-        Grid = new GameObject();
-        Grid.name = "BingoGrid";
-        Grid.transform.SetParent(Root.transform);
         
-        Grid.AddComponent<GridLayoutGroup>();
+        /*Grid.AddComponent<GridLayoutGroup>();
         Grid.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         Grid.GetComponent<GridLayoutGroup>().constraintCount = 3;
         Grid.GetComponent<GridLayoutGroup>().spacing = new Vector2(100f,100f);
-        Grid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150f,50f);
-        Grid.transform.position = new Vector3(Screen.width*0.35f,Screen.height*0.65f,0f);
+        Grid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150f,50f);*/
         
         CardElements = GameObject.Instantiate(AssetLoader.BingoCardElements,Root.transform);
+        
+        //Bingo grid
+        Grid = GetGameObjectChild(CardElements,"BingoGrid");
+        Grid.name = "BingoGrid";
+        Grid.transform.SetParent(Root.transform);
         
         if(ButtonTemplate == null)
         {

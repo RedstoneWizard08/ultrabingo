@@ -140,15 +140,25 @@ public static class GameManager
     //Update displayed player list when a player joins/leaves game.
     public static void RefreshPlayerList()
     {
-        BingoLobby.PlayerList.SetActive(false);
-        string players = "";
-        foreach(Player player in CurrentGame.getPlayers())
+        try
         {
-            players += player.username + "\n";
-        }
+            if(getSceneName() == "Main Menu")
+            {
+                BingoLobby.PlayerList.SetActive(false);
+                string players = "";
+                foreach(Player player in CurrentGame.getPlayers())
+                {
+                    players += player.username + "\n";
+                }
         
-        GetGameObjectChild(BingoLobby.PlayerList,"Players").GetComponent<TextMeshProUGUI>().text = players;
-        BingoLobby.PlayerList.SetActive(true);
+                GetGameObjectChild(BingoLobby.PlayerList,"Players").GetComponent<TextMeshProUGUI>().text = players;
+                BingoLobby.PlayerList.SetActive(true);
+            }
+        }
+        catch (Exception e)
+        {
+            Logging.Error("Something went wrong when trying to update player list");
+        }
     }
     
     //Setup the bingo grid.
@@ -157,30 +167,9 @@ public static class GameManager
         //Resize the GridLayoutGroup based on the grid size.
         Logging.Message("Dynamic setup with size " + CurrentGame.grid.size);
         GameObject gridObj = GetGameObjectChild(BingoCard.Root,"BingoGrid");
-        gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30,30);
         gridObj.GetComponent<GridLayoutGroup>().constraintCount = CurrentGame.grid.size;
-        
-        gridObj.transform.position = Vector3.zero;
-        gridObj.transform.localPosition = Vector3.zero;
-        switch(CurrentGame.grid.size)
-        {
-            case 3:
-            {
-                gridObj.transform.position = new Vector3(Screen.width*0.33f,Screen.height*0.66f,0f);
-                break;
-            }
-            case 4:
-            {
-                gridObj.transform.position = new Vector3(Screen.width*0.25f,Screen.height*0.70f,0f);
-                break;
-            }
-            case 5:
-            {
-                gridObj.transform.position = new Vector3(Screen.width*0.20f,Screen.height*0.75f,0f);
-                break;
-            }
-            default:{break;}
-        }
+        gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30,30);
+        gridObj.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150,50);
         
         for(int x = 0; x < CurrentGame.grid.size; x++)
         {
@@ -236,7 +225,7 @@ public static class GameManager
         }
     }
 
-    public static void SetupGameDetails(Game game,bool isHost=true)
+    public static void  SetupGameDetails(Game game,bool isHost=true)
     {
         CurrentGame = game;
         
@@ -337,12 +326,23 @@ public static class GameManager
             }
             else
             {
-                GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+                Logging.Warn("Getting color");
+                Logging.Warn(team);
+                Color col;
+                if(!BingoCardPauseMenu.teamColors.TryGetValue(team, out col))
+                {
+                    Logging.Error("Unable to get color, throwing exception");
+                }
+                else
+                {
+                    GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+                }
             }
         }
         catch (Exception e)
         {
             Logging.Error("THREW AN INVALID GRID POSITION TO UPDATE!");
+            Logging.Error(e.ToString());
             Logging.Error(coordLookup);
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but the grid could not be updated.\nCheck BepInEx console and report it to Clearwater!");
         }
