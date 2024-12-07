@@ -137,7 +137,7 @@ public static class NetworkManager
     {
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
-        ws.WaitTime = TimeSpan.FromSeconds(60);
+        ws.WaitTime = TimeSpan.FromSeconds(90);
         
         ws.OnMessage += (sender,e) => { onMessageRecieved(e); };
         ws.OnError += (sender,e) => { HandleError(e); };
@@ -207,7 +207,7 @@ public static class NetworkManager
     //Setup WebSocket heartbeat.
     public static void SetupHeartbeat()
     {
-        heartbeatTimer = new Timer(20000); //Ping once every 20 seconds
+        heartbeatTimer = new Timer(10000); //Ping once every 10 seconds
         heartbeatTimer.Elapsed += SendPing;
         heartbeatTimer.AutoReset = true;
         heartbeatTimer.Enabled = true;
