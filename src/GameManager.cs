@@ -239,6 +239,7 @@ public static class GameManager
         BingoLobby.MaxTeams.interactable = isHost;
         BingoLobby.TeamComposition.interactable = isHost;
         BingoLobby.RequirePRank.interactable = isHost;
+        BingoLobby.GridSize.interactable = isHost;
         BingoLobby.GameType.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);

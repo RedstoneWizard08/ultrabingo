@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using TMPro;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
@@ -15,6 +16,7 @@ public static class UIManager
     public static GameObject ultrabingoButtonObject = null;
     public static GameObject ultrabingoEncapsulator = null;
     public static GameObject ultrabingoLockedPanel = null;
+    public static GameObject ultrabingoUnallowedModsPanel = null;
     
     public static void DisableMajorAssists()
     { 
@@ -58,7 +60,12 @@ public static class UIManager
             ultrabingoButtonObject.name = "UltraBingoButton";
         }
         Button bingoButton = ultrabingoButtonObject.GetComponent<Button>();
-        bingoButton.onClick.AddListener(Open);
+        
+        
+        bingoButton.onClick.AddListener(delegate
+        {
+            Open();
+        });
         if(ultrabingoEncapsulator == null)
         {
             ultrabingoEncapsulator = BingoEncapsulator.Init();
@@ -69,8 +76,33 @@ public static class UIManager
         ultrabingoEncapsulator.SetActive(false);
     }
     
+    public static void populateUnallowedMods()
+    {
+        TextMeshProUGUI mods = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(ultrabingoUnallowedModsPanel,"BingoLockedPanel"),"Panel"),"ModList").GetComponent<TextMeshProUGUI>();
+        
+        List<string> whitelistedMods = new List<string>()
+        {
+            "PluginConfigurator","AngryLevelLoader","Baphomet's BINGO"
+        };
+        
+        string text = "<color=orange>";
+        
+        foreach (string mod in Main.LoadedMods)
+        {
+            if(!whitelistedMods.Contains(mod)) {text += mod + "\n";}
+        }
+        text += "</color>";
+        mods.text = text;
+    }
+    
     public static void Open()
     {
+        if(!NetworkManager.modlistCheck)
+        {
+            populateUnallowedMods();
+            ultrabingoUnallowedModsPanel.SetActive(true);
+            return;
+        }
         if(Main.HasUnlocked)
         {
             //Hide chapter select

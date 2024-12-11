@@ -25,6 +25,7 @@ public static class AssetLoader
     public static GameObject BingoSetTeams;
     public static GameObject BingoMapSelectionMenu;
     public static GameObject BingoLockedPanel;
+    public static GameObject BingoUnallowedModsPanel;
     
     public static AudioClip GameOverSound;
     
@@ -45,6 +46,7 @@ public static class AssetLoader
         BingoSetTeams = Assets.LoadAsset<GameObject>("BingoSetTeams");
         BingoMapSelectionMenu = Assets.LoadAsset<GameObject>("BingoMapSelection");
         BingoLockedPanel = Assets.LoadAsset<GameObject>("BingoLocked");
+        BingoUnallowedModsPanel = Assets.LoadAsset<GameObject>("BingoUnallowedMods");
          
         UISprite = Assets.LoadAsset<Sprite>("UISprite");
         GameOverSound = Addressables.LoadAssetAsync<AudioClip>("Assets/Music/Hits/Versus2Outro.wav").WaitForCompletion();

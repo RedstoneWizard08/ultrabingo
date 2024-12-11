@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using BepInEx;
+using BepInEx.Bootstrap;
 using HarmonyLib;
+using Newtonsoft.Json;
 using Steamworks;
 using Steamworks.Data;
 using UltraBINGO;
+using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,12 +37,13 @@ namespace UltrakillBingoClient
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
-        public static bool IsDevelopmentBuild = false;
+        public static bool IsDevelopmentBuild = true;
         public static bool IsSteamAuthenticated = false;
         public static bool HasUnlocked = true;
         
         public static List<String> missingMaps = new List<string>();
-         
+        public static List<string> LoadedMods = new List<string>();
+
         public static string CatalogFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"bingocatalog.toml");
         
         //Mod init logic
@@ -90,6 +95,20 @@ namespace UltrakillBingoClient
             return false;
         }
         
+        public void VerifyModWhitelist()
+        {
+            foreach (var plugin in Chainloader.PluginInfos)
+            {
+                List<string> modData = plugin.Value.ToString().Split(' ').ToList();
+                modData.RemoveAt(modData.Count-1);
+                string modName = string.Join(" ",modData);
+                LoadedMods.Add(modName);
+            }
+            
+            VerifyModRequest vmr = new VerifyModRequest(LoadedMods,SteamClient.SteamId.ToString());
+            NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(vmr));
+        }
+        
         //Scene switch
         public void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -101,6 +120,7 @@ namespace UltrakillBingoClient
                 if(!IsSteamAuthenticated)
                 {
                     Authenticate();
+                    VerifyModWhitelist();
                 }
                 
                 if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())
@@ -111,7 +131,9 @@ namespace UltrakillBingoClient
                 }
                 
                 UIManager.ultrabingoLockedPanel = GameObject.Instantiate(AssetLoader.BingoLockedPanel,GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").transform);
+                UIManager.ultrabingoUnallowedModsPanel = GameObject.Instantiate(AssetLoader.BingoUnallowedModsPanel,GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").transform);
                 UIManager.ultrabingoLockedPanel.SetActive(false);
+                UIManager.ultrabingoUnallowedModsPanel.SetActive(false);
             }
             else
             {

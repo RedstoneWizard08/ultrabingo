@@ -44,6 +44,8 @@ public static class NetworkManager
     public static string serverCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoCatalog.toml" : "http://vranks.uk/bingoCatalog.toml";
     public static string serverMapPoolCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoMapPool.toml" : "http://vranks.uk/bingoMapPool.toml";
     
+    public static bool modlistCheck = false;
+    
     static WebSocket ws;
     static Timer heartbeatTimer;
     
@@ -180,6 +182,11 @@ public static class NetworkManager
     //Encode and send base64 messages to the server.
     public static void SendEncodedMessage(string jsonToEncode)
     {
+        if(!ws.IsAlive)
+        {
+            ws.Connect();
+        }
+        
         byte[] encodedBytes = System.Text.Encoding.UTF8.GetBytes(jsonToEncode);
         string encodedJson = System.Convert.ToBase64String(encodedBytes);
         
@@ -355,6 +362,12 @@ public static class NetworkManager
             {
                 CheatNotification response = JsonConvert.DeserializeObject<CheatNotification>(em.contents);
                 CheatNotificationHandler.handle(response);
+                break;
+            }
+            case "ModVerificationResponse":
+            {
+                ModVerificationResponse response = JsonConvert.DeserializeObject<ModVerificationResponse>(em.contents);
+                ModVerificationHandler.handle(response);
                 break;
             }
             case "Pong":
