@@ -196,6 +196,8 @@ public class BingoSetTeamsMenu
         GameObject TeamSelectionPanelSub = GetGameObjectChild(TeamSelectionPanel, "TeamColorContainer");
         Logging.Message(TeamSelectionPanelSub.name);
         
+        TeamSelectionPanelButtons.Clear(); //Remove previously destroyed references
+        
         TeamSelectionPanelButtons.Add(GetGameObjectChild(TeamSelectionPanelSub,"Red"));
         TeamSelectionPanelButtons.Add(GetGameObjectChild(TeamSelectionPanelSub,"Green"));
         TeamSelectionPanelButtons.Add(GetGameObjectChild(TeamSelectionPanelSub,"Blue"));
