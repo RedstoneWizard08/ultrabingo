@@ -39,6 +39,13 @@ public static class BingoCardPauseMenu
         string path = "assets/bingo/lvlimg/" + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? "angry" : "campaign") + "/"
             + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? angryLevelName : campaignLevelName) + ".png";
         
+        
+        
+        if(!AssetLoader.Assets.Contains(path))
+        {
+            path = "assets/bingo/lvlimg/unknown.png";
+        }
+        
         Texture2D levelImg = AssetLoader.Assets.LoadAsset<Texture2D>(path);    
         Sprite levelSprite = Sprite.Create(levelImg, new Rect(0.0f, 0.0f, levelImg.width, levelImg.height), new Vector2(0.5f, 0.5f), 100.0f);
         
