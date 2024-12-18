@@ -238,10 +238,11 @@ public static class GameManager
         BingoLobby.MaxPlayers.interactable = isHost;
         BingoLobby.MaxTeams.interactable = isHost;
         BingoLobby.TeamComposition.interactable = isHost;
-        BingoLobby.RequirePRank.interactable = isHost;
         BingoLobby.GridSize.interactable = isHost;
         BingoLobby.GameType.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
+        BingoLobby.RequirePRank.interactable = isHost;
+        BingoLobby.DisableCampaignAltExits.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
         BingoLobby.SelectMaps.SetActive(isHost);
         BingoLobby.SetTeams.GetComponent<Button>().interactable = isHost;
@@ -257,6 +258,7 @@ public static class GameManager
             BingoLobby.GameType.value = 0;
             BingoLobby.Difficulty.value = 2;
             BingoLobby.RequirePRank.isOn = false;
+            BingoLobby.DisableCampaignAltExits.isOn = false;
             
             BingoMapSelection.NumOfMapsTotal = 0;
             BingoMapSelection.UpdateNumber();

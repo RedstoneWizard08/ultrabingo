@@ -29,6 +29,7 @@ public static class BingoLobby
     public static TMP_Dropdown GameType;
     public static TMP_Dropdown Difficulty;
     public static Toggle RequirePRank;
+    public static Toggle DisableCampaignAltExits;
     
     
     public static void onMaxPlayerUpdate(string playerAmount)
@@ -83,6 +84,13 @@ public static class BingoLobby
         UIManager.HandleGameSettingsUpdate();
     }
     
+    public static void onDisableCampaignAltExitsUpdate(bool value)
+    {
+        DisableCampaignAltExits.isOn = value;
+        GameManager.CurrentGame.gameSettings.disableCampaignAltExits = value;
+        UIManager.HandleGameSettingsUpdate();
+    }
+    
     public static void updateFromNotification(UpdateRoomSettingsNotification newSettings)
     {
         MaxPlayers.text = newSettings.maxPlayers.ToString();
@@ -92,6 +100,7 @@ public static class BingoLobby
         GameType.value = newSettings.gameType;
         Difficulty.value = newSettings.difficulty;
         GridSize.value = newSettings.gridSize;
+        DisableCampaignAltExits.isOn = newSettings.disableCampaignAltExits;
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
         GameManager.CurrentGame.gameSettings.maxTeams = newSettings.maxTeams;
@@ -100,6 +109,7 @@ public static class BingoLobby
         GameManager.CurrentGame.gameSettings.gameType = newSettings.gameType;
         GameManager.CurrentGame.gameSettings.difficulty = newSettings.difficulty;
         GameManager.CurrentGame.gameSettings.gridSize = newSettings.gridSize;
+        GameManager.CurrentGame.gameSettings.disableCampaignAltExits = newSettings.disableCampaignAltExits;
     }
     
     public static void Init(ref GameObject BingoLobby)
@@ -166,6 +176,10 @@ public static class BingoLobby
         
         RequirePRank = GetGameObjectChild(GetGameObjectChild(GameOptions,"RequirePRank"),"Input").GetComponent<Toggle>();
         RequirePRank.onValueChanged.AddListener(onPRankRequiredUpdate);
+        
+        DisableCampaignAltExits = GetGameObjectChild(GetGameObjectChild(GameOptions,"DisableCampaignAltEnds"),"Input").GetComponent<Toggle>();
+        DisableCampaignAltExits.onValueChanged.AddListener(onDisableCampaignAltExitsUpdate);
+        
         BingoLobby.SetActive(false);
     }
 }

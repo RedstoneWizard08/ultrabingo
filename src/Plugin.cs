@@ -140,6 +140,11 @@ namespace UltrakillBingoClient
                 if(GameManager.IsInBingoLevel)
                 {
                     UIManager.DisableMajorAssists();
+                    if(GameManager.CurrentGame.gameSettings.disableCampaignAltExits)
+                    {
+                        Logging.Warn("Disabling campaign alt exits");
+                        CampaignPatches.Apply(getSceneName());
+                    }
                 }
             }
         }

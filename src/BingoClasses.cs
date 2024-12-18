@@ -60,6 +60,7 @@ public class GameSettings
     public int difficulty;
     public bool requiresPRank;
     public bool hasManuallySetTeams;
+    public bool disableCampaignAltExits;
 }
 
 public class Game

@@ -43,6 +43,7 @@ public static class UIManager
             urss.gameType = BingoLobby.GameType.value;
             urss.difficulty = BingoLobby.Difficulty.value;
             urss.gridSize = BingoLobby.GridSize.value;
+            urss.disableCampaignAltExits = BingoLobby.DisableCampaignAltExits.isOn;
         
             NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(urss));
         }

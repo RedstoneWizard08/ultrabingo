@@ -16,6 +16,7 @@ public class UpdateRoomSettingsRequest : SendMessage
     public int gameType;
     public int difficulty;
     public int gridSize;
+    public bool disableCampaignAltExits;
 }
 
 public class UpdateRoomSettingsNotification : MessageResponse
@@ -27,6 +28,7 @@ public class UpdateRoomSettingsNotification : MessageResponse
     public int gameType;
     public int difficulty;
     public int gridSize;
+    public bool disableCampaignAltExits;
     
     public bool wereTeamsReset;
 }
