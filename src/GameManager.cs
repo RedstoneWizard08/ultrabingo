@@ -146,9 +146,11 @@ public static class GameManager
             {
                 BingoLobby.PlayerList.SetActive(false);
                 string players = "";
-                foreach(Player player in CurrentGame.getPlayers())
+                
+                foreach(string steamId in CurrentGame.currentPlayers.Keys.ToList())
                 {
-                    players += player.username + "\n";
+                    bool isHost = steamId == CurrentGame.gameHost;
+                    players += CurrentGame.currentPlayers[steamId].username + (isHost ? "(<color=orange>HOST</color>)" : "") + "\n";
                 }
         
                 GetGameObjectChild(BingoLobby.PlayerList,"Players").GetComponent<TextMeshProUGUI>().text = players;

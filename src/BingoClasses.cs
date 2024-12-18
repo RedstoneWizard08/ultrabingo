@@ -24,6 +24,7 @@ public class MapPoolContainer
 public class Player
 {
     public string username;
+    public string steamId;
 }
 
 public class GameLevel
