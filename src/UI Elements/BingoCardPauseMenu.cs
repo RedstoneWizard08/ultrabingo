@@ -24,10 +24,11 @@ public static class BingoCardPauseMenu
 
 
     public static GameObject Root;
+    public static GameObject Grid;
     
     public static GameObject BingoPauseCard;
-    
     public static GameObject LevelSquareTemplate;
+    public static GameObject inGamePanel;
     
     
     
@@ -125,7 +126,8 @@ public static class BingoCardPauseMenu
             Root = GameObject.Instantiate(AssetLoader.BingoPauseCard,__instance.pauseMenu.gameObject.transform);
         }
         Root.name = "BingoPauseCard";
-        GetGameObjectChild(Root,"Card").GetComponent<GridLayoutGroup>().constraintCount = GameManager.CurrentGame.grid.size;
+        Grid = GetGameObjectChild(Root,"Card");
+        Grid.GetComponent<GridLayoutGroup>().constraintCount = GameManager.CurrentGame.grid.size;
         Root.SetActive(true);
         
         return Root;

@@ -336,7 +336,11 @@ public static class GameManager
                 }
                 else
                 {
+                    //Pause menu card
                     GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+                    
+                    //In-game card
+                    GetGameObjectChild(BingoCardPauseMenu.inGamePanel,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
                 }
             }
         }
