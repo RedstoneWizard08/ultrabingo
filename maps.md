@@ -3,21 +3,30 @@
 Baphomet's Bingo uses the following maps in its map rotation, taken from the public level catalog for the Angry Level Loader:
 
 - All official levels from the main campaign (minus secret levels & credits museum) by Hakita and co.
+- Levels from the fanmade "Project Purgatorio" campaign, by the Purgatorio team: Rem_Safe_Space, Hydraxous, Duv, Raifu, bongwater
+- "Athena Research Facility - Heart Of The Machine" by Bobot
+- "A Bloody Path - Special Delivery" by Octo
 - "Altwrath - Depths of Despair" by Draghtnim
 - "Altwrath - Gears Of The Drowned" by Draghtnim
 - "And The Crowd Goes Wild" by Fruitcircuit, HaphazardlyLad, Kote & BadLuckBoi
 - "Blood Rush" by Dinky
+- "Bloody Tears" by riko
+- "Hola's Moving Castle - Castle On The Hill" by Holawenasx2 & Smallkloon
 - "Cania - The Lone and Level Sands" by Smallkoon & Spelunky
 - "Cliffs Of Wrath - On The Rocks" by dubtendo
 - "Convoy Catastrophe" by CEO Of Gaming
+- "Cult Of Dopefish" by Willem1321
 - "Darkcastle" by Grapes
-- "Envy - Lost Fields Of Gold" by Raifu
-- "Envy - Castle Maniac" by Raifu
-- "Envy - Every Star In The Sky" by Raifu
+- "Death Descent - Free Mind Loop" by PrestoPesto
 - "Epitaph" by Willem3231
+- "Fraudulence - Fool's Gold" by Spelunky
+- "Fraudulence - High Society" by Spelunky
 - "From Dust To Dust" by Draghtnim
+- "Fun Sized Heresy" by FNChannel
 - "Garden Of Lost Desires" by Doodleman & Bloogoober
 - "Halls Of The Extremist" by Spelunky
+- "Imminent Collapse In The Past" by GGGamesXdLol
+- "Inferno - Rubble In The Sky" by AlexPlays & JoshieGuy3000
 - "Journey To Lavandria" by TeamDoodz
 - "Limbo's Vault" by GGGamesXdLol
 - "Minecraft - Mine Oddity" by CEO Of Gaming
@@ -25,12 +34,14 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Minecraft - Nether Reaches" by CEO Of Gaming
 - "Mini Hell" by Megacheb
 - "Paradiso - Sacred Grounds" by Frizou
+- "Prelude Extra - Descent Into Exile" by vvenvss
 - "Primordial Hunger" by Willem & ballfartchungus43
 - "Reprise - Ashes To Ashes" by Smallkloon
 - "Reprise - A Dream Of Home" by Smallkloon
-- "Requiem" by lazy
 - "Revolt From The Abyss" by Robi
-- "S1 - I Wonder" by RoundCat
+- "Re-Wrath - A Man Made Sea" by funny
+- "Spelunky's Sandbox - I Wonder" by RoundCat
+- "Sins Of Mankind" by func_sam
 - "The House Of Wrath" by megga
 - "The Training Range" by Frizou
 - "The Timesplicer" by RedNova & Willem13215
@@ -39,7 +50,7 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 
 This list will change over time.
 
-If you are the author of one of these maps, and wish for me to:
+If you are the author(s) of one of these maps, and wish for me to:
 - Update crediting information
 - Remove your map from the map pool used by the mod
 
