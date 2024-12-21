@@ -14,12 +14,11 @@ public class ShopAddLevelInfo
     [HarmonyPostfix]
     public static void AddBingoLevelInfo(ShopZone __instance, Canvas ___shopCanvas)
     {
-        if(GameManager.IsInBingoLevel)
+        if(GameManager.IsInBingoLevel && ___shopCanvas != null && !___shopCanvas.gameObject.name.Contains("Shop"))
         {
-            if(___shopCanvas != null && !___shopCanvas.gameObject.name.Contains("Shop"))
+            try
             {
                 TextMeshProUGUI origTip = GetTextMeshProGUI(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"TipBox"),"Panel"),"TipText"));
-                
                 string coords = GameManager.CurrentRow + "-" + GameManager.CurrentColumn;
                 
                 string teamClaim = GameManager.CurrentGame.grid.levelTable[coords].claimedBy;
@@ -56,6 +55,11 @@ public class ShopAddLevelInfo
                 
                 GameObject sandboxButton = GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"Main Menu"),"SandboxButton");
                 sandboxButton.SetActive(false);
+            }
+
+            catch (Exception e)
+            {
+                Logging.Warn("This shop isn't vanilla");
             }
         }
     }

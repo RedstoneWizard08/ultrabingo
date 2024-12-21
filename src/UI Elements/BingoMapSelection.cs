@@ -230,7 +230,7 @@ public class BingoMapSelection
         MapContainerDescriptionNumMaps = GetGameObjectChild(MapContainerDescription,"NumMaps");
         MapContainerDescriptionMapList = GetGameObjectChild(GetGameObjectChild(MapContainerDescription,"MapsList"),"MapName");
         
-        MapList = GetGameObjectChild(GetGameObjectChild(MapContainer,"MapPoolList"),"List");
+        MapList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(MapContainer,"MapPoolList"),"Scroll View"),"Scroll Rect"),"Content"),"List");
         MapListButtonTemplate = GetGameObjectChild(MapList,"MapListButton");
         Back = GetGameObjectChild(MapSelection,"Back");
         Back.GetComponent<Button>().onClick.AddListener(delegate
