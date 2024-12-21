@@ -66,7 +66,7 @@ public static class ConfirmLeaveGame
             TextMeshProUGUI leaveText = GetGameObjectChild(GetGameObjectChild(__instance.quitDialog.gameObject,"Panel"),"Text (2)").GetComponent<TextMeshProUGUI>();
             if(GameManager.PlayerIsHost())
             {
-                leaveText.text = "<color=orange>WARNING</color>: Leaving now will <color=orange>end the game</color> for all players.\nAre you sure?";
+                leaveText.text = "<color=orange>WARNING</color>: YOU ARE THE HOST. Leaving now will <color=orange>end the game</color> for all players.\nAre you sure?";
             }
             else
             {

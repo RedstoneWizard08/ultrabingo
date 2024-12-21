@@ -51,7 +51,7 @@ public static class EndGameSignalHandler
 
         GameManager.CurrentGame.gameState = 2; // State 2 = game finished
 
-        string message = "<color=orange>GAME OVER!</color> The " + response.winningTeam + " team has won the game!";
+        string message = "<color=orange>GAME OVER!</color> The <color="+ response.winningTeam.ToLower() +">"+ response.winningTeam + " </color>team has <color=orange>won the game</color>!";
         GameManager.CurrentGame.winningTeam = response.winningTeam;
         if(getSceneName() != "Main Menu" && GameManager.IsInBingoLevel)
         {

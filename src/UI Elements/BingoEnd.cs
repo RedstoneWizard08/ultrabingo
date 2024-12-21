@@ -37,7 +37,7 @@ public static class BingoEnd
         BingoEncapsulator.BingoMenu.SetActive(false);
         BingoEncapsulator.BingoLobbyScreen.SetActive(false);
         BingoEncapsulator.BingoEndScreen.SetActive(true);
-        WinnerIndicator.GetComponent<TextMeshProUGUI>().text = "The " + winningTeam + " team has won the game!";
+        WinnerIndicator.GetComponent<TextMeshProUGUI>().text = "The <color="+winningTeam.ToLower()+">" + winningTeam + " </color>team has won the game!";
         
         GetGameObjectChild(WinningPlayers,"Text (TMP) (1)").GetComponent<TextMeshProUGUI>().text = winningPlayers;
         GetGameObjectChild(GetGameObjectChild(Stats,"TimeElapsed"),"Value").GetComponent<TextMeshProUGUI>().text = "<color=orange>"+timeElapsed+"</color>";

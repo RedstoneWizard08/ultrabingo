@@ -53,7 +53,7 @@ public static class LevelClaimHandler
             case 2: {actionType = "reclaimed "; break;}
         }
         
-        string broadcastString = response.username + " has <color=orange>" + actionType + response.levelname + "</color> for the " + response.team + " team.";
+        string broadcastString = response.username + " has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team.";
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(broadcastString);
         GameManager.UpdateCards(response.row,response.column,response.team,response.username,response.newTimeRequirement,response.newStyleRequirement);
     }

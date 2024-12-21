@@ -64,7 +64,7 @@ public class BingoCard
         }
         else
         {
-            LevelInformationText.GetComponent<TextMeshProUGUI>().text = "Claimed by the " + levelData.claimedTeam + " team\n";
+            LevelInformationText.GetComponent<TextMeshProUGUI>().text = "Claimed by the <color=" + levelData.claimedTeam.ToLower()+ ">" + levelData.claimedTeam + " </color>team\n\n";
             LevelInformationText.GetComponent<TextMeshProUGUI>().text += (GameManager.CurrentGame.gameSettings.gameType == 0 ? "Time " : "Style ") + "to beat: "
                 + (GameManager.CurrentGame.gameSettings.gameType == 0 ? levelData.timeRequirement : levelData.styleRequirement);
         }
@@ -105,7 +105,7 @@ public class BingoCard
         }
         
         //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter component causes crashes.
-        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,14);
+        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,12);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
         

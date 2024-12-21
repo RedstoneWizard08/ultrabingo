@@ -220,6 +220,14 @@ public static class GameManager
             }
         }
         
+        //Offet the grid so it's better centered if it's bigger than 3x3.
+        switch(CurrentGame.gameSettings.gridSize)
+        {
+            case 1: {gridObj.transform.localPosition += new Vector3(-30f,0f,0f); break;}
+            case 2: {gridObj.transform.localPosition += new Vector3(-105f,0f,0f); break;}
+            default: break;
+        }
+        
         //Display teammates.
         TextMeshProUGUI teammates = GetGameObjectChild(BingoCard.Teammates,"Players").GetComponent<TextMeshProUGUI>();
         teammates.text = "";
@@ -307,7 +315,6 @@ public static class GameManager
         
         List<string> dictKeys = CurrentGame.grid.levelTable.Keys.ToList();
         Logging.Warn(string.Join(",",dictKeys));
-        
         
         if(!CurrentGame.grid.levelTable.ContainsKey(coordLookup))
         {

@@ -94,7 +94,7 @@ public static class BingoCardPauseMenu
                 if(GameManager.CurrentRow == x && GameManager.CurrentColumn == y)
                 {
                     levelSquare.AddComponent<Outline>();
-                    levelSquare.GetComponent<Outline>().effectColor = Color.yellow;
+                    levelSquare.GetComponent<Outline>().effectColor = Color.magenta;
                     levelSquare.GetComponent<Outline>().effectDistance = new Vector2(3f,-3f);
                 }
                 
