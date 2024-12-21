@@ -47,10 +47,10 @@ public class BingoMapSelection
         BingoEncapsulator.BingoLobbyScreen.SetActive(true);
     }
     
-    public static void ClearList()
+    public static void ClearList(bool force=false)
     {
         SelectedIds.Clear();
-        if(getSceneName() != "Main Menu")
+        if(getSceneName() != "Main Menu" || force)
         {
             MapPoolButtons.Clear();
             AvailableMapPools.Clear();
@@ -85,7 +85,8 @@ public class BingoMapSelection
         
         UpdateMapPool ump = new UpdateMapPool();
         ump.gameId = GameManager.CurrentGame.gameId;
-        ump.mapPoolIds = BingoMapSelection.SelectedIds.ToList();
+        ump.mapPoolIds = SelectedIds.ToList();
+        ump.ticket = NetworkManager.CreateRegisterTicket();
         NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ump));
     }
     

@@ -44,6 +44,7 @@ public static class UIManager
             urss.difficulty = BingoLobby.Difficulty.value;
             urss.gridSize = BingoLobby.GridSize.value;
             urss.disableCampaignAltExits = BingoLobby.DisableCampaignAltExits.isOn;
+            urss.ticket = NetworkManager.CreateRegisterTicket();
         
             NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(urss));
         }

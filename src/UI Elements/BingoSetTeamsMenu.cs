@@ -81,6 +81,7 @@ public class BingoSetTeamsMenu
         TeamSettings ts = new TeamSettings();
         ts.gameId = GameManager.CurrentGame.gameId;
         ts.teams = currentTeamChanges;
+        ts.ticket = NetworkManager.CreateRegisterTicket();
         
         NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ts));
         

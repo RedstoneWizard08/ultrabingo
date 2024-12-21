@@ -17,6 +17,8 @@ public class UpdateRoomSettingsRequest : SendMessage
     public int difficulty;
     public int gridSize;
     public bool disableCampaignAltExits;
+    
+    public RegisterTicket ticket;
 }
 
 public class UpdateRoomSettingsNotification : MessageResponse

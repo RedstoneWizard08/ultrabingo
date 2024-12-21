@@ -227,7 +227,7 @@ public static class GameManager
         }
     }
 
-    public static void  SetupGameDetails(Game game,bool isHost=true)
+    public static void SetupGameDetails(Game game,bool isHost=true)
     {
         CurrentGame = game;
         
@@ -265,6 +265,7 @@ public static class GameManager
             BingoMapSelection.NumOfMapsTotal = 0;
             BingoMapSelection.UpdateNumber();
             BingoMapSelection.SelectedIds.Clear();
+            
             if(BingoMapSelection.MapPoolButtons.Count > 0)
             {
                 foreach(GameObject mapPoolButton in BingoMapSelection.MapPoolButtons)
@@ -284,6 +285,8 @@ public static class GameManager
             BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;
             BingoLobby.RequirePRank.isOn = CurrentGame.gameSettings.requiresPRank;
         }
+        
+        NetworkManager.RegisterConnection();
     }
     public static void ShowGameId()
     {

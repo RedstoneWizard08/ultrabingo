@@ -94,15 +94,15 @@ public class FinalRankFanfare
             srr.playerName = sanitiseUsername(Steamworks.SteamClient.Name);
             srr.steamId = Steamworks.SteamClient.SteamId.ToString();
             srr.team = GameManager.CurrentTeam;
-            
             srr.gameId = GameManager.CurrentGame.gameId;
             srr.time = time;
             srr.style = style;
             srr.levelName = getSceneName();
             srr.levelId = GameManager.CurrentGame.grid.levelTable[GameManager.CurrentRow+"-"+GameManager.CurrentColumn].levelId;
-            Logging.Message(srr.levelId);
             srr.column = GameManager.CurrentColumn;
             srr.row = GameManager.CurrentRow;
+            srr.ticket = NetworkManager.CreateRegisterTicket();
+            
             NetworkManager.SubmitRun(srr);
             
             GameManager.HasSent = true;

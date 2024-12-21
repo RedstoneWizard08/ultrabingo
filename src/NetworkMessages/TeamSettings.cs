@@ -11,6 +11,8 @@ public class TeamSettings : SendMessage
     
     public Dictionary<string,int> teams;
     
+    public RegisterTicket ticket;
+    
 }
 
 public class UpdateTeamsNotification : MessageResponse

@@ -84,6 +84,7 @@ namespace UltrakillBingoClient
                 if(ticketString.Length > 0)
                 {
                     IsSteamAuthenticated = true;
+                    NetworkManager.SetSteamTicket(ticketString);
                     return true;
                 }
             }
@@ -125,6 +126,7 @@ namespace UltrakillBingoClient
                 
                 if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())
                 {
+                    
                     BingoEnd.ShowEndScreen();
                     MonoSingleton<AssistController>.Instance.majorEnabled = false;
                     MonoSingleton<AssistController>.Instance.gameSpeed = 1f;

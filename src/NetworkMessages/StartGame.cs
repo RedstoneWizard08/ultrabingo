@@ -10,6 +10,7 @@ public class StartGameRequest : SendMessage
     public string messageType = "StartGame";
     
     public int roomId;
+    public RegisterTicket ticket;
     
 }
 

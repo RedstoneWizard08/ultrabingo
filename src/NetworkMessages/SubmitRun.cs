@@ -20,6 +20,8 @@ public class SubmitRunRequest : SendMessage
     
     public float time;
     public float style;
+    
+    public RegisterTicket ticket;
 }
 
 // Notify all players that a map has been claimed/reclaimed/improved.

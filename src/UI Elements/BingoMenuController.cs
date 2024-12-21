@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using AngryLevelLoader.Containers;
 using AngryLevelLoader.Managers;
 using AngryLevelLoader.Notifications;
+using Newtonsoft.Json;
 using UltraBINGO.Components;
+using UltraBINGO.NetworkMessages;
 using UltrakillBingoClient;
 using UnityEngine;
 using static UltraBINGO.CommonFunctions;
@@ -267,6 +269,7 @@ public static class BingoMenuController
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
             return;
         }
+        
         NetworkManager.JoinGame(roomId);
     }
     

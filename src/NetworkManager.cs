@@ -45,10 +45,19 @@ public static class NetworkManager
     public static string serverMapPoolCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoMapPool.toml" : "http://vranks.uk/bingoMapPool.toml";
     
     public static bool modlistCheck = false;
+    private static string steamTicket;
     
     static WebSocket ws;
     static Timer heartbeatTimer;
     
+    public static string GetSteamTicket()
+    {
+        return steamTicket;
+    }
+    public static void SetSteamTicket(string ticket)
+    {
+        steamTicket = ticket;
+    }
     
     //Fetch the bingo map catalog from the server.
     public static async Task<string> FetchCatalog(string urlToRequest)
@@ -193,6 +202,24 @@ public static class NetworkManager
         ws.Send(encodedJson);
     }
     
+    public static RegisterTicket CreateRegisterTicket()
+    {
+        RegisterTicket rt = new RegisterTicket();
+        rt.steamId = Steamworks.SteamClient.SteamId.ToString();
+        rt.steamTicket = GetSteamTicket();
+        rt.steamUsername = Steamworks.SteamClient.Name;
+        rt.gameId = GameManager.CurrentGame.gameId;
+        
+        return rt;
+    }
+    
+    public static void RegisterConnection()
+    {
+        Logging.Warn("Registering connection with server");
+        RegisterTicket rt = CreateRegisterTicket();
+        SendEncodedMessage(JsonConvert.SerializeObject(rt));
+    }
+    
     //Connect the WebSocket to the server.
     public static void ConnectWebSocket()
     {
@@ -258,6 +285,7 @@ public static class NetworkManager
     {
         StartGameRequest gameRequest = new StartGameRequest();
         gameRequest.roomId = roomId;
+        gameRequest.ticket = CreateRegisterTicket();
         
         SendEncodedMessage(JsonConvert.SerializeObject(gameRequest));
     }
