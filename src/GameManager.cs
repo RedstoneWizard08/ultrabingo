@@ -31,6 +31,7 @@ public static class GameManager
     public static bool EnteringAngryLevel = false;    
     public static bool TriedToActivateCheats = false;
     public static bool IsDownloadingLevel = false;
+    public static bool IsSwitchingLevels = false;
     
     public static GameObject LevelBeingDownloaded = null;
     
@@ -135,6 +136,7 @@ public static class GameManager
         HasSent = false;
         EnteringAngryLevel = false;
         TriedToActivateCheats = false;
+        IsSwitchingLevels = false;
     }
     
     //Update displayed player list when a player joins/leaves game.

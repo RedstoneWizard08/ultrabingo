@@ -15,6 +15,7 @@ namespace UltraBINGO.UI_Elements;
 public static class BingoMenuController
 {
     public static string currentlyDownloadingLevel = "";
+
     
     public static bool checkSteamAuthentication()
     {
@@ -149,17 +150,18 @@ public static class BingoMenuController
                                          Logging.Error(res.ToString());
                                      }
                                  }
-                                
                             }
                             else
                             {
                                 Logging.Message(scriptName + " is already downloaded");
                             }
                         }
+                        GameManager.IsSwitchingLevels = true;
                         AngrySceneManager.LoadLevelWithScripts(requiredAngryScripts,bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath);
                     }
                     else
                     {   
+                        GameManager.IsSwitchingLevels = true;
                         AngrySceneManager.LoadLevel(bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath,true);
                     }
                 }
@@ -195,8 +197,8 @@ public static class BingoMenuController
     
     public static async void LoadBingoLevelFromPauseMenu(string levelCoords, BingoLevelData levelData)
     {
-        //Make sure the game hasn't ended.
-        if(GameManager.CurrentGame.isGameFinished())
+        //Make sure the game hasn't ended or we're not already loading a level.
+        if(GameManager.CurrentGame.isGameFinished() || GameManager.IsSwitchingLevels)
         {
             return;
         }
@@ -219,6 +221,7 @@ public static class BingoMenuController
             else
             {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to <color=orange>"+levelDisplayName + "</color>...");
+                GameManager.IsSwitchingLevels = true;
                 await Task.Delay(1000);
                 SceneHelper.LoadScene(levelId);
             }
