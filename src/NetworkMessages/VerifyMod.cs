@@ -26,7 +26,7 @@ public static class ModVerificationHandler
 {
     public static void handle(ModVerificationResponse response)
     {
-        Logging.Warn("Mod list verif check result was " + response.status);
         NetworkManager.modlistCheck = response.status;
+        NetworkManager.DisconnectWebSocket(1000,"ModCheckDone");
     }
 }
