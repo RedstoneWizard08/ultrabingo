@@ -37,12 +37,12 @@ public class PlayerNotification
 
 public static class NetworkManager
 {
-    public static string serverURL = Main.IsDevelopmentBuild ? "ws://127.0.0.1:2052" : "ws://vranks.uk:2052";
+    public static string serverURL = Main.IsDevelopmentBuild ? "ws://127.0.0.1:2052" : "ws://clearwaterbirb.uk:2052";
     
     private static readonly HttpClient Client = new HttpClient();
     
-    public static string serverCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoCatalog.toml" : "http://vranks.uk/bingoCatalog.toml";
-    public static string serverMapPoolCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoMapPool.toml" : "http://vranks.uk/bingoMapPool.toml";
+    public static string serverCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoCatalog.toml" : "http://clearwaterbirb.uk/bingoCatalog.toml";
+    public static string serverMapPoolCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoMapPool.toml" : "http://clearwaterbirb.uk/bingoMapPool.toml";
     
     public static bool modlistCheck = false;
     private static string steamTicket;
