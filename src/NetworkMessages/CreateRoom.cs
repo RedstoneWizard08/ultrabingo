@@ -2,15 +2,6 @@
 
 namespace UltraBINGO.NetworkMessages;
 
-
-/*
- *
- * CreateRoom: Used when creating anew room.
- * Request: Info related to room configuration that's sent to server.
- * Response: Lets the player requesting the room creation if it was created or not.
- * 
- */
-
 public class CreateRoomRequest : SendMessage
 {
     public string messageType = "CreateRoom";
@@ -46,10 +37,9 @@ public static class CreateRoomResponseHandler
         {
             Logging.Message("Got details for room "+response.roomId);
                         
-            //Once room details have been obtained: set up the lobby screen with the following:
-            // Player list
+            //Once room details have been obtained: set up the lobby screen
             GameManager.SetupGameDetails(response.roomDetails);
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joining room ID: "+response.roomId);
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game: "+response.roomId);
         }
     }
 }

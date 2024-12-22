@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UltraBINGO.Components;
-using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,7 +11,6 @@ namespace UltraBINGO.UI_Elements;
 
 public static class BingoCardPauseMenu
 {
-    
     public static Dictionary<string,Color> teamColors = new Dictionary<string, Color>()
     {
         {"NONE",new Color(1,1 ,1,1)},
@@ -21,26 +19,22 @@ public static class BingoCardPauseMenu
         {"Blue",new Color(0,0,1,1)},
         {"Yellow",new Color(1,1,0,1)},
     };
-
-
+    
     public static GameObject Root;
     public static GameObject Grid;
     
-    public static GameObject BingoPauseCard;
-    public static GameObject LevelSquareTemplate;
     public static GameObject inGamePanel;
-    
-    
     
     public static void onMouseEnterLevelSquare(PointerEventData data)
     {
         string angryLevelName = data.pointerEnter.gameObject.GetComponent<BingoLevelData>().levelName.ToLower();
         string campaignLevelName = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name].levelId.ToLower();
         
-        string path = "assets/bingo/lvlimg/" + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? "angry" : "campaign") + "/"
-            + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? angryLevelName : campaignLevelName) + ".png";
-        
-        
+        string path = "assets/bingo/lvlimg/"
+                      + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? "angry" : "campaign")
+                      + "/"
+                      + (data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isAngryLevel ? angryLevelName : campaignLevelName)
+                      + ".png";
         
         if(!AssetLoader.Assets.Contains(path))
         {
@@ -55,12 +49,6 @@ public static class BingoCardPauseMenu
         
         GetGameObjectChild(Root,"SelectedLevel").SetActive(true);
         GetGameObjectChild(Root,"SelectedLevelImage").SetActive(true);
-    }
-    
-    public static void onMouseExitLevelSquare(PointerEventData data)
-    {
-        Logging.Message("Exit");
-        GetGameObjectChild(Root,"SelectedLevelImage").SetActive(false);
     }
     
     public static void ShowBingoCardInPauseMenu(ref OptionsManager __instance)
@@ -78,11 +66,11 @@ public static class BingoCardPauseMenu
                 GameLevel levelObject = GameManager.CurrentGame.grid.levelTable[levelSquare.name];
                 
                 //Set up BingoLevelData
-                levelSquare.AddComponent<BingoLevelData>();
-                levelSquare.GetComponent<BingoLevelData>().levelName = levelObject.levelName;
-                levelSquare.GetComponent<BingoLevelData>().isAngryLevel = levelObject.isAngryLevel;
-                levelSquare.GetComponent<BingoLevelData>().angryParentBundle = levelObject.angryParentBundle;
-                levelSquare.GetComponent<BingoLevelData>().angryLevelId = levelObject.angryLevelId;
+                BingoLevelData bld = levelSquare.AddComponent<BingoLevelData>();
+                bld.levelName = levelObject.levelName;
+                bld.isAngryLevel = levelObject.isAngryLevel;
+                bld.angryParentBundle = levelObject.angryParentBundle;
+                bld.angryLevelId = levelObject.angryLevelId;
                 
                 levelSquare.AddComponent<Button>();
                 levelSquare.GetComponent<Button>().onClick.AddListener(delegate
@@ -95,7 +83,7 @@ public static class BingoCardPauseMenu
                 {
                     levelSquare.AddComponent<Outline>();
                     levelSquare.GetComponent<Outline>().effectColor = Color.magenta;
-                    levelSquare.GetComponent<Outline>().effectDistance = new Vector2(3f,-3f);
+                    levelSquare.GetComponent<Outline>().effectDistance = new Vector2(2f,-2f);
                 }
                 
                 levelSquare.AddComponent<EventTrigger>();
@@ -106,14 +94,6 @@ public static class BingoCardPauseMenu
                     onMouseEnterLevelSquare((PointerEventData)data);
                 });
                 levelSquare.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
-                
-                EventTrigger.Entry mouseExit = new EventTrigger.Entry();
-                mouseExit.eventID = EventTriggerType.PointerExit;
-                mouseExit.callback.AddListener((data) =>
-                {
-                    onMouseExitLevelSquare((PointerEventData)data);
-                });
-                
                 levelSquare.SetActive(true);
             }
         }

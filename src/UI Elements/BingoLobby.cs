@@ -19,7 +19,6 @@ public static class BingoLobby
     public static GameObject SetTeams;
     public static GameObject StartGame;
     public static GameObject RoomIdDisplay;
-
     
     public static GameObject GameOptions;
     public static TMP_InputField MaxPlayers;
@@ -30,7 +29,6 @@ public static class BingoLobby
     public static TMP_Dropdown Difficulty;
     public static Toggle RequirePRank;
     public static Toggle DisableCampaignAltExits;
-    
     
     public static void onMaxPlayerUpdate(string playerAmount)
     {

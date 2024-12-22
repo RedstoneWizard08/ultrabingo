@@ -30,13 +30,11 @@ public static class UIManager
         
         GameObject disabledNotification = UIHelper.CreateText("Major assists are <color=orange>disabled</color> while playing Baphomet's Bingo.",26,"TextDisabled");
         disabledNotification.transform.SetParent(assistsList.transform);
-
     }
     
     public static void HideAngryButton()
     {
         GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("Canvas"),"OptionsMenu"),"Panel"),"PluginConfiguratorButton(Clone)").SetActive(false);
-        
     }
     
     public static void HandleGameSettingsUpdate()
@@ -63,7 +61,6 @@ public static class UIManager
     public static void SetupElements(CanvasController __instance)
     {
         RectTransform canvasRectTransform = __instance.GetComponent<RectTransform>();
-        GameObject chapterSelectObject = canvasRectTransform.Find("Chapter Select").gameObject;
         GameObject difficultySelectObject = canvasRectTransform.Find("Difficulty Select (1)").gameObject;
         
         if(ultrabingoButtonObject == null)
@@ -72,8 +69,6 @@ public static class UIManager
             ultrabingoButtonObject.name = "UltraBingoButton";
         }
         Button bingoButton = ultrabingoButtonObject.GetComponent<Button>();
-        
-        
         bingoButton.onClick.AddListener(delegate
         {
             Open();
@@ -88,7 +83,7 @@ public static class UIManager
         ultrabingoEncapsulator.SetActive(false);
     }
     
-    public static void populateUnallowedMods()
+    public static void PopulateUnallowedMods()
     {
         TextMeshProUGUI mods = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(ultrabingoUnallowedModsPanel,"BingoLockedPanel"),"Panel"),"ModList").GetComponent<TextMeshProUGUI>();
         
@@ -111,7 +106,7 @@ public static class UIManager
     {
         if(!NetworkManager.modlistCheck)
         {
-            populateUnallowedMods();
+            PopulateUnallowedMods();
             ultrabingoUnallowedModsPanel.SetActive(true);
             return;
         }
@@ -130,12 +125,4 @@ public static class UIManager
             ultrabingoLockedPanel.SetActive(true);
         }
     }
-    
-    public static void Close()
-    {
-        //Show chapter select
-        ultrabingoEncapsulator.SetActive(false);
-        ultrabingoButtonObject.transform.parent.gameObject.SetActive(true);
-    }
-
 }

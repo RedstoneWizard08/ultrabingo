@@ -25,21 +25,17 @@ public class BingoSetTeamsMenu
     
     public static GameObject PlayerGrid;
     public static GameObject ButtonTemplate;
-    
     public static GameObject CancelButton;
     public static GameObject ResetButton;
     public static GameObject FinishButton;
-    
     public static GameObject TeamSelectionPanel;
-    public static List<GameObject> TeamSelectionPanelButtons = new List<GameObject>();
-    
-    public static Dictionary<string,int> currentTeamChanges = new Dictionary<string, int>();
-    
     public static GameObject currentPlayerObject = null;
+    
+    public static List<GameObject> TeamSelectionPanelButtons = new List<GameObject>();
+    public static Dictionary<string,int> currentTeamChanges = new Dictionary<string, int>();
     
     public static int playersMapped = 0;
     public static int playersToMap = 0;
-
     
     public static void ReturnToLobbyMenu()
     {
@@ -49,13 +45,11 @@ public class BingoSetTeamsMenu
     
     public static void Cancel()
     {
-        Logging.Message("Cancelling");
         currentTeamChanges.Clear();
         foreach(GameObject go in TeamSelectionPanelButtons)
         {
             go.SetActive(true);
         }
-        
         ReturnToLobbyMenu();
     }
     
@@ -67,7 +61,6 @@ public class BingoSetTeamsMenu
         
         NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(cts));
         ReturnToLobbyMenu();
-        
     }
     
     public static void Submit()
@@ -84,7 +77,6 @@ public class BingoSetTeamsMenu
         ts.ticket = NetworkManager.CreateRegisterTicket();
         
         NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ts));
-        
         ReturnToLobbyMenu();
     }
     
@@ -120,16 +112,12 @@ public class BingoSetTeamsMenu
             Logging.Message("Players mapped: " + playersMapped + " | Players in game to map: " + playersToMap);
         }
         currentTeamChanges[currentPlayerObject.name] = teamId;
-        
         GetGameObjectChild(currentPlayerObject,"Text").GetComponent<TextMeshProUGUI>().color = teamColors[teamId];
-        
         TeamSelectionPanel.SetActive(false);
     }
     
     public static void Setup()
     {
-        Logging.Message("Setup teams menu");
-        
         Dictionary<string,Player> playerList = GameManager.CurrentGame.currentPlayers;
         Logging.Message("There are " + playerList.Count + " players");
         playersToMap = playerList.Count;
@@ -153,7 +141,6 @@ public class BingoSetTeamsMenu
         foreach(string id in playerSteamIds)
         {
             string playerName = GameManager.CurrentGame.currentPlayers[id].username;
-
             GameObject playerTeamButton = GameObject.Instantiate(ButtonTemplate,PlayerGrid.transform);
             playerTeamButton.name = id;
             GetGameObjectChild(playerTeamButton,"Text").GetComponent<TextMeshProUGUI>().text = playerName;
@@ -163,12 +150,10 @@ public class BingoSetTeamsMenu
                 OpenTeamColorPanel(ref playerTeamButton,id,playerName);
             });
             playerTeamButton.SetActive(true);
-            
         }
         
         //If there are only 2/3 teams, disable the excess buttons.
         int maxTeams = GameManager.CurrentGame.gameSettings.maxTeams;
-        Logging.Message("There are " + maxTeams + " teams");
         for(int x = maxTeams; x < TeamSelectionPanelButtons.Count; x++)
         {
             TeamSelectionPanelButtons[x].SetActive(false);
@@ -177,7 +162,6 @@ public class BingoSetTeamsMenu
         //And prepare the hot changes.
         PrepareChanges();
     }
-    
     
     public static void Init(ref GameObject BingoSetTeams)
     {
@@ -198,7 +182,6 @@ public class BingoSetTeamsMenu
         Logging.Message(TeamSelectionPanelSub.name);
         
         TeamSelectionPanelButtons.Clear(); //Remove previously destroyed references
-        
         TeamSelectionPanelButtons.Add(GetGameObjectChild(TeamSelectionPanelSub,"Red"));
         TeamSelectionPanelButtons.Add(GetGameObjectChild(TeamSelectionPanelSub,"Green"));
         TeamSelectionPanelButtons.Add(GetGameObjectChild(TeamSelectionPanelSub,"Blue"));
@@ -230,5 +213,4 @@ public class BingoSetTeamsMenu
             Submit();
         });
     }
-    
 }

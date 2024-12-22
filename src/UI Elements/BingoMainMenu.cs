@@ -37,7 +37,6 @@ public static class BingoMainMenu
     
     public static GameObject Init(ref GameObject BingoMenu)
     {
-        
         HostGame = GetGameObjectChild(BingoMenu,"Host Game");
         HostGame.GetComponent<Button>().onClick.AddListener(BingoMenuController.CreateRoom);
         

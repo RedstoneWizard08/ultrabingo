@@ -172,7 +172,7 @@ public static class NetworkManager
         
         if(GameManager.IsInBingoLevel)
         {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nExitting in 5 seconds...");
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nExiting in 5 seconds...");
             GameManager.ClearGameVariables();
             await Task.Delay(5000);
             

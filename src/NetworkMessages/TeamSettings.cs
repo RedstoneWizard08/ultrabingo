@@ -6,11 +6,8 @@ namespace UltraBINGO.NetworkMessages;
 public class TeamSettings : SendMessage
 {
     public string messageType = "UpdateTeamSettings";
-    
     public int gameId;
-    
     public Dictionary<string,int> teams;
-    
     public RegisterTicket ticket;
     
 }
@@ -36,7 +33,6 @@ public static class UpdateTeamsNotificationHandler
             msg = (response.status == 0 ? "The host has set the teams. The room has been locked." : "The host has cleared the teams. The room has been unlocked.");
             GameManager.CurrentGame.gameSettings.hasManuallySetTeams = false;
         }
-        
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
     }
 }

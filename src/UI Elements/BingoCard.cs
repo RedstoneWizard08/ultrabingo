@@ -28,7 +28,6 @@ public class BingoCard
     
     public static GameObject CardElements;
     
-    
     public static string team = "PLACEHOLDER";
     
     public static void Cleanup()
@@ -85,13 +84,6 @@ public class BingoCard
         }
         Root.name = "UltraBingoCard";
         
-        
-        /*Grid.AddComponent<GridLayoutGroup>();
-        Grid.GetComponent<GridLayoutGroup>().constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        Grid.GetComponent<GridLayoutGroup>().constraintCount = 3;
-        Grid.GetComponent<GridLayoutGroup>().spacing = new Vector2(100f,100f);
-        Grid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(150f,50f);*/
-        
         CardElements = GameObject.Instantiate(AssetLoader.BingoCardElements,Root.transform);
         
         //Bingo grid
@@ -104,7 +96,7 @@ public class BingoCard
             ButtonTemplate = new GameObject();
         }
         
-        //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter component causes crashes.
+        //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter causes crashes.
         ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,12);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
@@ -115,11 +107,11 @@ public class BingoCard
             GameManager.LeaveGame();
         });
         
-
+        //Team indicator panel
         TeamIndicator = GetGameObjectChild(CardElements,"TeamIndicator");
         TeamIndicator.GetComponent<TextMeshProUGUI>().text = ("-- You are on the "+team+" team -- ");
         
-        
+        //Time/style indicator panel
         ObjectiveIndicator = GetGameObjectChild(CardElements,"ObjectiveIndicator");
         
         //Bingo Level Information panel

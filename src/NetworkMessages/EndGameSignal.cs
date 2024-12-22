@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltraBINGO.UI_Elements;
-using UltrakillBingoClient;
 using UnityEngine;
 
 using static UltraBINGO.CommonFunctions;

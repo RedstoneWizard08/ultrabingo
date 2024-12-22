@@ -17,7 +17,6 @@ public static class AssetLoader
     
     public static GameObject BingoEntryButton;
     public static GameObject BingoPauseCard;
-    public static GameObject BingoTeammatesCard;
     public static GameObject BingoMainMenu;
     public static GameObject BingoLobbyMenu;
     public static GameObject BingoCardElements;
@@ -40,7 +39,6 @@ public static class AssetLoader
         
         BingoEntryButton = Assets.LoadAsset<GameObject>("BingoEntryButton");
         BingoPauseCard = Assets.LoadAsset<GameObject>("BingoPauseCard");
-        BingoTeammatesCard = Assets.LoadAsset<GameObject>("BingoTeammateCard");
         BingoMainMenu = Assets.LoadAsset<GameObject>("BingoMainMenu");
         BingoLobbyMenu = Assets.LoadAsset<GameObject>("BingoLobbyMenu");
         BingoCardElements = Assets.LoadAsset<GameObject>("BingoCard");

@@ -29,8 +29,10 @@ public static class CheatNotificationHandler
         "Their death was a canon event.",
         "Jakito does not approve.",
         "Their punishment is 1 hour of grinding 1-4.",
-        "Their attempt was a futile struggle, doomed from the very start."
-        
+        "Their attempt was a futile struggle, doomed from the very start.",
+        "Hakita told them to shut the fuck up.",
+        "They were misinformed on the internet.",
+        "Point and laugh at this person.",
     };
     
     public static void handle(CheatNotification response)
@@ -38,6 +40,5 @@ public static class CheatNotificationHandler
         Random random = new Random();
         string msg = response.playerToHumil + " tried to enable cheats.\n" + messages[random.Next(messages.Count)];
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
-        
     }
 }

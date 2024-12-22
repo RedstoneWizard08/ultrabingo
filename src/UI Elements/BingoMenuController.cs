@@ -272,7 +272,6 @@ public static class BingoMenuController
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
             return;
         }
-        
         NetworkManager.JoinGame(roomId);
     }
     
@@ -283,5 +282,4 @@ public static class BingoMenuController
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("The game has begun!");
         GameManager.MoveToCard();
     }
-    
 }

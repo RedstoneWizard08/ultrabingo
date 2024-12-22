@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 using static UltraBINGO.CommonFunctions;
 
@@ -12,7 +11,6 @@ public static class BingoEncapsulator
     public static GameObject BingoLobbyScreen;
     public static GameObject BingoCardScreen;
     public static GameObject BingoEndScreen;
-    
     public static GameObject BingoMapSelectionMenu;
     public static GameObject BingoSetTeams;
     

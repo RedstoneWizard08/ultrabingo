@@ -10,12 +10,9 @@ namespace UltraBINGO.UI_Elements;
 public static class BingoEnd
 {
     public static GameObject Root;
-    
     public static GameObject WinnerIndicator;
     public static GameObject WinningPlayers;
-    
     public static GameObject Stats;
-    
     public static GameObject LeaveGame;
     
     public static string winningTeam;
@@ -24,7 +21,6 @@ public static class BingoEnd
     public static int numOfClaims;
     public static string firstMap;
     public static string lastMap;
-    
     public static float bestStatValue;
     public static string bestStatName;
     
@@ -72,9 +68,6 @@ public static class BingoEnd
             BingoMapSelection.ClearList(true);
         });
         LeaveGame.transform.SetParent(BingoEndScreen.transform);
-        
-    
         BingoEndScreen.SetActive(false);    
-        
     }
 }
