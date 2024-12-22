@@ -36,7 +36,7 @@ public class ShopAddLevelInfo
                 
                 string unclaimed = "This level is currently <color=orange>unclaimed</color>.\nHurry and be the first to <color=green>claim it for your team</color>!";
                 string claimedByOwnTeam = "This level is currently <color=green>claimed by your team</color>.\n<color=orange>Choose another level</color> to claim, or <color=orange>try and improve the current requirement</color> to make it harder for other teams to reclaim!";
-                string claimedByOtherTeam = "This level is currently claimed by the OTHER team.\n<color=orange>Beat</color> the current requirement to <color=green>reclaim it for your team</color>!";
+                string claimedByOtherTeam = "This level is currently claimed by another team.\n<color=orange>Beat</color> the current requirement to <color=green>reclaim it for your team</color>!";
                 
                 if(teamClaim == "NONE")
                 {
