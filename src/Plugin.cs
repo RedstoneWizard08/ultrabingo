@@ -142,6 +142,7 @@ namespace UltrakillBingoClient
                 if(GameManager.IsInBingoLevel)
                 {
                     UIManager.DisableMajorAssists();
+                    UIManager.HideAngryButton();
                     if(GameManager.CurrentGame.gameSettings.disableCampaignAltExits)
                     {
                         Logging.Warn("Disabling campaign alt exits");

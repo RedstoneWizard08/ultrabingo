@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using AngryLevelLoader;
 using Newtonsoft.Json;
+using PluginConfig;
+using PluginConfig.API;
 using TMPro;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
@@ -27,6 +30,13 @@ public static class UIManager
         
         GameObject disabledNotification = UIHelper.CreateText("Major assists are <color=orange>disabled</color> while playing Baphomet's Bingo.",26,"TextDisabled");
         disabledNotification.transform.SetParent(assistsList.transform);
+
+    }
+    
+    public static void HideAngryButton()
+    {
+        GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("Canvas"),"OptionsMenu"),"Panel"),"PluginConfiguratorButton(Clone)").SetActive(false);
+        
     }
     
     public static void HandleGameSettingsUpdate()
