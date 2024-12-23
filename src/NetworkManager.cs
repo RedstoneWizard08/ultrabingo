@@ -21,6 +21,14 @@ using Object = System.Object;
 
 namespace UltrakillBingoClient;
 
+public enum AsyncAction
+{
+    None,
+    Host,
+    Join,
+    ModCheck
+}
+
 public class SendMessage
 {
     public string messageType;
@@ -37,6 +45,10 @@ public class PlayerNotification
 
 public static class NetworkManager
 {
+    public static AsyncAction pendingAction = AsyncAction.None;
+    public static int pendingRoomId = 0;
+    public static VerifyModRequest pendingVmr = null;
+    
     public static string serverURL = Main.IsDevelopmentBuild ? "ws://127.0.0.1:2052" : "ws://clearwaterbirb.uk:2052";
     
     private static readonly HttpClient Client = new HttpClient();
@@ -49,6 +61,34 @@ public static class NetworkManager
     
     static WebSocket ws;
     static Timer heartbeatTimer;
+    
+    public static void HandleAsyncConnect()
+    {
+        SetupHeartbeat();
+        switch (pendingAction)
+        {
+            case AsyncAction.Host:
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
+                CreateRoom();
+                break;
+            case AsyncAction.Join:
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
+                JoinGame(pendingRoomId);
+                break;
+            case AsyncAction.ModCheck:
+                SendEncodedMessage(JsonConvert.SerializeObject(pendingVmr));
+                break;
+            default:
+                break;
+        }
+    }
+    
+    public static void SendModCheck(VerifyModRequest vmr)
+    {
+        pendingAction = AsyncAction.ModCheck;
+        pendingVmr = vmr;
+        ConnectWebSocket();
+    }
     
     public static string GetSteamTicket()
     {
@@ -150,6 +190,7 @@ public static class NetworkManager
         ws.EnableRedirection = true;
         ws.WaitTime = TimeSpan.FromSeconds(90);
         
+        ws.OnOpen += (sender,e) => { HandleAsyncConnect(); };
         ws.OnMessage += (sender,e) => { onMessageRecieved(e); };
         ws.OnError += (sender,e) => { HandleError(e); };
         ws.OnClose += (sender,e) =>
@@ -223,13 +264,7 @@ public static class NetworkManager
     //Connect the WebSocket to the server.
     public static void ConnectWebSocket()
     {
-        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
-        ws.Connect();
-        SetupHeartbeat();
-        if(ws.IsAlive)
-        {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connected.");
-        }
+        ws.ConnectAsync();
     }
     
     //Disconnect WebSocket.

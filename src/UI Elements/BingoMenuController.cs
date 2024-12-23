@@ -241,19 +241,8 @@ public static class BingoMenuController
             return;
         }
         
-        //Check if the websocket connection is up.
-        if(!NetworkManager.IsConnectionUp())
-        {
-            NetworkManager.ConnectWebSocket();
-        }
-        
-        if(!NetworkManager.IsConnectionUp())
-        {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
-            return;
-        }
-        
-        NetworkManager.CreateRoom();
+        NetworkManager.pendingAction = AsyncAction.Host;
+        NetworkManager.ConnectWebSocket();
     }
     
     public static void JoinRoom(int roomId)
@@ -262,17 +251,9 @@ public static class BingoMenuController
         {
             return;
         }
-        
-        if(!NetworkManager.IsConnectionUp())
-        {
-            NetworkManager.ConnectWebSocket();
-        }
-        if(!NetworkManager.IsConnectionUp())
-        {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=red>Failed to connect to server.</color>");
-            return;
-        }
-        NetworkManager.JoinGame(roomId);
+        NetworkManager.pendingAction = AsyncAction.Join;
+        NetworkManager.pendingRoomId = roomId;
+        NetworkManager.ConnectWebSocket();
     }
     
     public static void StartGame()

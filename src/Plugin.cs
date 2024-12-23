@@ -106,8 +106,8 @@ namespace UltrakillBingoClient
                 LoadedMods.Add(modName);
             }
             
-            VerifyModRequest vmr = new VerifyModRequest(LoadedMods,SteamClient.SteamId.ToString());
-            NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(vmr));
+            VerifyModRequest vmr = new VerifyModRequest(LoadedMods, SteamClient.SteamId.ToString());
+            NetworkManager.SendModCheck(vmr);
         }
         
         //Scene switch
