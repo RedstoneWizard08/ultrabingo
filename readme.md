@@ -29,14 +29,14 @@ I will investigate possibilities for support for trending map loader mods in fut
 ### Why is Baphomet's Bingo locked for me?
 You may be in one of two scenarios:
 - You have not yet completed 7-4 and obtained the full (current) arsenal the game has, which is required by virtually every custom level. Locking the mod behind this check ensures that players do not find themselves softlocked in custom levels due to missing equipment.
-- You may be using a mod that is not whitelisted. To ensure fair play for all players in a game, a mod whitelist is active. If you wish to request a commonly used mod to be whitelisted, feel free to file an issue on the Github page or drop it over in the Baphomet's Bingo Discord.
+- You may be using a mod that is not whitelisted. To ensure fair play for all players in a game, a mod whitelist is active. If you wish to request a commonly used mod to be whitelisted, feel free to file an issue on the Github page or drop it over in the [Baphomet's Bingo Discord](https://discord.gg/VyzFJwEWtJ).
 
 
 # Troubleshooting
 
 ### I am unable to connect to the Baphomet's Bingo servers.
 Please try using a VPN if possible. The Baphomet's Bingo servers are proxied behind Cloudflare, the latter of which may not allow some specific IP ranges for reasons I am not able to directly provide support for.
-If you are still having problems, please join the Baphomet's Bingo Discord and mention your problem, and I will try to help you to the best of my ability.
+If you are still having problems, please join the [Baphomet's Bingo Discord](https://discord.gg/VyzFJwEWtJ)and mention your problem, and I will try to help you to the best of my ability.
 
 ### I am unable to join a game that says "This game is not accepting new players".
 The host of the game you are trying to join has manually defined and set teams, which locks the lobby and prevents new players from joining. This is an intentional design choice to prevent abnormal behavior. If possible, ask the host of the game to reset the teams in order to unlock the lobby and allow new players to join.
@@ -71,3 +71,10 @@ A **huge** thank you to the following members of the ULTRAKILL and Angry communi
   - [PHP-CLI-Colors](https://github.com/mikeerickson/php-cli-colors) by [mikeerickson](https://github.com/mikeerickson), licenced under the MIT Licence.
   - [Websocket-PHP](https://github.com/sirn-se/websocket-php) by [Sirn-se](https://github.com/sirn-se/), licenced under the ISC Licence.
   - [PHPDotEnv](https://github.com/vlucas/phpdotenv) by [VLucas](https://github.com/vlucas), licenced under the MIT Licence.
+
+### Donations
+If you enjoy my work, please consider donating! All received donations will go directly towards server hosting costs, which will allow me to keep the servers online. Thank you!
+<br><br>
+<a href='https://ko-fi.com/J3J7SN3N5' target='_blank'>
+                <img height="48" style="border:0px;height:36px;" src="https://storage.ko-fi.com/cdn/kofi3.png?v=3" alt="Buy Me a Coffee"/>
+</a>
