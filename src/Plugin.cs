@@ -65,7 +65,7 @@ namespace UltrakillBingoClient
             Logging.Message("--Applying patches...--");
             Harmony harmony = new Harmony(pluginId);
             harmony.PatchAll();
-            
+             
             Logging.Message("--Network manager init...--");
             NetworkManager.Initialise();
             
