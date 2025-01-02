@@ -149,19 +149,40 @@ public static class GameManager
                 BingoLobby.PlayerList.SetActive(false);
                 string players = "";
                 
+                GameObject PlayerList = GetGameObjectChild(BingoLobby.PlayerList,"PlayerList");
+                GameObject PlayerTemplate = GetGameObjectChild(PlayerList,"PlayerTemplate");
+                
+                foreach(Transform child in PlayerList.transform)
+                {
+                    if(child.gameObject.name != "PlayerTemplate")
+                    {
+                        GameObject.Destroy(child.gameObject);
+                    }
+                }
+                
                 foreach(string steamId in CurrentGame.currentPlayers.Keys.ToList())
                 {
-                    bool isHost = steamId == CurrentGame.gameHost;
-                    players += CurrentGame.currentPlayers[steamId].username + (isHost ? "(<color=orange>HOST</color>)" : "") + "\n";
+                    bool isHost = (steamId == CurrentGame.gameHost);
+                    GameObject player = GameObject.Instantiate(PlayerTemplate,PlayerList.transform);
+                    
+                    GetGameObjectChild(player,"PlayerName").GetComponent<Text>().text = 
+                        CurrentGame.currentPlayers[steamId].username + (isHost ? "(<color=orange>HOST</color>)" : "");
+                    
+                    GetGameObjectChild(player,"Kick").GetComponent<Button>().onClick.AddListener(delegate
+                    {
+                        NetworkManager.KickPlayer(steamId);
+                    });
+                    GetGameObjectChild(player,"Kick").transform.localScale = Vector3.one;
+                    GetGameObjectChild(player,"Kick").SetActive(isHost && steamId != Steamworks.SteamClient.SteamId.ToString());
+                    player.SetActive(true);    
                 }
-        
-                GetGameObjectChild(BingoLobby.PlayerList,"Players").GetComponent<TextMeshProUGUI>().text = players;
                 BingoLobby.PlayerList.SetActive(true);
             }
         }
         catch (Exception e)
         {
             Logging.Error("Something went wrong when trying to update player list");
+            Logging.Error(e.ToString());
         }
     }
     

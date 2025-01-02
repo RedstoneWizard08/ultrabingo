@@ -23,12 +23,18 @@ public static class JoinRoomResponseHandler
 {
     public static void handle(JoinRoomResponse response)
     {
+        
         string msg = "Failed to join: ";
         
         if(response.status < 0)
         {
             switch(response.status)
             {
+                case -5:
+                {
+                    msg += "<color=orange>You are banned from playing Baphomet's Bingo.</color>";
+                    break;
+                }
                 case -4:
                 {
                     msg += "Game has already started.";

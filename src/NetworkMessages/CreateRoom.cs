@@ -28,18 +28,25 @@ public static class CreateRoomResponseHandler
 {
     public static void handle(CreateRoomResponse response)
     {
-        if(response.roomId == 0)
+        if(response.status == "ban")
         {
-            //Was unable to create room
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to create room.");
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>You have been banned from playing Baphomet's Bingo.</color>");
         }
         else
         {
-            Logging.Message("Got details for room "+response.roomId);
+            if(response.roomId == 0)
+            {
+                //Was unable to create room
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to create room.");
+            }
+            else
+            {
+                Logging.Message("Got details for room "+response.roomId);
                         
-            //Once room details have been obtained: set up the lobby screen
-            GameManager.SetupGameDetails(response.roomDetails);
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game: "+response.roomId);
+                //Once room details have been obtained: set up the lobby screen
+                GameManager.SetupGameDetails(response.roomDetails);
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game: "+response.roomId);
+            } 
         }
     }
 }

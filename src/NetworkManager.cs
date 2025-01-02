@@ -341,6 +341,19 @@ public static class NetworkManager
         SendEncodedMessage(JsonConvert.SerializeObject(leaveRequest));
     }
     
+    public static void KickPlayer(string steamId)
+    {
+        Logging.Warn("Sending kick request");
+        
+        KickPlayer kp = new KickPlayer();
+        kp.gameId = GameManager.CurrentGame.gameId;
+        kp.playerToKick = steamId;
+        kp.ticket = CreateRegisterTicket();
+        
+        SendEncodedMessage(JsonConvert.SerializeObject(kp));
+        
+    }
+    
     //Handle all incoming messages received from the server.
     public static void onMessageRecieved(MessageEventArgs e)
     {
@@ -432,6 +445,19 @@ public static class NetworkManager
             {
                 ModVerificationResponse response = JsonConvert.DeserializeObject<ModVerificationResponse>(em.contents);
                 ModVerificationHandler.handle(response);
+                break;
+            }
+            case "KickNotification":
+            {
+                KickNotification response =JsonConvert.DeserializeObject<KickNotification>(em.contents);
+                KickNotificationHandler.handle(response);
+                break;
+            }
+            case "Kicked":
+            {
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You were kicked from the game.");
+                NetworkManager.DisconnectWebSocket();
+                KickHandler.handle();
                 break;
             }
             case "Pong":
