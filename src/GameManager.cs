@@ -173,7 +173,7 @@ public static class GameManager
                         NetworkManager.KickPlayer(steamId);
                     });
                     GetGameObjectChild(player,"Kick").transform.localScale = Vector3.one;
-                    GetGameObjectChild(player,"Kick").SetActive(steamId != Steamworks.SteamClient.SteamId.ToString());
+                    GetGameObjectChild(player,"Kick").SetActive(Steamworks.SteamClient.SteamId.ToString() == CurrentGame.gameHost && steamId != Steamworks.SteamClient.SteamId.ToString());
                     player.SetActive(true);    
                 }
                 BingoLobby.PlayerList.SetActive(true);

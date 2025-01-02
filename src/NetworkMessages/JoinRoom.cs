@@ -1,4 +1,5 @@
-﻿using UltrakillBingoClient;
+﻿using System.Collections.Generic;
+using UltrakillBingoClient;
 
 namespace UltraBINGO.NetworkMessages;
 
@@ -21,41 +22,23 @@ public class JoinRoomResponse : MessageResponse
 
 public static class JoinRoomResponseHandler
 {
+    public static Dictionary<int,string> messages = new Dictionary<int, string>()
+    {
+        {-6,"You have been kicked from this game."},
+        {-5, "<color=orange>You are banned from playing Baphomet's Bingo.</color>"},
+        {-4, "Game has already started."},
+        {-3, "Game is not accepting new players."},
+        {-2, "Game has already started."},
+        {-1, "Game does not exist."},
+    };
+
     public static void handle(JoinRoomResponse response)
     {
-        
         string msg = "Failed to join: ";
         
         if(response.status < 0)
         {
-            switch(response.status)
-            {
-                case -5:
-                {
-                    msg += "<color=orange>You are banned from playing Baphomet's Bingo.</color>";
-                    break;
-                }
-                case -4:
-                {
-                    msg += "Game has already started.";
-                    break;
-                }
-                case -3:
-                {
-                    msg += "Game is not accepting new players.";
-                    break;
-                }
-                case -2:
-                {
-                    msg += "Game has already started.";
-                    break;
-                }
-                case -1:
-                {
-                    msg += "Game does not exist.";
-                    break;
-                }
-            }
+            msg += messages[response.status];
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
             NetworkManager.DisconnectWebSocket(1000,"Normal close");
         }
