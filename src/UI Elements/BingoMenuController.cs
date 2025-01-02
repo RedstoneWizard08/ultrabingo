@@ -19,9 +19,15 @@ public static class BingoMenuController
     
     public static bool checkSteamAuthentication()
     {
+        if(Main.UpdateAvailable)
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>An update is available! Please update your mod to play Baphomet's Bingo.</color>");
+            return false;
+        }
         if(!Main.IsSteamAuthenticated)
         {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Unable to authenticate with Steam.\nYou must be connected to the Steam servers, and own a legal copy of ULTRAKILL to play Baphomet's Bingo.");
+            return false;
         }
         return Main.IsSteamAuthenticated;
     }
