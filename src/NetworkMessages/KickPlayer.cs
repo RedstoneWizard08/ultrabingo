@@ -1,6 +1,8 @@
 ﻿using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
 
+using static UltraBINGO.CommonFunctions;
+
 namespace UltraBINGO.NetworkMessages;
 
 public class KickPlayer : SendMessage
@@ -35,6 +37,7 @@ public static class KickHandler
 public class KickNotification : MessageResponse
 {
     public string playerToKick;
+    public string steamId;
 }
 
 public static class KickNotificationHandler
@@ -42,5 +45,8 @@ public static class KickNotificationHandler
     public static void handle(KickNotification response)
     {
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(response.playerToKick +  " was kicked from the game.");
+        GameManager.CurrentGame.currentPlayers.Remove(response.steamId);
+        if(getSceneName() == "Main Menu") {GameManager.RefreshPlayerList();}
+        
     }
 }

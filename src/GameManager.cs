@@ -148,6 +148,7 @@ public static class GameManager
             {
                 BingoLobby.PlayerList.SetActive(false);
                 string players = "";
+                bool isHost = (CurrentGame.gameHost == Steamworks.SteamClient.SteamId.ToString());
                 
                 GameObject PlayerList = GetGameObjectChild(BingoLobby.PlayerList,"PlayerList");
                 GameObject PlayerTemplate = GetGameObjectChild(PlayerList,"PlayerTemplate");
@@ -162,18 +163,17 @@ public static class GameManager
                 
                 foreach(string steamId in CurrentGame.currentPlayers.Keys.ToList())
                 {
-                    bool isHost = (steamId == CurrentGame.gameHost);
                     GameObject player = GameObject.Instantiate(PlayerTemplate,PlayerList.transform);
                     
                     GetGameObjectChild(player,"PlayerName").GetComponent<Text>().text = 
-                        CurrentGame.currentPlayers[steamId].username + (isHost ? "(<color=orange>HOST</color>)" : "");
+                        CurrentGame.currentPlayers[steamId].username + (steamId == CurrentGame.gameHost ? "(<color=orange>HOST</color>)" : "");
                     
                     GetGameObjectChild(player,"Kick").GetComponent<Button>().onClick.AddListener(delegate
                     {
                         NetworkManager.KickPlayer(steamId);
                     });
                     GetGameObjectChild(player,"Kick").transform.localScale = Vector3.one;
-                    GetGameObjectChild(player,"Kick").SetActive(isHost && steamId != Steamworks.SteamClient.SteamId.ToString());
+                    GetGameObjectChild(player,"Kick").SetActive(steamId != Steamworks.SteamClient.SteamId.ToString());
                     player.SetActive(true);    
                 }
                 BingoLobby.PlayerList.SetActive(true);
