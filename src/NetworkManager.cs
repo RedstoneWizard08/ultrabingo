@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using AngryLevelLoader.Fields;
 using AngryLevelLoader.Managers;
+using BepInEx.Configuration;
 using Newtonsoft.Json;
 using Tommy;
 using UltraBINGO;
@@ -49,12 +50,15 @@ public static class NetworkManager
     public static int pendingRoomId = 0;
     public static VerifyModRequest pendingVmr = null;
     
-    public static string serverURL = Main.IsDevelopmentBuild ? "ws://127.0.0.1:2052" : "ws://clearwaterbirb.uk:2052";
+    public static ConfigEntry<string> serverURLConfig;
+    public static ConfigEntry<string> serverPortConfig;
+    
+    public static string serverURL;
     
     private static readonly HttpClient Client = new HttpClient();
     
-    public static string serverCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoCatalog.toml" : "http://clearwaterbirb.uk/bingoCatalog.toml";
-    public static string serverMapPoolCatalogURL = Main.IsDevelopmentBuild ? "http://127.0.0.1/bingoMapPool.toml" : "http://clearwaterbirb.uk/bingoMapPool.toml";
+    public static string serverCatalogURL;
+    public static string serverMapPoolCatalogURL;
     
     public static bool modlistCheck = false;
     private static string steamTicket;
@@ -184,8 +188,14 @@ public static class NetworkManager
     }
     
     //Init and setup the WebSocket connection.
-    public static void Initialise()
+    public static void Initialise(string url, string port,bool isDev=false)
     {
+        serverURL = isDev ? "ws://127.0.0.1:2052" : "ws://" + url + ":" + port;
+        
+        serverMapPoolCatalogURL = isDev ? "http://127.0.0.1/bingoMapPool.toml" : "http://"+ url + "/bingoMapPool.toml";
+        
+        serverCatalogURL = isDev ? "http://127.0.0.1/bingoCatalog.toml" : "http://"+ url + "/bingoCatalog.toml"; 
+
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
         ws.WaitTime = TimeSpan.FromSeconds(90);

@@ -67,7 +67,14 @@ namespace UltrakillBingoClient
             harmony.PatchAll();
              
             Logging.Message("--Network manager init...--");
-            NetworkManager.Initialise();
+            NetworkManager.serverURLConfig = Config.Bind("ServerConfig","serverUrl","clearwaterbirb.uk","Server URL");
+            NetworkManager.serverPortConfig = Config.Bind("ServerConfig","serverPort","2052","Server Port");
+            
+            string url = NetworkManager.serverURLConfig.Value;
+            string port = NetworkManager.serverPortConfig.Value;
+            Logging.Warn(url);
+            Logging.Warn(port);
+            NetworkManager.Initialise(url,port,IsDevelopmentBuild);
             
             Logging.Message("--Done!--");
             SceneManager.sceneLoaded += onSceneLoaded;
