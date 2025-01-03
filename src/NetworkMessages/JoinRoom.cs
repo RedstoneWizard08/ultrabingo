@@ -7,7 +7,7 @@ public class JoinRoomRequest : SendMessage
 {
     public string messageType = "JoinRoom";
     
-    public int roomId;
+    public string password;
     public string username;
     public string steamId;
     
@@ -44,7 +44,7 @@ public static class JoinRoomResponseHandler
         }
         else
         {
-            GameManager.SetupGameDetails(response.roomDetails,false);
+            GameManager.SetupGameDetails(response.roomDetails,"",false);
         }
     }
 }

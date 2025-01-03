@@ -258,14 +258,14 @@ public static class GameManager
         }
     }
 
-    public static void SetupGameDetails(Game game,bool isHost=true)
+    public static void SetupGameDetails(Game game, string password, bool isHost=true)
     {
         CurrentGame = game;
         
         BingoEncapsulator.BingoMenu.SetActive(false);
         BingoEncapsulator.BingoLobbyScreen.SetActive(true);
         
-        ShowGameId();
+        ShowGameId(password);
         RefreshPlayerList();
         
         BingoLobby.MaxPlayers.interactable = isHost;
@@ -319,9 +319,9 @@ public static class GameManager
         
         NetworkManager.RegisterConnection();
     }
-    public static void ShowGameId()
+    public static void ShowGameId(string password)
     {
-        GetGameObjectChild(GetGameObjectChild(BingoLobby.RoomIdDisplay,"Title"),"Text").GetComponent<Text>().text = "Game ID: " + CurrentGame.gameId;
+        GetGameObjectChild(GetGameObjectChild(BingoLobby.RoomIdDisplay,"Title"),"Text").GetComponent<Text>().text = "Game ID: " + password;
     }
     
     public static void StartGame()

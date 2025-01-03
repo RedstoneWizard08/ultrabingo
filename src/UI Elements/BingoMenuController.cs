@@ -251,14 +251,14 @@ public static class BingoMenuController
         NetworkManager.ConnectWebSocket();
     }
     
-    public static void JoinRoom(int roomId)
+    public static void JoinRoom(string roomPassword)
     {
         if(!checkSteamAuthentication())
         {
             return;
         }
         NetworkManager.pendingAction = AsyncAction.Join;
-        NetworkManager.pendingRoomId = roomId;
+        NetworkManager.pendingPassword = roomPassword;
         NetworkManager.ConnectWebSocket();
     }
     

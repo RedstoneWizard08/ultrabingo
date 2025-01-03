@@ -22,6 +22,7 @@ public class CreateRoomResponse : MessageResponse
     public string status;
     public int roomId;
     public Game roomDetails;
+    public string roomPassword;
 }
 
 public static class CreateRoomResponseHandler
@@ -42,9 +43,10 @@ public static class CreateRoomResponseHandler
             else
             {
                 Logging.Message("Got details for room "+response.roomId);
+                Logging.Message("Password: " + response.roomPassword);
                         
                 //Once room details have been obtained: set up the lobby screen
-                GameManager.SetupGameDetails(response.roomDetails);
+                GameManager.SetupGameDetails(response.roomDetails,response.roomPassword);
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game: "+response.roomId);
             } 
         }

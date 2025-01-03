@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
+using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
+
+using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.NetworkMessages;
 
@@ -34,9 +38,17 @@ public static class ModVerificationHandler
         Version localVersion = new Version(Main.pluginVersion);
         Version latestVersion = new Version(response.latestVersion);
         
+        GetGameObjectChild(BingoMainMenu.VersionInfo,"VersionNum").GetComponent<TextMeshProUGUI>().text = Main.pluginVersion;
+        
         switch(localVersion.CompareTo(latestVersion))
         {
-            case -1: { Logging.Message("UPDATE AVAILABLE!");Main.UpdateAvailable = true; break;}
+            case -1:
+            {
+                Logging.Message("UPDATE AVAILABLE!");
+                Main.UpdateAvailable = true;
+                GetGameObjectChild(BingoMainMenu.VersionInfo,"UpdateText").SetActive(true);
+                break;
+            }
             default: { Logging.Message("No newer version detected. Assuming current version is up to date."); Main.UpdateAvailable = false;break;}
         }
                     

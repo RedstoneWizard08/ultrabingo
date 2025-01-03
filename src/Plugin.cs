@@ -6,7 +6,6 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
 using HarmonyLib;
-using Newtonsoft.Json;
 using Steamworks;
 using Steamworks.Data;
 using UltraBINGO;

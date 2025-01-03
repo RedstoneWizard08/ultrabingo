@@ -19,6 +19,9 @@ public static class BingoMainMenu
     public static GameObject MapWarn;
     public static GameObject MissingMapsList;
     
+    public static GameObject DiscordButton;
+    public static GameObject VersionInfo;
+    
     public static void Open()
     {
         //Hide chapter select
@@ -45,8 +48,8 @@ public static class BingoMainMenu
         {
             GameObject input = GetGameObjectChild(JoinGameInput,"InputField (TMP)");
                 
-            int roomId = int.Parse(input.GetComponent<TMP_InputField>().text);
-            BingoMenuController.JoinRoom(roomId);
+            string password = input.GetComponent<TMP_InputField>().text;
+            BingoMenuController.JoinRoom(password);
         });
         
         JoinGameInput = GetGameObjectChild(JoinGame,"IdInput");
@@ -67,6 +70,13 @@ public static class BingoMainMenu
         {
             BingoMenuController.ReturnToMenu();
         });
+        
+        DiscordButton = GetGameObjectChild(BingoMenu,"Discord");
+        DiscordButton.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            Application.OpenURL("https://discord.gg/VyzFJwEWtJ");
+        });
+        VersionInfo = GetGameObjectChild(BingoMenu,"Version");
         
         return Root;
     }

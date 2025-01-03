@@ -47,7 +47,7 @@ public class PlayerNotification
 public static class NetworkManager
 {
     public static AsyncAction pendingAction = AsyncAction.None;
-    public static int pendingRoomId = 0;
+    public static string pendingPassword = "";
     public static VerifyModRequest pendingVmr = null;
     
     public static ConfigEntry<string> serverURLConfig;
@@ -77,7 +77,7 @@ public static class NetworkManager
                 break;
             case AsyncAction.Join:
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
-                JoinGame(pendingRoomId);
+                JoinGame(pendingPassword);
                 break;
             case AsyncAction.ModCheck:
                 SendEncodedMessage(JsonConvert.SerializeObject(pendingVmr));
@@ -316,12 +316,10 @@ public static class NetworkManager
         SendEncodedMessage(JsonConvert.SerializeObject(crr));
     }
     
-    public static void JoinGame(int roomId)
+    public static void JoinGame(string password)
     {
-        Logging.Message("Joining game " + roomId);
-        
         JoinRoomRequest jrr = new JoinRoomRequest();
-        jrr.roomId = roomId;
+        jrr.password = password;
         jrr.username = sanitiseUsername(Steamworks.SteamClient.Name);
         jrr.steamId = Steamworks.SteamClient.SteamId.ToString();
         SendEncodedMessage(JsonConvert.SerializeObject(jrr));
