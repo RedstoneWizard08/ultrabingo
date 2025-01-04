@@ -76,7 +76,7 @@ public static class NetworkManager
                 CreateRoom();
                 break;
             case AsyncAction.Join:
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joining game...");
                 JoinGame(pendingPassword);
                 break;
             case AsyncAction.ModCheck:

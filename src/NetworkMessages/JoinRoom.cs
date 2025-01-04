@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UltrakillBingoClient;
 
 namespace UltraBINGO.NetworkMessages;
@@ -44,6 +45,7 @@ public static class JoinRoomResponseHandler
         }
         else
         {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game.");
             GameManager.SetupGameDetails(response.roomDetails,"",false);
         }
     }
