@@ -4,6 +4,8 @@
 
 Baphomet's Bingo is a modification (mod) for ULTRAKILL that  adds a multiplayer competitive bingo-like gamemode that tasks teams of players to race through levels with the quickest time or highest style to claim them for their team, and to be the first team to claim a bingo by claiming a complete row, column or diagonal for their team color.
 
+### Join the Discord to look for games, drop suggestions and feedback: https://discord.gg/VyzFJwEWtJ
+
 # Features
 
 - A new multiplayer gamemode centered around bingo
@@ -13,7 +15,7 @@ Baphomet's Bingo is a modification (mod) for ULTRAKILL that  adds a multiplayer 
 
 # Download & Installation
 
-Baphomet's Bingo is available for download on [Thunderstore](https://www.google.com) (recommended), and as a download package on GitHub.
+Baphomet's Bingo is available for download on [Thunderstore](https://thunderstore.io/c/ultrakill/p/Clearwater/BaphometsBingo/) (recommended), and as a download package on GitHub.
 #### Baphomet's Bingo requires the Angry Level Loader mod to function. Downloading Baphomet's Bingo via ThunderStore will automatically install it for you, however if you are having issues, you can manually download it [here](https://thunderstore.io/c/ultrakill/p/EternalsTeam/AngryLevelLoader/).
 
 # FAQ
