@@ -227,7 +227,6 @@ public static class NetworkManager
             GameManager.ClearGameVariables();
             await Task.Delay(5000);
             
-            Logging.Message("Trying to return to main menu");
             SceneHelper.LoadScene("Main Menu");
         }
     }
@@ -351,15 +350,12 @@ public static class NetworkManager
     
     public static void KickPlayer(string steamId)
     {
-        Logging.Warn("Sending kick request");
-        
         KickPlayer kp = new KickPlayer();
         kp.gameId = GameManager.CurrentGame.gameId;
         kp.playerToKick = steamId;
         kp.ticket = CreateRegisterTicket();
         
         SendEncodedMessage(JsonConvert.SerializeObject(kp));
-        
     }
     
     //Handle all incoming messages received from the server.

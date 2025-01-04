@@ -51,14 +51,6 @@ namespace UltrakillBingoClient
         private void Awake()
         {
             Logging.Warn("--Now loading Baphomet's Bingo...--");
-            if(IsDevelopmentBuild)
-            {
-                Logging.Warn("-- DEVELOPMENT BUILD. REQUESTS WILL BE SENT TO LOCALHOST. --");
-            }
-            else
-            {
-                Logging.Warn("-- RELEASE BUILD. REQUESTS WILL BE SENT TO REMOTE SERVER. --");
-            }
             
             Logging.Message("--Loading asset bundle...--");
             AssetLoader.LoadAssets();
@@ -73,8 +65,6 @@ namespace UltrakillBingoClient
             
             string url = NetworkManager.serverURLConfig.Value;
             string port = NetworkManager.serverPortConfig.Value;
-            Logging.Warn(url);
-            Logging.Warn(port);
             NetworkManager.Initialise(url,port,IsDevelopmentBuild);
             
             Logging.Message("--Done!--");
@@ -153,7 +143,6 @@ namespace UltrakillBingoClient
                     UIManager.HideAngryButton();
                     if(GameManager.CurrentGame.gameSettings.disableCampaignAltExits)
                     {
-                        Logging.Warn("Disabling campaign alt exits");
                         CampaignPatches.Apply(getSceneName());
                     }
                 }

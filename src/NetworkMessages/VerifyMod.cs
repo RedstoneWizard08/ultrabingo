@@ -49,7 +49,7 @@ public static class ModVerificationHandler
                 GetGameObjectChild(BingoMainMenu.VersionInfo,"UpdateText").SetActive(true);
                 break;
             }
-            default: { Logging.Message("No newer version detected. Assuming current version is up to date."); Main.UpdateAvailable = false;break;}
+            default: {Main.UpdateAvailable = false;break;}
         }
                     
         

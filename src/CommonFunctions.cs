@@ -20,7 +20,6 @@ public static class CommonFunctions
     public static bool checkIfLevelSaveExists(string savePath, string fileName)
     {
         string fullPath = Path.Combine(savePath, string.Format("Slot{0}/" + fileName, GameProgressSaver.currentSlot + 1));
-        Logging.Message(fullPath);
         return File.Exists(fullPath);
     }
     

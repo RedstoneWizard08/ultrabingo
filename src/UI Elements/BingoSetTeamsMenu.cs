@@ -109,7 +109,6 @@ public class BingoSetTeamsMenu
         if(currentTeamChanges[currentPlayerObject.name] == 0)
         {
             playersMapped++;
-            Logging.Message("Players mapped: " + playersMapped + " | Players in game to map: " + playersToMap);
         }
         currentTeamChanges[currentPlayerObject.name] = teamId;
         GetGameObjectChild(currentPlayerObject,"Text").GetComponent<TextMeshProUGUI>().color = teamColors[teamId];
@@ -119,7 +118,6 @@ public class BingoSetTeamsMenu
     public static void Setup()
     {
         Dictionary<string,Player> playerList = GameManager.CurrentGame.currentPlayers;
-        Logging.Message("There are " + playerList.Count + " players");
         playersToMap = playerList.Count;
         playersMapped = 0;
         
@@ -179,7 +177,6 @@ public class BingoSetTeamsMenu
         TeamSelectionPanel = GetGameObjectChild(BingoSetTeams,"TeamSelection");
         
         GameObject TeamSelectionPanelSub = GetGameObjectChild(TeamSelectionPanel, "TeamColorContainer");
-        Logging.Message(TeamSelectionPanelSub.name);
         
         TeamSelectionPanelButtons.Clear(); //Remove previously destroyed references
         TeamSelectionPanelButtons.Add(GetGameObjectChild(TeamSelectionPanelSub,"Red"));
@@ -195,21 +192,18 @@ public class BingoSetTeamsMenu
         CancelButton = GetGameObjectChild(BingoSetTeams,"Cancel");
         CancelButton.GetComponent<Button>().onClick.AddListener(delegate
         {
-            Logging.Message("Cancel");
             Cancel();
         });
         
         ResetButton = GetGameObjectChild(BingoSetTeams,"Reset");
         ResetButton.GetComponent<Button>().onClick.AddListener(delegate
         {
-            Logging.Message("Reset");
             Discard();
         });
         
         FinishButton = GetGameObjectChild(BingoSetTeams,"Finish");
         FinishButton.GetComponent<Button>().onClick.AddListener(delegate
         {
-            Logging.Message("Finish");
             Submit();
         });
     }

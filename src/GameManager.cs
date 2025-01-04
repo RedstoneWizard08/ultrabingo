@@ -332,10 +332,7 @@ public static class GameManager
     public static void UpdateCards(int row, int column, string team, string playername, float newTime, int newStyle)
     {
         string coordLookup = row+"-"+column;
-        Logging.Warn(coordLookup);
-        
         List<string> dictKeys = CurrentGame.grid.levelTable.Keys.ToList();
-        Logging.Warn(string.Join(",",dictKeys));
         
         if(!CurrentGame.grid.levelTable.ContainsKey(coordLookup))
         {
@@ -364,8 +361,6 @@ public static class GameManager
             }
             else
             {
-                Logging.Warn("Getting color");
-                Logging.Warn(team);
                 Color col;
                 if(!BingoCardPauseMenu.teamColors.TryGetValue(team, out col))
                 {

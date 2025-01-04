@@ -61,7 +61,6 @@ public static class CampaignPatches
             }
             default:
             {
-                Logging.Warn("Not in campaign level with alt exit");
                 break;
             }
         }

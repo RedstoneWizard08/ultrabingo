@@ -43,8 +43,7 @@ public static class CreateRoomResponseHandler
             else
             {
                 Logging.Message("Got details for room "+response.roomId);
-                Logging.Message("Password: " + response.roomPassword);
-                        
+                
                 //Once room details have been obtained: set up the lobby screen
                 GameManager.SetupGameDetails(response.roomDetails,response.roomPassword);
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game: "+response.roomId);
