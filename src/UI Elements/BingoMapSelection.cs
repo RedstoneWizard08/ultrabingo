@@ -60,7 +60,15 @@ public class BingoMapSelection
     
     public static void UpdateNumber()
     {
-        SelectedMapsTotal.GetComponent<TextMeshProUGUI>().text = "Total maps in pool: <color=orange>"+NumOfMapsTotal+"</color>";
+        int gridSize = GameManager.CurrentGame.gameSettings.gridSize+3;
+        int requiredMaps = gridSize*gridSize;
+        
+        
+        
+        SelectedMapsTotal.GetComponent<TextMeshProUGUI>().text = "Total maps in pool: " + ((NumOfMapsTotal > requiredMaps) ? "<color=green>" : "<color=orange>")
+            + NumOfMapsTotal+"</color>"
+            + "/"
+            + requiredMaps;
     }
     
     public static void ToggleMapPool(ref GameObject mapPool)

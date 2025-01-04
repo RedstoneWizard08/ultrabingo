@@ -8,6 +8,7 @@ using BepInEx.Bootstrap;
 using HarmonyLib;
 using Steamworks;
 using Steamworks.Data;
+using TMPro;
 using UltraBINGO;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
@@ -133,7 +134,6 @@ namespace UltrakillBingoClient
                 
                 if(GameManager.CurrentGame != null && GameManager.CurrentGame.isGameFinished())
                 {
-                    
                     BingoEnd.ShowEndScreen();
                     MonoSingleton<AssistController>.Instance.majorEnabled = false;
                     MonoSingleton<AssistController>.Instance.gameSpeed = 1f;
@@ -141,6 +141,7 @@ namespace UltrakillBingoClient
                 
                 UIManager.ultrabingoLockedPanel = GameObject.Instantiate(AssetLoader.BingoLockedPanel,GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").transform);
                 UIManager.ultrabingoUnallowedModsPanel = GameObject.Instantiate(AssetLoader.BingoUnallowedModsPanel,GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").transform);
+                GetGameObjectChild(BingoMainMenu.VersionInfo,"VersionNum").GetComponent<TextMeshProUGUI>().text = pluginVersion;
                 UIManager.ultrabingoLockedPanel.SetActive(false);
                 UIManager.ultrabingoUnallowedModsPanel.SetActive(false);
             }
