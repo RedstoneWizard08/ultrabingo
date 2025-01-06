@@ -19,6 +19,7 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Darkcastle" by Grapes
 - "Death Descent - Free Mind Loop" by PrestoPesto
 - "Epitaph" by Willem3231
+- "False Ascendence 2" by PhantomBlader
 - "Fraudulence - Fool's Gold" by Spelunky
 - "Fraudulence - High Society" by Spelunky
 - "From Dust To Dust" by Draghtnim
@@ -33,6 +34,7 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Minecraft - Take Back The Night" by CEO Of Gaming
 - "Minecraft - Nether Reaches" by CEO Of Gaming
 - "Mini Hell" by Megacheb
+- "Nova Kaizo - Talladega" by RedNova
 - "Paradiso - Sacred Grounds" by Frizou
 - "Prelude Extra - Descent Into Exile" by vvenvss
 - "Primordial Hunger" by Willem & ballfartchungus43
@@ -40,6 +42,9 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Reprise - A Dream Of Home" by Smallkloon
 - "Revolt From The Abyss" by Robi
 - "Re-Wrath - A Man Made Sea" by funny
+- "Rotat E - Dizzy Dilemma" by FruitCircuit
+- "Rotat E - Spinning Stupidity" by FruitCircuit
+- "Secret Christmas Gift" by daviejay2011
 - "Spelunky's Sandbox - I Wonder" by RoundCat
 - "Sins Of Mankind" by func_sam
 - "The House Of Wrath" by megga
