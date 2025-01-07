@@ -69,9 +69,14 @@ public class StatWindow
             }
             
             string formattedTime = mins + ":" + secs.ToString("00.000");
+            if(formattedTime == "0:00.000")
+            {
+                formattedTime = "<size=14>FINISH TO CLAIM" + (GameManager.CurrentGame.gameSettings.requiresPRank ? "(<color=#ffa200d9>P</color>)" : "") + "</size>";
+            }
                         
             string colorTag = (currentTeamClaim != "NONE"
-                ? ("<color="+GameManager.CurrentGame.grid.levelTable[coords].claimedBy.ToLower()+">" + currentTeamClaim + "</color>")  : "NONE"); 
+                ? ("<color="+GameManager.CurrentGame.grid.levelTable[coords].claimedBy.ToLower()+">" + currentTeamClaim + "</color>")  : "NONE")
+                + (GameManager.CurrentGame.gameSettings.requiresPRank ? "(<color=#ffa200d9>P</color>)" : "");
             
             //If we're in a prime level, use major assists text for to beat, and challenge text for claimed by.
             if(getSceneName().Contains("P-"))
