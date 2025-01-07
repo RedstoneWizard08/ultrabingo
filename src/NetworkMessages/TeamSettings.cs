@@ -42,4 +42,5 @@ public class ClearTeamSettings : SendMessage
     public string messageType = "ClearTeams";
     
     public int gameId;
+    public RegisterTicket ticket;
 }

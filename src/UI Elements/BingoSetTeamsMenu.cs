@@ -58,6 +58,7 @@ public class BingoSetTeamsMenu
         Logging.Message("Resetting teams");
         ClearTeamSettings cts = new ClearTeamSettings();
         cts.gameId = GameManager.CurrentGame.gameId;
+        cts.ticket = NetworkManager.CreateRegisterTicket();
         
         NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(cts));
         ReturnToLobbyMenu();
