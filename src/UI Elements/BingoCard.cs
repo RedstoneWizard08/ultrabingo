@@ -97,7 +97,8 @@ public class BingoCard
         }
         
         //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter causes crashes.
-        ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,12);
+        //ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,12);
+        ButtonTemplate = GameObject.Instantiate(AssetLoader.BingoCardButtonTemplate,Root.transform);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);
         

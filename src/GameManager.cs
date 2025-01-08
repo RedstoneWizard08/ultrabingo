@@ -201,7 +201,7 @@ public static class GameManager
             for(int y = 0; y < CurrentGame.grid.size; y++)
             {
                 //Clone and set up the button and hover triggers.
-                GameObject level = GameObject.Instantiate(BingoCard.ButtonTemplate,gridObj.transform);
+                GameObject level = GameObject.Instantiate(AssetLoader.BingoCardButtonTemplate,gridObj.transform);
                 
                 //Mouse enter
                 level.AddComponent<EventTrigger>();
@@ -240,14 +240,7 @@ public static class GameManager
                 level.SetActive(true);
             }
         }
-        
-        //Offet the grid so it's better centered if it's bigger than 3x3.
-        switch(CurrentGame.gameSettings.gridSize)
-        {
-            case 1: {gridObj.transform.localPosition += new Vector3(-30f,0f,0f); break;}
-            case 2: {gridObj.transform.localPosition += new Vector3(-105f,0f,0f); break;}
-            default: break;
-        }
+        gridObj.transform.localPosition = new Vector3(-300f,145f,0f);
         
         //Display teammates.
         TextMeshProUGUI teammates = GetGameObjectChild(BingoCard.Teammates,"Players").GetComponent<TextMeshProUGUI>();
