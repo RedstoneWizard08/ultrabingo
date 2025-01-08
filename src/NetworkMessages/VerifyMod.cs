@@ -33,7 +33,7 @@ public static class ModVerificationHandler
 {
     public static void handle(ModVerificationResponse response)
     {
-        NetworkManager.modlistCheck = response.status;
+        NetworkManager.modlistCheckPassed = response.status;
         
         Version localVersion = new Version(Main.pluginVersion);
         Version latestVersion = new Version(response.latestVersion);
@@ -52,7 +52,7 @@ public static class ModVerificationHandler
             default: {Main.UpdateAvailable = false;break;}
         }
                     
-        
+        NetworkManager.modlistCheckDone = true;
         NetworkManager.DisconnectWebSocket(1000,"ModCheckDone");
     }
 }

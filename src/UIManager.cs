@@ -104,7 +104,11 @@ public static class UIManager
     
     public static void Open()
     {
-        if(!NetworkManager.modlistCheck)
+        if(!NetworkManager.modlistCheckDone)
+        {
+            return;
+        }
+        if(!NetworkManager.modlistCheckPassed)
         {
             PopulateUnallowedMods();
             ultrabingoUnallowedModsPanel.SetActive(true);

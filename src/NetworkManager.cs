@@ -60,7 +60,8 @@ public static class NetworkManager
     public static string serverCatalogURL;
     public static string serverMapPoolCatalogURL;
     
-    public static bool modlistCheck = false;
+    public static bool modlistCheckDone = false;
+    public static bool modlistCheckPassed = false;
     private static string steamTicket;
     
     static WebSocket ws;
