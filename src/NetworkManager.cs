@@ -249,7 +249,10 @@ public static class NetworkManager
         byte[] encodedBytes = System.Text.Encoding.UTF8.GetBytes(jsonToEncode);
         string encodedJson = System.Convert.ToBase64String(encodedBytes);
         
-        ws.Send(encodedJson);
+        ws.SendAsync(encodedJson,new Action<bool>((completed) =>
+        {
+            if(!completed){Logging.Warn( "Async not sent");}
+        }));
     }
     
     public static RegisterTicket CreateRegisterTicket()
