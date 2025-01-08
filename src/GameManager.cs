@@ -308,6 +308,7 @@ public static class GameManager
             BingoLobby.GameType.value = CurrentGame.gameSettings.gameType;
             BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;
             BingoLobby.RequirePRank.isOn = CurrentGame.gameSettings.requiresPRank;
+            BingoLobby.DisableCampaignAltExits.isOn = CurrentGame.gameSettings.disableCampaignAltExits;
         }
         
         NetworkManager.RegisterConnection();
