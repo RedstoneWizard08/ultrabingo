@@ -27,7 +27,8 @@ public enum AsyncAction
     None,
     Host,
     Join,
-    ModCheck
+    ModCheck,
+    RetrySend
 }
 
 public class SendMessage
@@ -49,6 +50,7 @@ public static class NetworkManager
     public static AsyncAction pendingAction = AsyncAction.None;
     public static string pendingPassword = "";
     public static VerifyModRequest pendingVmr = null;
+    public static string QueuedMessage = "";
     
     public static ConfigEntry<string> serverURLConfig;
     public static ConfigEntry<string> serverPortConfig;
@@ -82,6 +84,10 @@ public static class NetworkManager
                 break;
             case AsyncAction.ModCheck:
                 SendEncodedMessage(JsonConvert.SerializeObject(pendingVmr));
+                break;
+            case AsyncAction.RetrySend:
+                SendEncodedMessage(JsonConvert.SerializeObject(QueuedMessage));
+                QueuedMessage = "";
                 break;
             default:
                 break;
@@ -244,7 +250,11 @@ public static class NetworkManager
     {
         if(!ws.IsAlive)
         {
-            ws.Connect();
+            Logging.Warn("Queuing message & retrying connection");
+            QueuedMessage = jsonToEncode;
+            pendingAction = AsyncAction.RetrySend;
+            ws.ConnectAsync();
+            return;
         }
         
         byte[] encodedBytes = System.Text.Encoding.UTF8.GetBytes(jsonToEncode);

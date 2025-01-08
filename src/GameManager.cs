@@ -67,9 +67,11 @@ public static class GameManager
     public static void LeaveGame(bool isInLevel=false)
     {
         //Send a request to the server saying we want to leave.
+        Logging.Warn("Sending leave request");
         NetworkManager.SendLeaveGameRequest(CurrentGame.gameId);
         
         //When that's sent off, close the connection on our end.
+        Logging.Warn("Closing connection");
         NetworkManager.DisconnectWebSocket(1000,"Normal close");
         
         ClearGameVariables();

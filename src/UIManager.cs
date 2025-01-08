@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using PluginConfig;
 using PluginConfig.API;
 using TMPro;
+using UltraBINGO.Components;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
@@ -79,6 +80,7 @@ public static class UIManager
             ultrabingoEncapsulator.name = "UltraBingo";
             ultrabingoEncapsulator.transform.parent = __instance.transform;
             ultrabingoEncapsulator.transform.localPosition = Vector3.zero;
+            ultrabingoEncapsulator.AddComponent<BingoMenuManager>();
         }
         ultrabingoEncapsulator.SetActive(false);
     }
