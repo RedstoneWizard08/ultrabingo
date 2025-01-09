@@ -75,8 +75,7 @@ public class StatWindow
             }
                         
             string colorTag = (currentTeamClaim != "NONE"
-                ? ("<color="+GameManager.CurrentGame.grid.levelTable[coords].claimedBy.ToLower()+">" + currentTeamClaim + "</color>")  : "NONE")
-                + (GameManager.CurrentGame.gameSettings.requiresPRank ? "(<color=#ffa200d9>P</color>)" : "");
+                ? ("<color="+GameManager.CurrentGame.grid.levelTable[coords].claimedBy.ToLower()+">" + currentTeamClaim + "</color>")  : "NONE");
             
             //If we're in a prime level, use major assists text for to beat, and challenge text for claimed by.
             if(getSceneName().Contains("P-"))

@@ -33,7 +33,7 @@ namespace UltrakillBingoClient
     {   
         public const string pluginId = "clearwater.ultrakillbingo.ultrakillbingo";
         public const string pluginName = "Baphomet's BINGO";
-        public const string pluginVersion = "1.0.0";
+        public const string pluginVersion = "1.0.1";
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
