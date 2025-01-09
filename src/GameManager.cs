@@ -94,16 +94,6 @@ public static class GameManager
         BingoEncapsulator.BingoCardScreen.SetActive(true);
     }
     
-    public static void OnMouseOverLevel(PointerEventData data)
-    {
-        BingoCard.ShowLevelData(data.pointerEnter.transform.parent.gameObject.GetComponent<BingoLevelData>());
-    }
-    
-    public static void OnMouseExitLevel(PointerEventData data)
-    {
-        BingoCard.HideLevelData();
-    }
-    
     //Check if we're the host of the game we're in.
     public static bool PlayerIsHost()
     {
@@ -204,19 +194,6 @@ public static class GameManager
             {
                 //Clone and set up the button and hover triggers.
                 GameObject level = GameObject.Instantiate(AssetLoader.BingoCardButtonTemplate,gridObj.transform);
-                
-                //Mouse enter
-                level.AddComponent<EventTrigger>();
-                EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
-                mouseEnter.eventID = EventTriggerType.PointerEnter;
-                mouseEnter.callback.AddListener((data) => { OnMouseOverLevel((PointerEventData)data); });
-                level.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
-                
-                //Mouse exit
-                EventTrigger.Entry mouseExit = new EventTrigger.Entry();
-                mouseExit.eventID = EventTriggerType.PointerExit;
-                mouseExit.callback.AddListener((data) => { OnMouseExitLevel((PointerEventData)data); });
-                level.GetComponent<EventTrigger>().triggers.Add(mouseExit);
                 
                 //Label the button.
                 string lvlCoords = x+"-"+y;

@@ -21,9 +21,6 @@ public class BingoCard
     public static GameObject TeamIndicator;
     public static GameObject ObjectiveIndicator;
     
-    public static GameObject LevelInformation;
-    public static GameObject LevelInformationText;
-    
     public static GameObject Teammates;
     
     public static GameObject CardElements;
@@ -52,28 +49,6 @@ public class BingoCard
         {
             ObjectiveIndicator.GetComponent<TMP_Text>().text += "\n<color=#ffa200d9>P</color>-Ranks are <color=orange>required</color> to claim a level.";
         }
-    }
-    
-    public static void ShowLevelData(BingoLevelData levelData)
-    {
-        if(!levelData.isClaimed)
-        {
-            LevelInformationText.GetComponent<TextMeshProUGUI>().text = "This level is currently unclaimed.\n";
-            LevelInformationText.GetComponent<TextMeshProUGUI>().text += (GameManager.CurrentGame.gameSettings.gameType == 0 ? "Set a time " : "Grab some style ") + "to claim it for your team!";
-        }
-        else
-        {
-            LevelInformationText.GetComponent<TextMeshProUGUI>().text = "Claimed by the <color=" + levelData.claimedTeam.ToLower()+ ">" + levelData.claimedTeam + " </color>team\n\n";
-            LevelInformationText.GetComponent<TextMeshProUGUI>().text += (GameManager.CurrentGame.gameSettings.gameType == 0 ? "Time " : "Style ") + "to beat: "
-                + (GameManager.CurrentGame.gameSettings.gameType == 0 ? levelData.timeRequirement : levelData.styleRequirement);
-        }
-        
-        LevelInformation.SetActive(true);
-    }
-    
-    public static void HideLevelData()
-    {
-        LevelInformation.SetActive(false);
     }
     
     public static GameObject Init()
@@ -114,13 +89,6 @@ public class BingoCard
         
         //Time/style indicator panel
         ObjectiveIndicator = GetGameObjectChild(CardElements,"ObjectiveIndicator");
-        
-        //Bingo Level Information panel
-        LevelInformation = GetGameObjectChild(CardElements,"LevelInfo");
-        LevelInformation.SetActive(false);
-        
-        //Level Information text
-        LevelInformationText = GetGameObjectChild(LevelInformation,"Text");
         
         //Teammate panel
         Teammates = GetGameObjectChild(CardElements,"Teammates");
