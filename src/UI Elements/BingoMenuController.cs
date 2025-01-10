@@ -264,9 +264,12 @@ public static class BingoMenuController
     
     public static void StartGame()
     {
+        Logging.Warn("Setting up dynamic card");
         GameManager.SetupBingoCardDynamic();
         
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("The game has begun!");
+        Logging.Warn("Displaying card");
         GameManager.MoveToCard();
+        Logging.Warn("GO GO GO");
     }
 }

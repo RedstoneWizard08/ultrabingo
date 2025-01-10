@@ -4,6 +4,7 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 
 - All official levels from the main campaign (minus secret levels & credits museum) by Hakita and co.
 - Levels from the fanmade "Project Purgatorio" campaign, by the Purgatorio team: Rem_Safe_Space, Hydraxous, Duv, Raifu, bongwater
+- "Abandoned In Place" by Willem1321
 - "Athena Research Facility - Heart Of The Machine" by Bobot
 - "A Bloody Path - Special Delivery" by Octo
 - "Altwrath - Depths of Despair" by Draghtnim
@@ -33,6 +34,8 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Minecraft - Mine Oddity" by CEO Of Gaming
 - "Minecraft - Take Back The Night" by CEO Of Gaming
 - "Minecraft - Nether Reaches" by CEO Of Gaming
+- "Mineshafts - Into The Abyss" by aggravateeexe 
+- "Mineshafts - Resonating Resentment" by aggravateeexe
 - "Mini Hell" by Megacheb
 - "Nova Kaizo - Talladega" by RedNova
 - "Paradiso - Sacred Grounds" by Frizou
@@ -51,6 +54,7 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "The Training Range" by Frizou
 - "The Timesplicer" by RedNova & Willem13215
 - "What Lies Beneath - The Beginning Of Eternity" by Woosp
+- "Where The Streets Have No Name" by pkpseudo
 - "Whitebox - Blank Slate" by Smallkoon
 
 This list will change over time.

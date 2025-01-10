@@ -77,6 +77,4 @@ A **huge** thank you to the following members of the ULTRAKILL and Angry communi
 ### Donations
 If you enjoy my work, please consider donating! All received donations will go directly towards server hosting costs, which will allow me to keep the servers online. Thank you!
 <br><br>
-<a href='https://ko-fi.com/J3J7SN3N5' target='_blank'>
-                <img height="48" style="border:0px;height:36px;" src="https://storage.ko-fi.com/cdn/kofi3.png?v=3" alt="Buy Me a Coffee"/>
-</a>
+<a href='https://ko-fi.com/J3J7SN3N5' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
