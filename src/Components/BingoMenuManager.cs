@@ -16,7 +16,7 @@ public class BingoMenuManager : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Backspace))
+        if(Input.GetKeyDown(KeyCode.F10))
         {
             tryResetUI.Invoke();
         }
