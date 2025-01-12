@@ -1,4 +1,5 @@
-﻿using UltrakillBingoClient;
+﻿using System;
+using UltrakillBingoClient;
 
 namespace UltraBINGO.NetworkMessages;
 
@@ -45,16 +46,31 @@ public static class LevelClaimHandler
 {
     public static void handle(LevelClaimNotification response)
     {
-        string actionType = "";
-        switch(response.claimType)
+        try
         {
-            case 0: {actionType = "claimed "; break;}
-            case 1: {actionType = "improved "; break;}
-            case 2: {actionType = "reclaimed "; break;}
+            if(response == null)
+            {
+                Logging.Error("Level claim response was null!");
+                throw new ArgumentNullException();
+            }
+            string actionType = "";
+            switch(response.claimType)
+            {
+                case 0: {actionType = "claimed "; break;}
+                case 1: {actionType = "improved "; break;}
+                case 2: {actionType = "reclaimed "; break;}
+            }
+        
+            string broadcastString = response.username + " has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team.";
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(broadcastString);
+            GameManager.UpdateCards(response.row,response.column,response.team,response.username,response.newTimeRequirement,response.newStyleRequirement);
         }
         
-        string broadcastString = response.username + " has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team.";
-        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(broadcastString);
-        GameManager.UpdateCards(response.row,response.column,response.team,response.username,response.newTimeRequirement,response.newStyleRequirement);
+        catch (Exception e)
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but was unable to update the grid.\nCheck BepInEx console and report it to Clearwater!");
+            Logging.Error(e.Message);
+            throw;
+        }
     }
 }
