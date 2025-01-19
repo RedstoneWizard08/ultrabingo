@@ -21,6 +21,8 @@ public static class DisconnectSignalHandler
         {
             case "HOSTLEFTGAME": {disconnectReason = "The host has left the game. The game will be ended.";break;}
             case "HOSTDROPPED": {disconnectReason = "The host has lost connection. The game will be ended.";break;}
+            case "RECONNECTFAILED": {disconnectReason = "Failed to reconnect.";break;}
+            case "GAMEENDED": {disconnectReason = "The game has already ended.";break;}
             default: {disconnectReason = "Disconnected for an unspecified reason (check console).\nThe game will be ended.";break;}
         }
 

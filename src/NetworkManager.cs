@@ -28,7 +28,8 @@ public enum AsyncAction
     Host,
     Join,
     ModCheck,
-    RetrySend
+    RetrySend,
+    ReconnectGame
 }
 
 public class SendMessage
@@ -75,22 +76,45 @@ public static class NetworkManager
         switch (pendingAction)
         {
             case AsyncAction.Host:
+            {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
                 CreateRoom();
-                break;
+                break;  
+            }
+
             case AsyncAction.Join:
+            {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joining game...");
                 JoinGame(pendingPassword);
-                break;
+                break; 
+            }
+
             case AsyncAction.ModCheck:
+            {
                 SendEncodedMessage(JsonConvert.SerializeObject(pendingVmr));
                 break;
+            }
+
             case AsyncAction.RetrySend:
+            {
                 SendEncodedMessage(JsonConvert.SerializeObject(QueuedMessage));
                 QueuedMessage = "";
                 break;
-            default:
+            }
+
+            case AsyncAction.ReconnectGame:
+            {
+                Logging.Warn("Requesting to reconnect");
+                ReconnectRequest rr = new ReconnectRequest();
+                rr.steamId = Steamworks.SteamClient.SteamId.ToString();
+                rr.roomId = GameManager.CurrentGame.gameId;
+                rr.ticket = CreateRegisterTicket();
+                SendEncodedMessage(JsonConvert.SerializeObject(rr));
+                Logging.Warn("Reconnect request sent");
                 break;
+            }
+                
+            default: break;
         }
     }
     
@@ -221,20 +245,41 @@ public static class NetworkManager
         };
     }
     
+    public static async void TryReconnect()
+    {
+        pendingAction = AsyncAction.ReconnectGame;
+        ConnectWebSocket();
+    }
+    
     //Handle any errors that happen with the WebSocket connection.
     public static async void HandleError(ErrorEventArgs e)
     {
         Logging.Warn("Network error happened");
         Logging.Error(e.Message);
         Logging.Error(e.Exception.ToString());
+        if(ws.IsAlive)
+        {
+            ws.CloseAsync();
+        }
         
         if(GameManager.IsInBingoLevel)
         {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nExiting in 5 seconds...");
-            GameManager.ClearGameVariables();
-            await Task.Delay(5000);
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nAttempting reconnection...");
+            await Task.Delay(2000);
             
-            SceneHelper.LoadScene("Main Menu");
+            TryReconnect();
+
+        }
+        else
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost. Returning to menu.");
+            GameManager.ClearGameVariables();
+            
+            BingoEncapsulator.BingoCardScreen.SetActive(false);
+            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+            BingoEncapsulator.BingoEndScreen.SetActive(false);
+            BingoEncapsulator.BingoMenu.SetActive(true);
+            
         }
     }
     
@@ -287,7 +332,10 @@ public static class NetworkManager
     //Connect the WebSocket to the server.
     public static void ConnectWebSocket()
     {
-        ws.ConnectAsync();
+        if(!ws.IsAlive)
+        {
+            ws.ConnectAsync();
+        }
     }
     
     //Disconnect WebSocket.
@@ -444,6 +492,12 @@ public static class NetworkManager
                 Logging.Message("Player in our game timed out");
                 TimeoutSignal response = JsonConvert.DeserializeObject<TimeoutSignal>(em.contents);
                 TimeoutSignalHandler.handle(response);
+                break;
+            }
+            case "ReconnectResponse":
+            {
+                ReconnectResponse response = JsonConvert.DeserializeObject<ReconnectResponse>(em.contents);
+                ReconnectResponseHandler.handle(response);
                 break;
             }
             case "GameEnd":
