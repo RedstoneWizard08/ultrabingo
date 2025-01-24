@@ -131,7 +131,6 @@ public static class BingoMenuController
                     Logging.Message("Loading specified Angry level");
                     string msg = (getSceneName() != "Main Menu" ? "Moving to <color=orange>" + angryLevelData.levelName + "</color>..." : "Loading <color=orange>" + angryLevelData.levelName + "</color>...");
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
-
                     AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.gameSettings.difficulty;
                     
                     //Before loading, check if the level uses any custom scripts.
@@ -162,13 +161,19 @@ public static class BingoMenuController
                                 Logging.Message(scriptName + " is already downloaded");
                             }
                         }
-                        GameManager.IsSwitchingLevels = true;
-                        AngrySceneManager.LoadLevelWithScripts(requiredAngryScripts,bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath);
+                        if(!GameManager.CurrentGame.isGameFinished())
+                        {
+                            GameManager.IsSwitchingLevels = true;
+                            AngrySceneManager.LoadLevelWithScripts(requiredAngryScripts,bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath);
+                        }
                     }
                     else
                     {   
-                        GameManager.IsSwitchingLevels = true;
-                        AngrySceneManager.LoadLevel(bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath,true);
+                        if(!GameManager.CurrentGame.isGameFinished())
+                        {
+                            GameManager.IsSwitchingLevels = true;
+                            AngrySceneManager.LoadLevel(bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath,true);
+                        }
                     }
                 }
                 else
@@ -229,7 +234,9 @@ public static class BingoMenuController
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to <color=orange>"+levelDisplayName + "</color>...");
                 GameManager.IsSwitchingLevels = true;
                 await Task.Delay(1000);
-                SceneHelper.LoadScene(levelId);
+                //Check if game hasn't ended between click and delay. If it has, prevent level load.
+                if(!GameManager.CurrentGame.isGameFinished()) { SceneHelper.LoadScene(levelId); }
+                
             }
         }
     }
