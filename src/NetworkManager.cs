@@ -494,6 +494,12 @@ public static class NetworkManager
                 TimeoutSignalHandler.handle(response);
                 break;
             }
+            case "NewHostNotification":
+            {
+                HostMigration response = JsonConvert.DeserializeObject<HostMigration>(em.contents);
+                HostMigrationHandler.handle(response);
+                break;
+            }
             case "ReconnectResponse":
             {
                 ReconnectResponse response = JsonConvert.DeserializeObject<ReconnectResponse>(em.contents);
