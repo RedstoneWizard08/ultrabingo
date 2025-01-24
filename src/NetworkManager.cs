@@ -229,7 +229,7 @@ public static class NetworkManager
 
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
-        ws.WaitTime = TimeSpan.FromSeconds(90);
+        ws.WaitTime = TimeSpan.FromSeconds(45);
         
         ws.OnOpen += (sender,e) => { HandleAsyncConnect(); };
         ws.OnMessage += (sender,e) => { onMessageRecieved(e); };
