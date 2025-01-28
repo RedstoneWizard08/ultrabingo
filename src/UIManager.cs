@@ -120,10 +120,16 @@ public static class UIManager
         }
         if(Main.HasUnlocked)
         {
+            if(NetworkManager.IsConnectionUp())
+            {
+                NetworkManager.DisconnectWebSocket();
+                GameManager.ClearGameVariables();
+            }
             //Hide chapter select
             ultrabingoButtonObject.transform.parent.gameObject.SetActive(false);
         
             //NetworkManager.analyseCatalog();
+            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
             BingoEncapsulator.Root.SetActive(true);
             BingoEncapsulator.BingoMenu.SetActive(true);
         }
