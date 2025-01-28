@@ -29,6 +29,7 @@ public static class BingoLobby
     public static TMP_Dropdown Difficulty;
     public static Toggle RequirePRank;
     public static Toggle DisableCampaignAltExits;
+    public static TMP_Dropdown GameVisibility;
     
     public static void onMaxPlayerUpdate(string playerAmount)
     {
@@ -89,6 +90,13 @@ public static class BingoLobby
         UIManager.HandleGameSettingsUpdate();
     }
     
+    public static void onGameVisibilityUpdate(int value)
+    {
+        GameVisibility.value = value;
+        GameManager.CurrentGame.gameSettings.gameVisibility = value;
+        UIManager.HandleGameSettingsUpdate();
+    }
+    
     public static void updateFromNotification(UpdateRoomSettingsNotification newSettings)
     {
         MaxPlayers.text = newSettings.maxPlayers.ToString();
@@ -99,6 +107,7 @@ public static class BingoLobby
         Difficulty.value = newSettings.difficulty;
         GridSize.value = newSettings.gridSize;
         DisableCampaignAltExits.isOn = newSettings.disableCampaignAltExits;
+        GameVisibility.value = newSettings.gameVisibility;
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
         GameManager.CurrentGame.gameSettings.maxTeams = newSettings.maxTeams;
@@ -108,6 +117,7 @@ public static class BingoLobby
         GameManager.CurrentGame.gameSettings.difficulty = newSettings.difficulty;
         GameManager.CurrentGame.gameSettings.gridSize = newSettings.gridSize;
         GameManager.CurrentGame.gameSettings.disableCampaignAltExits = newSettings.disableCampaignAltExits;
+        GameManager.CurrentGame.gameSettings.gameVisibility = newSettings.gameVisibility;
     }
     
     public static void Init(ref GameObject BingoLobby)
@@ -177,6 +187,9 @@ public static class BingoLobby
         
         DisableCampaignAltExits = GetGameObjectChild(GetGameObjectChild(GameOptions,"DisableCampaignAltEnds"),"Input").GetComponent<Toggle>();
         DisableCampaignAltExits.onValueChanged.AddListener(onDisableCampaignAltExitsUpdate);
+        
+        GameVisibility = GetGameObjectChild(GetGameObjectChild(GameOptions,"GameVisibility"),"Dropdown").GetComponent<TMP_Dropdown>();
+        GameVisibility.onValueChanged.AddListener(onGameVisibilityUpdate);
         
         BingoLobby.SetActive(false);
     }

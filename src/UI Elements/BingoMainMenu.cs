@@ -13,6 +13,7 @@ public static class BingoMainMenu
     public static GameObject HostGame;
     public static GameObject JoinGame;
     public static GameObject JoinGameInput;
+    public static GameObject GameBrowser;
     public static GameObject Back;
     
     public static GameObject MapCheck;
@@ -53,6 +54,14 @@ public static class BingoMainMenu
         });
         
         JoinGameInput = GetGameObjectChild(JoinGame,"IdInput");
+        
+        GameBrowser = GetGameObjectChild(BingoMenu,"Match Browser");
+        GameBrowser.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            BingoEncapsulator.BingoMenu.SetActive(false);
+            BingoEncapsulator.BingoGameBrowser.SetActive(true);
+            BingoBrowser.FetchGames();
+        });
         
         MapCheck = GetGameObjectChild(BingoMenu,"MapCheck");
         MapCheck.GetComponent<Button>().onClick.AddListener(delegate

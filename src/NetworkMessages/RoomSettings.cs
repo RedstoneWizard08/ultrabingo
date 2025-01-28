@@ -17,6 +17,7 @@ public class UpdateRoomSettingsRequest : SendMessage
     public int difficulty;
     public int gridSize;
     public bool disableCampaignAltExits;
+    public int gameVisibility;
     
     public RegisterTicket ticket;
 }
@@ -31,6 +32,7 @@ public class UpdateRoomSettingsNotification : MessageResponse
     public int difficulty;
     public int gridSize;
     public bool disableCampaignAltExits;
+    public int gameVisibility;
     
     public bool wereTeamsReset;
 }

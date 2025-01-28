@@ -235,6 +235,7 @@ public static class GameManager
         CurrentGame = game;
         
         BingoEncapsulator.BingoMenu.SetActive(false);
+        BingoEncapsulator.BingoGameBrowser.SetActive(false);
         BingoEncapsulator.BingoLobbyScreen.SetActive(true);
         
         ShowGameId(password);
@@ -248,10 +249,10 @@ public static class GameManager
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.RequirePRank.interactable = isHost;
         BingoLobby.DisableCampaignAltExits.interactable = isHost;
+        BingoLobby.GameVisibility.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
         BingoLobby.SelectMaps.SetActive(isHost);
         BingoLobby.SetTeams.GetComponent<Button>().interactable = isHost;
-        
         
         if(isHost)
         {
@@ -264,6 +265,7 @@ public static class GameManager
             BingoLobby.Difficulty.value = 2;
             BingoLobby.RequirePRank.isOn = false;
             BingoLobby.DisableCampaignAltExits.isOn = false;
+            BingoLobby.GameVisibility.value = 0;
             
             BingoMapSelection.NumOfMapsTotal = 0;
             BingoMapSelection.UpdateNumber();
@@ -288,6 +290,7 @@ public static class GameManager
             BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;
             BingoLobby.RequirePRank.isOn = CurrentGame.gameSettings.requiresPRank;
             BingoLobby.DisableCampaignAltExits.isOn = CurrentGame.gameSettings.disableCampaignAltExits;
+            BingoLobby.GameVisibility.value = CurrentGame.gameSettings.gameVisibility;
         }
         
         NetworkManager.RegisterConnection();

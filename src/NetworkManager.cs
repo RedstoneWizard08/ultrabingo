@@ -29,7 +29,8 @@ public enum AsyncAction
     Join,
     ModCheck,
     RetrySend,
-    ReconnectGame
+    ReconnectGame,
+    FetchGames
 }
 
 public class SendMessage
@@ -111,6 +112,13 @@ public static class NetworkManager
                 rr.ticket = CreateRegisterTicket();
                 SendEncodedMessage(JsonConvert.SerializeObject(rr));
                 Logging.Warn("Reconnect request sent");
+                break;
+            }
+            
+            case AsyncAction.FetchGames:
+            {
+                FetchGamesRequest fgr = new FetchGamesRequest();
+                SendEncodedMessage(JsonConvert.SerializeObject(fgr));
                 break;
             }
                 
@@ -420,6 +428,13 @@ public static class NetworkManager
         SendEncodedMessage(JsonConvert.SerializeObject(kp));
     }
     
+    public static void RequestGames()
+    {
+        pendingAction = AsyncAction.FetchGames;
+        ws.ConnectAsync();
+    }
+    
+    
     //Handle all incoming messages received from the server.
     public static void onMessageRecieved(MessageEventArgs e)
     {
@@ -536,6 +551,13 @@ public static class NetworkManager
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You were kicked from the game.");
                 NetworkManager.DisconnectWebSocket();
                 KickHandler.handle();
+                break;
+            }
+            case "FetchGamesResponse":
+            {
+                Logging.Warn(em.contents);
+                FetchGamesResponse response = JsonConvert.DeserializeObject<FetchGamesResponse>(em.contents);
+                FetchGamesReponseHandler.handle(response);
                 break;
             }
             case "Pong":

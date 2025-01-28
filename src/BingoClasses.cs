@@ -62,6 +62,7 @@ public class GameSettings
     public bool requiresPRank;
     public bool hasManuallySetTeams;
     public bool disableCampaignAltExits;
+    public int gameVisibility;
 }
 
 public class Game

@@ -14,6 +14,8 @@ public static class BingoEncapsulator
     public static GameObject BingoMapSelectionMenu;
     public static GameObject BingoSetTeams;
     
+    public static GameObject BingoGameBrowser;
+    
     public static GameObject Init()
     {
         if(Root == null)
@@ -45,6 +47,9 @@ public static class BingoEncapsulator
         
         BingoEndScreen = GameObject.Instantiate(AssetLoader.BingoEndScreen,Root.transform);
         BingoEnd.Init(ref BingoEndScreen);
+        
+        BingoGameBrowser = GameObject.Instantiate(AssetLoader.BingoGameBrowser,Root.transform);
+        BingoBrowser.Init(ref BingoGameBrowser);
         
         return Root;
     }
