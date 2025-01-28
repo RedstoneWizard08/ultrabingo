@@ -5,3 +5,4 @@
 - Properly changed reset button from Backspace to F10
 - Prevent level switch if started right before a game ends
 - Prevent nomo/noweap Angry setting applying in bingo gamemodes
+- Prevent clicking on the button of the level we're currently in

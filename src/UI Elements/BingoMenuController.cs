@@ -215,6 +215,13 @@ public static class BingoMenuController
         {
             return;
         }
+                
+        //Prevent loading the level we're already on.
+        if(levelData.angryLevelId == getSceneName())
+        {
+            Logging.Warn("Trying to load level we're already in");
+            return;
+        }
         
         if(!GameManager.CurrentGame.isGameFinished())
         {
