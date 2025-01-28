@@ -164,6 +164,7 @@ public static class BingoMenuController
                         if(!GameManager.CurrentGame.isGameFinished())
                         {
                             GameManager.IsSwitchingLevels = true;
+                            AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0; //Prevent nomo override
                             AngrySceneManager.LoadLevelWithScripts(requiredAngryScripts,bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath);
                         }
                     }
@@ -172,6 +173,7 @@ public static class BingoMenuController
                         if(!GameManager.CurrentGame.isGameFinished())
                         {
                             GameManager.IsSwitchingLevels = true;
+                            AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0;//Prevent nomo override
                             AngrySceneManager.LoadLevel(bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath,true);
                         }
                     }
