@@ -3,11 +3,8 @@ using System.Threading.Tasks;
 using AngryLevelLoader.Containers;
 using AngryLevelLoader.Managers;
 using AngryLevelLoader.Notifications;
-using Newtonsoft.Json;
 using UltraBINGO.Components;
-using UltraBINGO.NetworkMessages;
 using UltrakillBingoClient;
-using UnityEngine;
 using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.UI_Elements;
@@ -50,17 +47,16 @@ public static class BingoMenuController
             int row = int.Parse(levelCoords[0].ToString());
             int column = int.Parse(levelCoords[2].ToString());
             GameManager.IsInBingoLevel = true;
-            GameManager.CurrentRow = row;
-            GameManager.CurrentColumn = column;
         
             //Check if the level we're going into is campaign or Angry.
             //If it's Angry, we need to do some checks if the level is downloaded before going in.
             if(levelData.isAngryLevel)
             {
-                handleAngryLoad(levelData);
+                handleAngryLoad(levelData,row,column);
             }
             else
             {
+                GameManager.UpdateGridPosition(row,column);
                 SceneHelper.LoadScene(levelName);
             }
         }
@@ -93,7 +89,7 @@ public static class BingoMenuController
         }
     }
     
-    public static async void handleAngryLoad(BingoLevelData angryLevelData,bool isInGame=false)
+    public static async void handleAngryLoad(BingoLevelData angryLevelData,int row=0, int column=0)
     {
             //Make sure the game hasn't ended.
             if(GameManager.CurrentGame.isGameFinished())
@@ -165,6 +161,8 @@ public static class BingoMenuController
                         {
                             GameManager.IsSwitchingLevels = true;
                             AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0; //Prevent nomo override
+                            
+                            GameManager.UpdateGridPosition(row,column);
                             AngrySceneManager.LoadLevelWithScripts(requiredAngryScripts,bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath);
                         }
                     }
@@ -174,6 +172,7 @@ public static class BingoMenuController
                         {
                             GameManager.IsSwitchingLevels = true;
                             AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0;//Prevent nomo override
+                            GameManager.UpdateGridPosition(row,column);
                             AngrySceneManager.LoadLevel(bundleContainer,customLevel,customLevel.data,customLevel.data.scenePath,true);
                         }
                     }
@@ -227,21 +226,19 @@ public static class BingoMenuController
         {
             int row = int.Parse(levelCoords[0].ToString());
             int column = int.Parse(levelCoords[2].ToString());
-        
-            GameManager.CurrentRow = row;
-            GameManager.CurrentColumn = column;
-        
+            
             string levelDisplayName = GameManager.CurrentGame.grid.levelTable[levelCoords].levelName;
             string levelId = GameManager.CurrentGame.grid.levelTable[levelCoords].levelId;
         
             if(levelData.isAngryLevel)
             {
-                handleAngryLoad(levelData);
+                handleAngryLoad(levelData,row,column);
             }
             else
             {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to <color=orange>"+levelDisplayName + "</color>...");
                 GameManager.IsSwitchingLevels = true;
+                GameManager.UpdateGridPosition(row,column);
                 await Task.Delay(1000);
                 //Check if game hasn't ended between click and delay. If it has, prevent level load.
                 if(!GameManager.CurrentGame.isGameFinished()) { SceneHelper.LoadScene(levelId); }

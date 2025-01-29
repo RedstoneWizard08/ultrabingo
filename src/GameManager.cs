@@ -35,6 +35,12 @@ public static class GameManager
     
     public static GameObject LevelBeingDownloaded = null;
     
+    public static void UpdateGridPosition(int row, int column)
+    {
+        CurrentRow = row;
+        CurrentColumn = column;
+    }
+    
     public static void ClearGameVariables()
     {
         CurrentGame = null;
