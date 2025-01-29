@@ -28,8 +28,12 @@ public static class CampaignPatches
             }
             case "Level 2-3":
             {
-                GameObject box = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("4 - End Hallway"),"4 Nonstuff"),"Electricitybox");
+                GameObject box = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("4 - End Hallway"),"4 Nonstuff"),"ElectricityBox");
                 box.SetActive(false);
+                
+                GameObject pit = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Sewer Arena"),"2 Nonstuff"),"Secret Level Entrance"),"FinalRoom 1"),"Pit");
+                pit.SetActive(false);
+                
                 break;
             }
             case "Level 3-1":
@@ -48,6 +52,10 @@ public static class CampaignPatches
             {
                 GameObject door = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Elevator"),"2B Secret"),"FinalRoom 1"),"FinalDoor");
                 door.GetComponent<FinalDoor>().enabled = false;
+                
+                GameObject pit = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Elevator"),"2B Secret"),"FinalRoom 1"),"Pit");
+                pit.SetActive(false);
+                
                 break;   
             }
             case "Level 6-2":
@@ -60,6 +68,9 @@ public static class CampaignPatches
             {
                 GameObject plane = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("Doors"),"1 -> S"),"Plane (1)");
                 plane.GetComponent<Flammable>().enabled = false;
+                
+                GameObject pit = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Garden Maze"),"Secret"),"FinalRoom 1"),"Pit");
+                pit.SetActive(false);
                 break;   
             }
             default:
