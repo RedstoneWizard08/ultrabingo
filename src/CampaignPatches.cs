@@ -21,6 +21,9 @@ public static class CampaignPatches
             {
                 GameObject fountain = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1 - First Field"),"1 Stuff"),"Fountain");
                 fountain.GetComponent<Door>().enabled = false;
+                
+                GameObject pit = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1 - First Field"),"1 Nonstuff"),"FinalRoom 1");
+                pit.SetActive(false);
                 break;
             }
             case "Level 2-3":
