@@ -8,3 +8,4 @@
 - Prevent level switch if started right before a game ends
 - Prevent nomo/noweap Angry setting applying in bingo gamemodes
 - Prevent clicking on the button of the level we're currently in
+- Prevent triggering campaign secret level ends via OOB
