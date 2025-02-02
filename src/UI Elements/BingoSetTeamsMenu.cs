@@ -112,7 +112,7 @@ public class BingoSetTeamsMenu
             playersMapped++;
         }
         currentTeamChanges[currentPlayerObject.name] = teamId;
-        GetGameObjectChild(currentPlayerObject,"Text").GetComponent<TextMeshProUGUI>().color = teamColors[teamId];
+        currentPlayerObject.GetComponent<Image>().color = teamColors[teamId];
         TeamSelectionPanel.SetActive(false);
     }
     
