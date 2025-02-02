@@ -40,6 +40,10 @@ You may be in one of two scenarios:
 Please try using a VPN if possible. The Baphomet's Bingo servers are proxied behind Cloudflare, the latter of which may not allow some specific IP ranges for reasons I am not able to directly provide support for.
 If you are still having problems, please join the [Baphomet's Bingo Discord](https://discord.gg/VyzFJwEWtJ)and mention your problem, and I will try to help you to the best of my ability.
 
+### My game freezes/crashes when joining/starting a game, or loading a level.
+
+There appears to be a strange issue where the UI used for the bingo is unable to render consistently when using uncapped framerates, which in turn causes the game to freeze or crash. To minimize the chances of this happening, **enable VSync and/or cap your framerate in the in-game settings.**
+
 ### I am unable to join a game that says "This game is not accepting new players".
 The host of the game you are trying to join has manually defined and set teams, which locks the lobby and prevents new players from joining. This is an intentional design choice to prevent abnormal behavior. If possible, ask the host of the game to reset the teams in order to unlock the lobby and allow new players to join.
 
