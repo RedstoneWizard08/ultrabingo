@@ -17,6 +17,16 @@ public static class BingoBrowser
     public static GameObject GameList;
     public static GameObject Back;
     
+    public static void LockUI()
+    {
+        
+    }
+    
+    public static void UnlockUI()
+    {
+        
+    }
+    
     public static void Init(ref GameObject BingoGameBrowser)
     {
         FetchText = GetGameObjectChild(BingoGameBrowser,"FetchText");

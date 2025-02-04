@@ -120,6 +120,20 @@ public static class BingoLobby
         GameManager.CurrentGame.gameSettings.gameVisibility = newSettings.gameVisibility;
     }
     
+    public static void LockUI()
+    {
+        StartGame.GetComponent<Button>().interactable = false;
+        ReturnToBingoMenu.GetComponent<Button>().interactable = false;
+        SelectMaps.GetComponent<Button>().interactable = false;
+    }
+    
+    public static void UnlockUI()
+    {
+        StartGame.GetComponent<Button>().interactable = true;
+        ReturnToBingoMenu.GetComponent<Button>().interactable = true;
+        SelectMaps.GetComponent<Button>().interactable = true;
+    }
+    
     public static void Init(ref GameObject BingoLobby)
     {
         //Player list
@@ -154,6 +168,8 @@ public static class BingoLobby
         {
             if(GameManager.PreStartChecks())
             {
+                //Lock the button to prevent being able to spam it
+                LockUI();
                 GameManager.StartGame();
             }
         });

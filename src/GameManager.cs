@@ -95,6 +95,7 @@ public static class GameManager
     public static void MoveToCard()
     {
         BingoCard.UpdateTitles();
+        BingoLobby.UnlockUI();
         
         BingoEncapsulator.BingoLobbyScreen.SetActive(false);
         BingoEncapsulator.BingoCardScreen.SetActive(true);

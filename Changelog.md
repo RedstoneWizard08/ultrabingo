@@ -1,7 +1,9 @@
 ﻿v.1.0.2
 
 - Added match browser
-- When setting teams, the set team color now displays in the border instead of in the player tetx
+- When setting teams, the set team color now displays in the border instead of in the player text
+- Fixed being able to spam start game button, which would cause the bingo grid to duplicate
+- Fixed being able to spam host/join game buttons on the main menu, which would eventually cause a freeze
 - Fixed being able to host/join a game and immediately return to menu before transitioned to main menu
 - Fixed Take Back The Night not loading correctly due to incorrect ID on the server
 - Fixed grid position being moved if the download of a level was started, then the player restarted the current level from the pause menu

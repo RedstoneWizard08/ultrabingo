@@ -39,14 +39,33 @@ public static class BingoMainMenu
         Root.transform.parent.parent.gameObject.SetActive(true);
     }
     
+    public static void LockUI()
+    {
+        HostGame.GetComponent<Button>().interactable = false;
+        JoinGame.GetComponent<Button>().interactable = false;
+        GameBrowser.GetComponent<Button>().interactable = false;
+    }
+    
+    public static void UnlockUI()
+    {
+        HostGame.GetComponent<Button>().interactable = true;
+        JoinGame.GetComponent<Button>().interactable = true;
+        GameBrowser.GetComponent<Button>().interactable = true;
+    }
+    
     public static GameObject Init(ref GameObject BingoMenu)
     {
         HostGame = GetGameObjectChild(BingoMenu,"Host Game");
-        HostGame.GetComponent<Button>().onClick.AddListener(BingoMenuController.CreateRoom);
+        HostGame.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            LockUI();
+            BingoMenuController.CreateRoom();
+        });
         
         JoinGame = GetGameObjectChild(BingoMenu,"Join Game");
         JoinGame.GetComponent<Button>().onClick.AddListener(delegate
         {
+            LockUI();
             GameObject input = GetGameObjectChild(JoinGameInput,"InputField (TMP)");
                 
             string password = input.GetComponent<TMP_InputField>().text;
