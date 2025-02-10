@@ -4,6 +4,7 @@
 - Added ability to copy game id if hosting
 - Better prevention against OOB skips to reach secret exits if disabling campaign alt exits is enabled
 - When setting teams, the set team color now displays in the border instead of in the player text
+- In-game bingo panel now displays correctly if weapon position is set to right instead of left/middle
 - Fixed being able to spam start game button, which would cause the bingo grid to duplicate
 - Fixed being able to spam host/join game buttons on the main menu, which would eventually cause a freeze
 - Fixed being able to host/join a game and immediately return to menu before transitioned to main menu

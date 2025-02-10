@@ -8,6 +8,35 @@ using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.HarmonyPatches;
 
+[HarmonyPatch(typeof(OptionsMenuToManager),"WeaponPosition")]
+public class WeaponPosPanelPatch
+{
+    [HarmonyPostfix]
+    public static void changeBingoPanelPos(int stuff)
+    {
+        if(GameManager.IsInBingoLevel && !GameManager.CurrentGame.isGameFinished())
+        {
+            GameObject tmp = GetGameObjectChild(GetInactiveRootObject("Canvas"),"Level Stats Controller");
+            Logging.Warn(tmp.name);
+            GameObject bingoPanel = GetGameObjectChild(tmp,"BingoInGamePanel");
+            switch(MonoSingleton<PrefsManager>.Instance.GetInt("weaponHoldPosition", 0))
+            {
+                case 2: // Right
+                {
+                    bingoPanel.transform.localPosition = new Vector3(-425f,0f,0f);
+                    break;
+                }
+                default: // Left/middle
+                {
+                    bingoPanel.transform.localPosition = new Vector3(300f,0f,0f);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
 [HarmonyPatch(typeof(LevelStats),"Start")]
 public class StatWindowStart
 {

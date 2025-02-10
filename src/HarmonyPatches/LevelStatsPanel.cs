@@ -24,6 +24,21 @@ public static class LevelStatsPanelPatchStart
             inGamePanel.name = "BingoInGamePanel";
             
             GameObject grid = GetGameObjectChild(inGamePanel,"Grid");
+            switch(MonoSingleton<PrefsManager>.Instance.GetInt("weaponHoldPosition", 0))
+            {
+                case 2: // Right
+                {
+                    inGamePanel.transform.localPosition += new Vector3(-425f,0f,0f);
+                    break;
+                }
+                default: // Left/middle
+                {
+                    inGamePanel.transform.localPosition += new Vector3(-5f,0f,0f);
+                    break;
+                }
+            }
+            
+            
             grid.transform.localPosition += new Vector3(-5f,5f,0f);
             
             GameObject card = GameObject.Instantiate(BingoCardPauseMenu.Grid,grid.transform);
