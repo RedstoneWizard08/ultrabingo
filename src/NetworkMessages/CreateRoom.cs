@@ -1,4 +1,5 @@
-﻿using UltrakillBingoClient;
+﻿using UltraBINGO.UI_Elements;
+using UltrakillBingoClient;
 
 namespace UltraBINGO.NetworkMessages;
 
@@ -49,5 +50,7 @@ public static class CreateRoomResponseHandler
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game: "+response.roomId);
             } 
         }
+        BingoMainMenu.UnlockUI();
+        BingoBrowser.UnlockUI();
     }
 }
