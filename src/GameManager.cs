@@ -259,6 +259,8 @@ public static class GameManager
         BingoLobby.GameVisibility.interactable = isHost;
         BingoLobby.StartGame.SetActive(isHost);
         BingoLobby.SelectMaps.SetActive(isHost);
+        BingoLobby.RoomIdDisplay.SetActive(isHost);
+        BingoLobby.CopyId.SetActive(isHost);
         BingoLobby.SetTeams.GetComponent<Button>().interactable = isHost;
         
         if(isHost)

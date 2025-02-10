@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using TMPro;
+﻿using TMPro;
 using UltraBINGO.NetworkMessages;
-using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Windows;
 
 using static UltraBINGO.CommonFunctions;
 
@@ -19,6 +16,7 @@ public static class BingoLobby
     public static GameObject SetTeams;
     public static GameObject StartGame;
     public static GameObject RoomIdDisplay;
+    public static GameObject CopyId;
     
     public static GameObject GameOptions;
     public static TMP_InputField MaxPlayers;
@@ -176,6 +174,13 @@ public static class BingoLobby
         
         //Room id text
         RoomIdDisplay = GetGameObjectChild(BingoLobby,"BingoGameID");
+        
+        //Copy ID
+        CopyId = GetGameObjectChild(BingoLobby,"CopyID");
+        CopyId.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            GUIUtility.systemCopyBuffer = GetGameObjectChild(GetGameObjectChild(RoomIdDisplay,"Title"),"Text").GetComponent<Text>().text.Split(':')[1];
+        });
         
         //Game options
         GameOptions = GetGameObjectChild(BingoLobby,"BingoGameSettings");

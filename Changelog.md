@@ -1,6 +1,7 @@
 ﻿v.1.0.2
 
 - Added match browser
+- Added ability to copy game id if hosting
 - When setting teams, the set team color now displays in the border instead of in the player text
 - Fixed being able to spam start game button, which would cause the bingo grid to duplicate
 - Fixed being able to spam host/join game buttons on the main menu, which would eventually cause a freeze
