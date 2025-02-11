@@ -18,6 +18,7 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Convoy Catastrophe" by CEO Of Gaming
 - "Cult Of Dopefish" by Willem1321
 - "Darkcastle" by Grapes
+- "Death Around The Corner" by ballfartchungus43
 - "Death Descent - Free Mind Loop" by PrestoPesto
 - "Epitaph" by Willem3231
 - "False Ascendence 2" by PhantomBlader

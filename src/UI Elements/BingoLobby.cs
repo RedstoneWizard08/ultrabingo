@@ -32,9 +32,9 @@ public static class BingoLobby
     public static void onMaxPlayerUpdate(string playerAmount)
     {
         int amount = int.Parse(playerAmount);
-        GameManager.CurrentGame.gameSettings.maxPlayers = Mathf.Clamp(amount,2,16);
+        GameManager.CurrentGame.gameSettings.maxPlayers = Mathf.Clamp(Mathf.Max(amount,GameManager.CurrentGame.currentPlayers.Count),2,16);
         
-        MaxPlayers.text = Mathf.Clamp(amount,2f,16f).ToString();
+        MaxPlayers.text = Mathf.Clamp(amount,Mathf.Max(amount,GameManager.CurrentGame.currentPlayers.Count),16f).ToString();
         UIManager.HandleGameSettingsUpdate();
     }
     

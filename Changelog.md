@@ -1,4 +1,5 @@
-﻿v.1.0.2
+﻿
+v.1.0.2
 
 - Added match browser
 - Added ability to copy game id if hosting
@@ -16,3 +17,7 @@
 - Prevent clicking on the button of the level we're currently in
 - Prevent triggering campaign secret level ends via OOB
 - Added Ultrakill Style Editor and USTManager to whitelist
+
+- Added maps to map pool:
+    - Angry Standard:
+    - Inanis Power Station
