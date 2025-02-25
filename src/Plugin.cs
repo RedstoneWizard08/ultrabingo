@@ -13,6 +13,8 @@ using UltraBINGO;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.SceneManagement;
 
 using static UltraBINGO.CommonFunctions;
@@ -33,7 +35,7 @@ namespace UltrakillBingoClient
     {   
         public const string pluginId = "clearwater.ultrakillbingo.ultrakillbingo";
         public const string pluginName = "Baphomet's BINGO";
-        public const string pluginVersion = "1.0.2";
+        public const string pluginVersion = "1.0.3";
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
@@ -46,6 +48,11 @@ namespace UltrakillBingoClient
         public static List<string> LoadedMods = new List<string>();
 
         public static string CatalogFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"bingocatalog.toml");
+        
+        string allAssets = "";
+        bool ran = false;
+        int index = 0;
+        int totalAssets = 0;
         
         //Mod init logic
         private void Awake()
@@ -108,6 +115,7 @@ namespace UltrakillBingoClient
             NetworkManager.SendModCheck(vmr);
         }
         
+        
         //Scene switch
         public void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -139,7 +147,7 @@ namespace UltrakillBingoClient
             {
                 if(GameManager.IsInBingoLevel)
                 {
-                    UIManager.DisableMajorAssists();
+                    //UIManager.DisableMajorAssists();
                     UIManager.HideAngryButton();
                     if(GameManager.CurrentGame.gameSettings.disableCampaignAltExits)
                     {

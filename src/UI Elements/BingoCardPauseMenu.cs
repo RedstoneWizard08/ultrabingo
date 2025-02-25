@@ -25,6 +25,8 @@ public static class BingoCardPauseMenu
     
     public static GameObject inGamePanel;
     
+    public static GameObject DescriptorText;
+    
     public static void onMouseEnterLevelSquare(PointerEventData data)
     {
         string angryLevelName = data.pointerEnter.gameObject.GetComponent<BingoLevelData>().levelName.ToLower();
@@ -108,6 +110,9 @@ public static class BingoCardPauseMenu
         Root.name = "BingoPauseCard";
         Grid = GetGameObjectChild(Root,"Card");
         Grid.GetComponent<GridLayoutGroup>().constraintCount = GameManager.CurrentGame.grid.size;
+        
+        DescriptorText = GetGameObjectChild(GetGameObjectChild(Root,"Descriptor"),"Text (TMP)");
+        
         Root.SetActive(true);
         
         return Root;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AngryLevelLoader.Containers;
 using AngryLevelLoader.Managers;
 using AngryLevelLoader.Notifications;
+using TMPro;
 using UltraBINGO.Components;
 using UltrakillBingoClient;
 using static UltraBINGO.CommonFunctions;
@@ -125,10 +126,19 @@ public static class BingoMenuController
                 {
                     //...if it does, gather all the necessary data and ask Angry to load it.
                     Logging.Message("Loading specified Angry level");
-                    string msg = (getSceneName() != "Main Menu" ? "Moving to <color=orange>" + angryLevelData.levelName + "</color>..." : "Loading <color=orange>" + angryLevelData.levelName + "</color>...");
+                    string msg = (getSceneName() != "Main Menu" ? "MOVING TO <color=orange>" + angryLevelData.levelName + "</color>..." : "LOADING <color=orange>" + angryLevelData.levelName + "</color>...");
+                    
+                    if(getSceneName() == "Main Menu")
+                    {
+                        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
+                    }
+                    else
+                    {
+                        BingoCardPauseMenu.DescriptorText.GetComponent<TextMeshProUGUI>().text = msg;
+                    }
                     await Task.Delay(1000);
-                    MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
                     AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.gameSettings.difficulty;
+                    
                     
                     //Before loading, check if the level uses any custom scripts.
                     List<string> requiredAngryScripts = ScriptManager.GetRequiredScriptsFromBundle(bundleContainer);
@@ -237,7 +247,8 @@ public static class BingoMenuController
             }
             else
             {
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Moving to <color=orange>"+levelDisplayName + "</color>...");
+                string msg = "MOVING TO <color=orange>" + levelDisplayName + "</color>...";
+                BingoCardPauseMenu.DescriptorText.GetComponent<TextMeshProUGUI>().text = msg;
                 GameManager.IsSwitchingLevels = true;
                 
                 await Task.Delay(1000);
@@ -247,7 +258,6 @@ public static class BingoMenuController
                     GameManager.UpdateGridPosition(row,column);
                     SceneHelper.LoadScene(levelId);
                 }
-                
             }
         }
     }

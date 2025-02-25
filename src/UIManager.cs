@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using AngryLevelLoader;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
-using PluginConfig;
-using PluginConfig.API;
 using TMPro;
 using UltraBINGO.Components;
 using UltraBINGO.NetworkMessages;
@@ -24,10 +22,21 @@ public static class UIManager
     
     public static void DisableMajorAssists()
     { 
-        GameObject optionsMenu = MonoSingleton<OptionsMenuToManager>.Instance.optionsMenu;
-        GameObject assistsList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(optionsMenu,"Assist Options"),"Scroll Rect"),"Contents");
-        GetGameObjectChild(assistsList,"Text (6)").SetActive(false);
-        GetGameObjectChild(assistsList,"Major Assists").SetActive(false);
+        SettingsMenu.Components.SettingsMenu optionsMenu = MonoSingleton<OptionsMenuToManager>.Instance.optionsMenu;
+        Logging.Warn(optionsMenu.gameObject.name);
+        GameObject assistsList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(optionsMenu.gameObject,"Pages"),"Assist"),"Scroll Rect"),"Contents");
+        
+        Logging.Warn(assistsList.gameObject.name);
+        
+        GetGameObjectChild(assistsList,"-- Major Assists --").SetActive(false);
+        GetGameObjectChild(assistsList,"Game Speed").SetActive(false);
+        GetGameObjectChild(assistsList,"Damage Taken").SetActive(false);
+        GetGameObjectChild(assistsList,"Boss Fight Difficulty Override").SetActive(false);
+        GetGameObjectChild(assistsList,"Infinite Stamina").SetActive(false);
+        GetGameObjectChild(assistsList,"Disable Whiplash Hard Damage").SetActive(false);
+        GetGameObjectChild(assistsList,"Disable All Hard Damage").SetActive(false);
+        GetGameObjectChild(assistsList,"Disable Weapon Freshness").SetActive(false);
+        GetGameObjectChild(assistsList,"Disable Assist Popup").SetActive(false);
         
         GameObject disabledNotification = UIHelper.CreateText("Major assists are <color=orange>disabled</color> while playing Baphomet's Bingo.",26,"TextDisabled");
         disabledNotification.transform.SetParent(assistsList.transform);
@@ -35,7 +44,15 @@ public static class UIManager
     
     public static void HideAngryButton()
     {
-        GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("Canvas"),"OptionsMenu"),"Panel"),"PluginConfiguratorButton(Clone)").SetActive(false);
+        try
+        {
+            GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("Canvas"),"OptionsMenu"),"Panel"),"PluginConfiguratorButton(Clone)").SetActive(false);
+        }
+        catch (Exception e)
+        {
+            Logging.Warn("Couldn't find Angry button in options - Is Angry not working?");
+        }
+
     }
     
     public static void HandleGameSettingsUpdate()

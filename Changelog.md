@@ -1,4 +1,11 @@
-﻿
+﻿v.1.0.3
+- Critical fixes to make the mod work again after the ULTRA_REVAMP update
+- Changed "Moving to" text from HUD message to the bingo pause card
+- Added Encore level map pool
+- Updated all official level thumbnails with their updated versions from the latest game version
+- Removed all Angry map pools due to custom levels also breaking due to the game update
+
+
 v.1.0.2
 
 - Added match browser

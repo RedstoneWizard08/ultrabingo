@@ -18,7 +18,7 @@ public class ShopAddLevelInfo
         {
             try
             {
-                TextMeshProUGUI origTip = GetTextMeshProGUI(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"TipBox"),"Panel"),"TipText"));
+                TMP_Text origTip = __instance.tipOfTheDay;
                 string coords = GameManager.CurrentRow + "-" + GameManager.CurrentColumn;
                 
                 string teamClaim = GameManager.CurrentGame.grid.levelTable[coords].claimedBy;
@@ -50,16 +50,18 @@ public class ShopAddLevelInfo
                 }
                 
                 //Hide the CG and sandbox buttons
-                GameObject cgButton = GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"Main Menu"),"CyberGrindButton");
+                GameObject shopObject = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"Background"),"Main Panel"),"Main Menu");
+                
+                GameObject cgButton = GetGameObjectChild(GetGameObjectChild(shopObject,"Buttons"),"CyberGrindButton");
                 cgButton.SetActive(false);
                 
-                GameObject sandboxButton = GetGameObjectChild(GetGameObjectChild(___shopCanvas.gameObject,"Main Menu"),"SandboxButton");
+                GameObject sandboxButton = GetGameObjectChild(GetGameObjectChild(shopObject,"Buttons"),"SandboxButton");
                 sandboxButton.SetActive(false);
             }
 
             catch (Exception e)
             {
-                Logging.Warn("This shop isn't vanilla");
+                Logging.Warn("This shop isn't vanilla or an error occured");
             }
         }
     }
