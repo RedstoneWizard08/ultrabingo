@@ -35,7 +35,7 @@ namespace UltrakillBingoClient
     {   
         public const string pluginId = "clearwater.ultrakillbingo.ultrakillbingo";
         public const string pluginName = "Baphomet's BINGO";
-        public const string pluginVersion = "1.0.3";
+        public const string pluginVersion = "1.0.6";
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
@@ -148,8 +148,6 @@ namespace UltrakillBingoClient
             {
                 if(GameManager.IsInBingoLevel)
                 {
-                    //UIManager.DisableMajorAssists();
-                    UIManager.HideAngryButton();
                     if(GameManager.CurrentGame.gameSettings.disableCampaignAltExits)
                     {
                         CampaignPatches.Apply(getSceneName());

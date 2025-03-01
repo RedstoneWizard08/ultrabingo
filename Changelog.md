@@ -2,6 +2,8 @@
 - Gone straight to this version to resync with TS.
 - Fixed the bingo pause menu and tab level stats not appearing.
 - Fixed a small issue with the 0-2 alt exit prevention that was broken due to the game update.
+- Fixed the divider on the bingo main menu not being symmetrical.
+- Added Healthbars and HandPaint to the mod whitelist.
 
 v.1.0.3
 - Critical fixes to make the mod work again after the ULTRA_REVAMP update

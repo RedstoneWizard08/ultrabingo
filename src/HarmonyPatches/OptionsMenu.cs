@@ -23,10 +23,20 @@ public static class OptionsMenuPatcher
     {
         if(GameManager.IsInBingoLevel && !GameManager.CurrentGame.isGameFinished())
         {
+            //Hide the PluginConfig button
+            SettingsMenu.Components.SettingsMenu optionsMenu = MonoSingleton<OptionsMenuToManager>.Instance.optionsMenu;
+
+            try
+            {
+                GetGameObjectChild(GetGameObjectChild(optionsMenu.gameObject,"Navigation Rail"),"PluginConfiguratorButton(Clone)").SetActive(false);
+            }
+            catch (Exception e)
+            {
+                Logging.Warn("Couldn't find PluginConfigurator button in options - Is it not working?");
+            }
+            
             if(settingsPage.name == "Assist")
             {
-                SettingsMenu.Components.SettingsMenu optionsMenu = MonoSingleton<OptionsMenuToManager>.Instance.optionsMenu;
-                Logging.Warn(optionsMenu.gameObject.name);
                 GameObject assistsList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(optionsMenu.gameObject,"Pages"),"Assist"),"Scroll Rect"),"Contents");
         
                 Logging.Warn(assistsList.gameObject.name);
