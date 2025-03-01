@@ -1,4 +1,9 @@
-﻿v.1.0.3
+﻿v.1.0.6
+- Gone straight to this version to resync with TS.
+- Fixed the bingo pause menu and tab level stats not appearing.
+- Fixed a small issue with the 0-2 alt exit prevention that was broken due to the game update.
+
+v.1.0.3
 - Critical fixes to make the mod work again after the ULTRA_REVAMP update
 - Changed "Moving to" text from HUD message to the bingo pause card
 - Added Encore level map pool
