@@ -13,7 +13,7 @@ public static class CampaignPatches
         {
             case "Level 0-2":
             {
-                GameObject pedestal = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("5B - Secret Arena"),"5B Nonstuff"),"Altar");
+                GameObject pedestal = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("5B - Secret Arena"),"5B Nonstuff"),"Altar (Blue Skull) Variant");
                 pedestal.SetActive(false);
                 break;
             }
