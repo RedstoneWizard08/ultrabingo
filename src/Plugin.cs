@@ -58,6 +58,7 @@ namespace UltrakillBingoClient
         private void Awake()
         {
             Logging.Warn("--Now loading Baphomet's Bingo...--");
+            Debug.unityLogger.filterLogType = LogType.Warning;
             
             Logging.Message("--Loading asset bundle...--");
             AssetLoader.LoadAssets();

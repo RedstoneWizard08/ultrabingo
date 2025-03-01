@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AngryLevelLoader.Containers;
 using AngryLevelLoader.Managers;
 using HarmonyLib;
@@ -7,6 +8,7 @@ using TMPro;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
+using UnityEngine;
 using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.HarmonyPatches;
@@ -84,20 +86,31 @@ public static class ConfirmLeaveGame
     }
 }
 
-[HarmonyPatch(typeof(OptionsManager),"Start")]
+[HarmonyPatch(typeof(OptionsManager),"Awake")]
 public static class PauseMenu
 {
     [HarmonyPostfix]
-    public static void patchPauseMenu(ref OptionsManager __instance)
+    public static async void patchPauseMenu(OptionsManager __instance)
     {
+        Logging.Warn("In patch pause menu");
+        await Task.Delay(200);
+        
         if(GameManager.IsInBingoLevel && getSceneName() != "Main Menu")
         {
-            GetGameObjectChild(GetGameObjectChild(__instance.pauseMenu,"Quit Mission"),"Text").GetComponent<TextMeshProUGUI>().text = "LEAVE GAME";
+            GameObject canvas = GetInactiveRootObject("Canvas");
+            GameObject pauseMenu = GetGameObjectChild(canvas,"PauseMenu");
+            if(pauseMenu == null)
+            {
+                Logging.Error("Pause menu is null? Waiting and trying again");
+                pauseMenu = __instance.pauseMenu;
+                Logging.Error(pauseMenu.name);
+            }
+            Logging.Warn(pauseMenu.name);
+            GetGameObjectChild(GetGameObjectChild(pauseMenu,"Quit Mission"),"Text").GetComponent<TextMeshProUGUI>().text = "LEAVE GAME";
             BingoCardPauseMenu.Init(ref __instance);
             BingoCardPauseMenu.ShowBingoCardInPauseMenu(ref __instance);
         }
     }
-    
 }
 
 [HarmonyPatch(typeof(OptionsMenuToManager),"QuitMissionNoConfirm")]
