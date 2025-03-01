@@ -54,6 +54,6 @@ public static class AssetLoader
         BingoInGameGridPanel = Assets.LoadAsset<GameObject>("BingoInGameGrid");
          
         UISprite = Assets.LoadAsset<Sprite>("UISprite");
-        GameOverSound = Addressables.LoadAssetAsync<AudioClip>("Assets/Music/Hits/Versus2Outro.wav").WaitForCompletion();
+        GameOverSound = Assets.LoadAsset<AudioClip>("gameEnd");
     }
 }
