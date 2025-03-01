@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AngryLevelLoader.Containers;
 using AngryLevelLoader.Managers;
 using HarmonyLib;
@@ -16,8 +17,11 @@ namespace UltraBINGO.HarmonyPatches;
 public static class LevelStatsPanelPatchStart
 {
     [HarmonyPostfix]
-    public static void showBingoPanel(ref LevelStatsEnabler __instance)
+    public static async void showBingoPanel(LevelStatsEnabler __instance)
     {
+        //Give the game a sec to load in before displaying the tab panel.
+        await Task.Delay(250);
+        
         if(GameManager.IsInBingoLevel && getSceneName() != "Main Menu")
         {
             GameObject inGamePanel = GameObject.Instantiate(AssetLoader.BingoInGameGridPanel,__instance.gameObject.transform);

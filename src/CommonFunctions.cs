@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -58,8 +59,16 @@ public static class CommonFunctions
     
     public static GameObject GetGameObjectChild(GameObject parentObject, string childToFind)
     {
-        GameObject childToReturn = parentObject.transform.Find(childToFind).gameObject;
-        return childToReturn;
+        try
+        {
+            GameObject childToReturn = parentObject.transform.Find(childToFind).gameObject;
+            return childToReturn;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        
     }
 
     public static TextMeshProUGUI GetTextMeshProGUI(GameObject objectToUse)
