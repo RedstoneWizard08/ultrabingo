@@ -560,6 +560,27 @@ public static class NetworkManager
                 FetchGamesReponseHandler.handle(response);
                 break;
             }
+            case "RerollVote":
+            {
+                Logging.Warn("Player wants to reroll map");
+                RerollVoteNotification response = JsonConvert.DeserializeObject<RerollVoteNotification>(em.contents);
+                RerollVoteNotificationHandler.handle(response);
+                break;
+            }
+            case "RerollSuccess":
+            {
+                Logging.Warn("VOTE SUCCESSFUL");
+                RerollSuccessNotification response = JsonConvert.DeserializeObject<RerollSuccessNotification>(em.contents);
+                RerollSuccessNotificationHandler.handle(response);
+                break;
+            }
+            case "RerollExpire":
+            {
+                Logging.Warn("VOTE FAILED");
+                RerollExpireNotification response = JsonConvert.DeserializeObject<RerollExpireNotification>(em.contents);
+                RerollExpireNotificationHandler.handle(response);
+                break;
+            }
             case "Pong":
             {
                 //No need to do anything here, ping/pong just keeps the connection alive

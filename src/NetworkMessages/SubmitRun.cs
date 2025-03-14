@@ -40,6 +40,8 @@ public class LevelClaimNotification : PlayerNotification
     public float newTimeRequirement;
     public int newStyleRequirement;
     
+    public bool isMapVoted;
+    
 }
 
 public static class LevelClaimHandler
@@ -62,6 +64,12 @@ public static class LevelClaimHandler
             }
         
             string broadcastString = response.username + " has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team.";
+            
+            if(response.isMapVoted)
+            {
+                broadcastString += "\n The reroll vote for this map has been cancelled.";
+            }
+            
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(broadcastString);
             GameManager.UpdateCards(response.row,response.column,response.team,response.username,response.newTimeRequirement,response.newStyleRequirement);
         }

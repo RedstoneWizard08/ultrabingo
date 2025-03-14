@@ -25,6 +25,7 @@ public static class AssetLoader
     public static GameObject BingoMapSelectionMenu;
     public static GameObject BingoCardButtonTemplate;
     public static GameObject BingoGameBrowser;
+    public static GameObject BingoVotePanel;
     
     public static GameObject BingoInGameGridPanel;
     public static GameObject BingoLockedPanel;
@@ -55,5 +56,7 @@ public static class AssetLoader
          
         UISprite = Assets.LoadAsset<Sprite>("UISprite");
         GameOverSound = Assets.LoadAsset<AudioClip>("gameEnd");
+        
+        BingoVotePanel = Assets.LoadAsset<GameObject>("BingoVotePanel");
     }
 }

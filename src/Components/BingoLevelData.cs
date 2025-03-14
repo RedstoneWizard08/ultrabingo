@@ -11,6 +11,9 @@ public class BingoLevelData : MonoBehaviour
     public string claimedTeam = "none";
     public string claimedPlayer = "none";
     
+    public int row;
+    public int column;
+    
     public float timeRequirement = 0;
     public float styleRequirement = 0;
     

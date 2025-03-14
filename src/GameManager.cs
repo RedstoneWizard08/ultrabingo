@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
 using UltraBINGO.Components;
@@ -32,8 +33,33 @@ public static class GameManager
     public static bool TriedToActivateCheats = false;
     public static bool IsDownloadingLevel = false;
     public static bool IsSwitchingLevels = false;
+    public static bool alreadyStartedVote = false;
     
     public static GameObject LevelBeingDownloaded = null;
+    
+    public static async void SwapRerolledMap(string oldMapId, GameLevel level, int column, int row)
+    {
+        if(IsInBingoLevel && CurrentGame != null)
+        {
+            CurrentGame.grid.levelTable[column+"-"+row] = level;
+            BingoLevelData a = GetGameObjectChild(BingoCardPauseMenu.Grid,(column+"-"+row)).GetComponent<BingoLevelData>();
+            
+            a.isAngryLevel = level.isAngryLevel;
+            a.angryParentBundle = level.angryParentBundle;
+            a.angryLevelId = level.angryLevelId;
+            a.levelName = level.levelName;
+        }
+        
+        Logging.Warn(oldMapId + "-" + getSceneName());
+        Logging.Warn((oldMapId == getSceneName()).ToString());
+        if(oldMapId == getSceneName())
+        {
+            Logging.Warn("Currently on old map - switching in 5 seconds");
+            await Task.Delay(5000);
+            Button b = GetGameObjectChild(BingoCardPauseMenu.Grid,(column+"-"+row)).GetComponent<Button>();
+            b.onClick.Invoke();
+        }
+    }
     
     public static void UpdateGridPosition(int row, int column)
     {
@@ -210,6 +236,8 @@ public static class GameManager
                 
                 //Setup the BingoLevelData component.
                 level.AddComponent<BingoLevelData>();
+                level.GetComponent<BingoLevelData>().column = x;
+                level.GetComponent<BingoLevelData>().row = y;
                 level.GetComponent<BingoLevelData>().isAngryLevel = levelObject.isAngryLevel;
                 level.GetComponent<BingoLevelData>().angryParentBundle = levelObject.angryParentBundle;
                 level.GetComponent<BingoLevelData>().angryLevelId = levelObject.angryLevelId;
@@ -235,6 +263,9 @@ public static class GameManager
         {
             teammates.text += player + "\n";
         }
+        
+        //Reset votes.
+        alreadyStartedVote = false;
     }
 
     public static void SetupGameDetails(Game game, string password, bool isHost=true)
@@ -358,6 +389,15 @@ public static class GameManager
                     
                     //In-game card
                     GetGameObjectChild(BingoCardPauseMenu.inGamePanel,coordLookup).GetComponent<Image>().color = BingoCardPauseMenu.teamColors[team];
+                    BingoLevelData bld = GetGameObjectChild(GetGameObjectChild(BingoCardPauseMenu.Root,"Card"),coordLookup).GetComponent<BingoLevelData>();
+                    
+                    bld.isClaimed = true;
+                    bld.claimedTeam = team;
+                    bld.claimedPlayer = playername;
+                    bld.timeRequirement = newTime;
+                    bld.styleRequirement = newStyle;
+                    
+                    Logging.Warn("Done");
                 }
             }
         }
@@ -368,5 +408,27 @@ public static class GameManager
             Logging.Error(coordLookup);
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but the grid could not be updated.\nCheck BepInEx console and report it to Clearwater!");
         }
+    }
+    
+    public static void RequestReroll(int row, int column)
+    {
+        if(GameManager.alreadyStartedVote)
+        {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You have already started a vote in this game.");
+        }
+        else
+        {
+            RerollRequest rr = new RerollRequest();
+            rr.gameId = CurrentGame.gameId;
+            rr.steamId = Steamworks.SteamClient.SteamId.ToString();
+            rr.row = row;
+            rr.column = column;
+            rr.steamTicket = NetworkManager.CreateRegisterTicket();
+        
+            NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(rr)); 
+        }
+
+        
+        MonoSingleton<OptionsManager>.Instance.UnPause();
     }
 }

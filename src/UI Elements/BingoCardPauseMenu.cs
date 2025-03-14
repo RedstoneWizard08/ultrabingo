@@ -73,8 +73,13 @@ public static class BingoCardPauseMenu
                 bld.isAngryLevel = levelObject.isAngryLevel;
                 bld.angryParentBundle = levelObject.angryParentBundle;
                 bld.angryLevelId = levelObject.angryLevelId;
+                bld.column = x;
+                bld.row = y;
+                bld.isClaimed = (levelObject.claimedBy != "NONE");
+                bld.claimedTeam = levelObject.claimedBy;
                 
                 levelSquare.AddComponent<Button>();
+                levelSquare.AddComponent<BingoLevelSquare>();
                 levelSquare.GetComponent<Button>().onClick.AddListener(delegate
                 {
                     BingoMenuController.LoadBingoLevelFromPauseMenu(levelSquare.name,levelSquare.GetComponent<BingoLevelData>());

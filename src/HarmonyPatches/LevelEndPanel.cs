@@ -103,7 +103,7 @@ public class FinalRankFanfare
             srr.row = GameManager.CurrentRow;
             srr.ticket = NetworkManager.CreateRegisterTicket();
             
-            NetworkManager.SubmitRun(srr);
+            NetworkManager.SubmitRun(srr);  
             
             GameManager.HasSent = true;
             

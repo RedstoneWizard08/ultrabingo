@@ -92,7 +92,6 @@ public static class PauseMenu
     [HarmonyPostfix]
     public static async void patchPauseMenu(OptionsManager __instance)
     {
-        Logging.Warn("In patch pause menu");
         await Task.Delay(200);
         
         if(GameManager.IsInBingoLevel && getSceneName() != "Main Menu")
@@ -105,7 +104,6 @@ public static class PauseMenu
                 pauseMenu = __instance.pauseMenu;
                 Logging.Error(pauseMenu.name);
             }
-            Logging.Warn(pauseMenu.name);
             GetGameObjectChild(GetGameObjectChild(pauseMenu,"Quit Mission"),"Text").GetComponent<TextMeshProUGUI>().text = "LEAVE GAME";
             BingoCardPauseMenu.Init(ref __instance);
             BingoCardPauseMenu.ShowBingoCardInPauseMenu(ref __instance);

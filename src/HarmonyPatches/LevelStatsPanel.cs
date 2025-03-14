@@ -5,6 +5,7 @@ using AngryLevelLoader.Managers;
 using HarmonyLib;
 using RudeLevelScript;
 using TMPro;
+using UltraBINGO.Components;
 using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
@@ -42,7 +43,6 @@ public static class LevelStatsPanelPatchStart
                 }
             }
             
-            
             grid.transform.localPosition += new Vector3(-5f,5f,0f);
             
             GameObject card = GameObject.Instantiate(BingoCardPauseMenu.Grid,grid.transform);
@@ -51,6 +51,15 @@ public static class LevelStatsPanelPatchStart
             card.transform.localPosition = Vector3.zero;    
             
             BingoCardPauseMenu.inGamePanel = card;
+            
+            //Load the reroll panel.
+            BingoVotePanel.Init(ref AssetLoader.BingoVotePanel);
+            
+            GameObject votePanel = GameObject.Instantiate(AssetLoader.BingoVotePanel,__instance.gameObject.transform.parent);
+            votePanel.AddComponent<BingoVoteManager>();
+            votePanel.name = "VotePanel";
+            votePanel.SetActive(false);
+            
         }
     }
 }
