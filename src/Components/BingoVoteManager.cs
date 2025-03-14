@@ -1,4 +1,7 @@
-﻿using TMPro;
+﻿using Newtonsoft.Json;
+using TMPro;
+using UltraBINGO.NetworkMessages;
+using UltrakillBingoClient;
 using UnityEngine;
 
 namespace UltraBINGO.Components;
@@ -45,10 +48,27 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager>
             stopVote();
         }
         
-        if(Input.GetKeyDown(KeyCode.F1) && !hasVoted)
+        if(Input.GetKeyDown(KeyCode.F1))
         {
-            hasVoted = true;
-            
+            if(hasVoted)
+            {
+                Logging.Warn("Tried to vote, but alreadyVoted set to true!");
+            }
+            else
+            {
+                Logging.Warn("Creating vote request");
+                RerollRequest rr = new RerollRequest();
+                rr.gameId = GameManager.CurrentGame.gameId;
+                rr.steamId = Steamworks.SteamClient.SteamId.ToString();
+                rr.row = 0;
+                rr.column = 0;
+                rr.steamTicket = NetworkManager.CreateRegisterTicket();
+        
+                Logging.Warn("Creating vote request");
+                NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(rr)); 
+                Logging.Warn("Done, hasVoted to true");
+                hasVoted = true;
+            }
         }
     }
     
@@ -56,6 +76,7 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager>
     {
         timeRemaining = 0f;
         voteOngoing = false;
+        hasVoted = false;
         gameObject.SetActive(false);
     }
     
