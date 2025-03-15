@@ -63,7 +63,7 @@ public static class LevelClaimHandler
                 case 2: {actionType = "reclaimed "; break;}
             }
         
-            string broadcastString = response.username + " has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team.";
+            string broadcastString = "<color="+response.team.ToLower()+">"+response.username + "</color> has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team.";
             
             if(response.isMapVoted)
             {
