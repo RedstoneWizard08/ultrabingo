@@ -21,6 +21,7 @@ public static class BingoLobby
     public static GameObject GameOptions;
     public static TMP_InputField MaxPlayers;
     public static TMP_InputField MaxTeams;
+    public static TMP_Dropdown Gamemode;
     public static TMP_Dropdown TeamComposition;
     public static TMP_Dropdown GridSize;
     public static TMP_Dropdown GameType;
@@ -43,6 +44,12 @@ public static class BingoLobby
         int amount = int.Parse(teamAmount);
         GameManager.CurrentGame.gameSettings.maxTeams = Mathf.Clamp(amount,2,4);
         MaxTeams.text = Mathf.Clamp(amount,2f,4f).ToString();
+        UIManager.HandleGameSettingsUpdate();
+    }
+    
+    public static void onGamemodeTypeUpdate(int value)
+    {
+        GameManager.CurrentGame.gameSettings.gamemode = value;
         UIManager.HandleGameSettingsUpdate();
     }
     
@@ -99,6 +106,7 @@ public static class BingoLobby
     {
         MaxPlayers.text = newSettings.maxPlayers.ToString();
         MaxTeams.text = newSettings.maxTeams.ToString();
+        Gamemode.value = newSettings.gamemode;
         TeamComposition.value = newSettings.teamComposition;
         RequirePRank.isOn = newSettings.PRankRequired;
         GameType.value = newSettings.gameType;
@@ -109,6 +117,7 @@ public static class BingoLobby
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
         GameManager.CurrentGame.gameSettings.maxTeams = newSettings.maxTeams;
+        GameManager.CurrentGame.gameSettings.gamemode = newSettings.gamemode;
         GameManager.CurrentGame.gameSettings.teamComposition = newSettings.teamComposition;
         GameManager.CurrentGame.gameSettings.requiresPRank = newSettings.PRankRequired;
         GameManager.CurrentGame.gameSettings.gameType = newSettings.gameType;
@@ -193,6 +202,9 @@ public static class BingoLobby
         
         TeamComposition = GetGameObjectChild(GetGameObjectChild(GameOptions,"TeamComposition"),"Dropdown").GetComponent<TMP_Dropdown>();
         TeamComposition.onValueChanged.AddListener(onTeamCompositionUpdate);
+        
+        Gamemode = GetGameObjectChild(GetGameObjectChild(GameOptions,"Gamemode"),"Dropdown").GetComponent<TMP_Dropdown>();
+        Gamemode.onValueChanged.AddListener(onGamemodeTypeUpdate);
         
         GridSize = GetGameObjectChild(GetGameObjectChild(GameOptions,"GridSize"),"Dropdown").GetComponent<TMP_Dropdown>();
         GridSize.onValueChanged.AddListener(onGridSizeUpdate);

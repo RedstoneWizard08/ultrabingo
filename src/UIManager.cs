@@ -29,6 +29,7 @@ public static class UIManager
             urss.roomId = GameManager.CurrentGame.gameId;
             urss.maxPlayers = int.Parse(BingoLobby.MaxPlayers.text);
             urss.maxTeams = int.Parse(BingoLobby.MaxTeams.text);
+            urss.gamemode = BingoLobby.Gamemode.value;
             urss.teamComposition = BingoLobby.TeamComposition.value;
             urss.PRankRequired = BingoLobby.RequirePRank.isOn;
             urss.gameType = BingoLobby.GameType.value;

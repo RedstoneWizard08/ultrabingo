@@ -11,6 +11,7 @@ using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Timers;
 using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO;
@@ -36,6 +37,8 @@ public static class GameManager
     public static bool alreadyStartedVote = false;
     
     public static GameObject LevelBeingDownloaded = null;
+    
+    public static float dominationTimer = 0;
     
     public static async void SwapRerolledMap(string oldMapId, GameLevel level, int column, int row)
     {

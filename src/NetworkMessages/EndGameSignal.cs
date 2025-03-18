@@ -19,6 +19,9 @@ public class EndGameSignal
     
     public float bestStatValue;
     public string bestStatMap;
+    
+    public int endStatus;
+    public List<String> tiedTeams;
 }
 
 public static class EndGameSignalHandler
@@ -36,8 +39,8 @@ public static class EndGameSignalHandler
     
     public static async void handle(EndGameSignal response)
     {
-        BingoEnd.winningTeam = response.winningTeam;
-        BingoEnd.winningPlayers = string.Join(",",response.winningPlayers);
+        BingoEnd.winningTeam = (response.endStatus == 0 ? response.winningTeam : (response.endStatus == 2 ? string.Join("&",response.winningPlayers) : ""));
+        BingoEnd.winningPlayers = (response.endStatus == 0 ? string.Join(",",response.winningPlayers) : "");
         BingoEnd.timeElapsed = response.timeElapsed;
         BingoEnd.numOfClaims = response.claims;
         BingoEnd.firstMap = response.firstMapClaimed;
@@ -45,12 +48,41 @@ public static class EndGameSignalHandler
         
         BingoEnd.bestStatValue = response.bestStatValue;
         BingoEnd.bestStatName = response.bestStatMap;
+        BingoEnd.endCode = response.endStatus;
+        
+        if(response.endStatus == 2)
+        {
+            BingoEnd.tiedTeams = string.Join(" & ",response.tiedTeams);
+        }
         
         await Task.Delay(250);
 
         GameManager.CurrentGame.gameState = 2; // State 2 = game finished
+        
+        string message = "<color=orange>GAME OVER!</color>";
+        switch(response.endStatus)
+        {
+            case 0: //Normal end
+            {
+                message += "The <color="+response.winningTeam.ToLower()+">"+ response.winningTeam +" </color>team has <color=orange>won the game</color>!";
+                break;
+            }
+            case 1: //Game end with no winner
+            {
+                message += "No winning team has been declared.";
+                break;
+            }
+            case 2: //Game end with tie
+            {
+                message += "The " + string.Join("&",response.tiedTeams) + " teams have <color=orange>tied for the win!</color>";
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
 
-        string message = "<color=orange>GAME OVER!</color> The <color="+ response.winningTeam.ToLower() +">"+ response.winningTeam + " </color>team has <color=orange>won the game</color>!";
         GameManager.CurrentGame.winningTeam = response.winningTeam;
         if(getSceneName() != "Main Menu" && GameManager.IsInBingoLevel)
         {

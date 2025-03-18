@@ -12,6 +12,7 @@ public class UpdateRoomSettingsRequest : SendMessage
     public int maxPlayers;
     public int maxTeams;
     public int teamComposition;
+    public int gamemode;
     public bool PRankRequired;
     public int gameType;
     public int difficulty;
@@ -27,6 +28,7 @@ public class UpdateRoomSettingsNotification : MessageResponse
     public int maxPlayers;
     public int maxTeams;
     public int teamComposition;
+    public int gamemode;
     public bool PRankRequired;
     public int gameType;
     public int difficulty;

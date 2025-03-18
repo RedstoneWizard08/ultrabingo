@@ -56,13 +56,16 @@ public class GameSettings
     public int maxPlayers;
     public int maxTeams;
     public int teamComposition;
+    public int gamemode;
     public int gridSize;
-    public int gameType;
+    public int gameType; //Time/Style - Going to be removed in 1.1
     public int difficulty;
     public bool requiresPRank;
     public bool hasManuallySetTeams;
     public bool disableCampaignAltExits;
     public int gameVisibility;
+    
+    public int dominationTimer;
 }
 
 public class Game

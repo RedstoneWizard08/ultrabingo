@@ -24,6 +24,9 @@ public static class BingoEnd
     public static float bestStatValue;
     public static string bestStatName;
     
+    public static int endCode;
+    public static string tiedTeams;
+    
     public static async void ShowEndScreen()
     { 
         await Task.Delay(50); //Give the game a moment to fully load back into the menu before displaying
@@ -33,7 +36,28 @@ public static class BingoEnd
         BingoEncapsulator.BingoMenu.SetActive(false);
         BingoEncapsulator.BingoLobbyScreen.SetActive(false);
         BingoEncapsulator.BingoEndScreen.SetActive(true);
-        WinnerIndicator.GetComponent<TextMeshProUGUI>().text = "The <color="+winningTeam.ToLower()+">" + winningTeam + " </color>team has won the game!";
+        
+        string message = "";
+        switch(endCode)
+        {
+            case 0:
+            {
+                message = "The <color="+winningTeam.ToLower()+">" + winningTeam + " </color>team has won the game!";
+                break;
+            }
+            case 1:
+            {
+                message = "No team won the game.";
+                break;
+            }
+            case 2:
+            {
+                message = "The " + tiedTeams + " teams have tied!";
+                break;
+            }
+        }
+        
+        WinnerIndicator.GetComponent<TextMeshProUGUI>().text = message;
         
         GetGameObjectChild(WinningPlayers,"Text (TMP) (1)").GetComponent<TextMeshProUGUI>().text = winningPlayers;
         GetGameObjectChild(GetGameObjectChild(Stats,"TimeElapsed"),"Value").GetComponent<TextMeshProUGUI>().text = "<color=orange>"+timeElapsed+"</color>";

@@ -356,7 +356,7 @@ public static class NetworkManager
     public static void SetupHeartbeat()
     {
         Logging.Warn("Setting up heartbeat");
-        heartbeatTimer = new Timer(10000); //Ping once every 10 seconds
+        heartbeatTimer = new Timer(10*1000); //Ping once every 10 seconds
         heartbeatTimer.Elapsed += SendPing;
         heartbeatTimer.AutoReset = true;
         heartbeatTimer.Enabled = true;

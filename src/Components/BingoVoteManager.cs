@@ -37,7 +37,7 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager>
     {
         if(voteOngoing && timeRemaining > 0f)
         {
-            timeRemaining = Mathf.MoveTowards(this.timeRemaining,0f,Time.deltaTime);
+            timeRemaining = Mathf.MoveTowards(this.timeRemaining,0f,Time.unscaledDeltaTime);
             
             RerollText.text = "Reroll <color=orange>" + map + "</color>?" + (!hasVoted ? votePrompt : "");
             RerollVotes.text = "<color=orange>" + currentVotes + "</color>/" + voteThreshold + " votes";

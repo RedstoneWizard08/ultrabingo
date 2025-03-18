@@ -60,6 +60,20 @@ public static class LevelStatsPanelPatchStart
             votePanel.name = "VotePanel";
             votePanel.SetActive(false);
             
+            //If playing domination, load the domination time remaining panel.
+            //(Need to put the timeManager component in the root to ensure it remains active even while the panel is closed)
+            if(GameManager.CurrentGame.gameSettings.gamemode == 1)
+            {
+                GameObject dominationTimeRemaining = GameObject.Instantiate(AssetLoader.BingoDominationTimer,inGamePanel.gameObject.transform);
+                
+                GameObject canvas = GetInactiveRootObject("Canvas");
+                
+                canvas.AddComponent<DominationTimeManager>();
+                canvas.GetComponent<DominationTimeManager>().Bind(dominationTimeRemaining);
+                dominationTimeRemaining.name = "BingoDominationTimer";
+                dominationTimeRemaining.SetActive(true);
+                dominationTimeRemaining.transform.localPosition = new Vector3(350f,-25f,0f);
+            }
         }
     }
 }
