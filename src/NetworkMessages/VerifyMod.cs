@@ -27,6 +27,9 @@ public class ModVerificationResponse : MessageResponse
     public bool status;
     
     public string latestVersion;
+    
+    public string motd;
+ 
 }
 
 public static class ModVerificationHandler
@@ -51,6 +54,8 @@ public static class ModVerificationHandler
             }
             default: {Main.UpdateAvailable = false;break;}
         }
+        
+        GetGameObjectChild(BingoMainMenu.MOTDContainer,"Content").GetComponent<TextMeshProUGUI>().text = response.motd;
                     
         NetworkManager.modlistCheckDone = true;
         NetworkManager.DisconnectWebSocket(1000,"ModCheckDone");

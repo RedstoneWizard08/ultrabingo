@@ -1,6 +1,7 @@
 ﻿v.1.1
 - Added the ability to vote to reroll a map.
 - Added Domination gamemode. Teams fight to control as many maps as possible before time runs out.
+- Added Message of the Day section to the bingo main menu. This allows for quick informing of updates, server changes and PSAs for known issues.
 - Visual pass to make UI elements more in line with UI changes from the latest game update.
 
 v.1.0.6

@@ -23,6 +23,8 @@ public static class BingoMainMenu
     public static GameObject DiscordButton;
     public static GameObject VersionInfo;
     
+    public static GameObject MOTDContainer;
+    
     public static void Open()
     {
         //Hide chapter select
@@ -105,6 +107,9 @@ public static class BingoMainMenu
             Application.OpenURL("https://discord.gg/VyzFJwEWtJ");
         });
         VersionInfo = GetGameObjectChild(BingoMenu,"Version");
+        
+        MOTDContainer = GetGameObjectChild(BingoMenu,"MOTD");
+        
         
         return Root;
     }
