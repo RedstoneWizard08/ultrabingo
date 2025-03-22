@@ -22,7 +22,11 @@ public class DominationTimeManager : MonoBehaviour
     
     public void Start()
     {
-        Timer = GetGameObjectChild(Panel,"Timer").GetComponent<TextMeshProUGUI>();
+        if(GameManager.IsInBingoLevel)
+        {
+            Timer = GetGameObjectChild(Panel,"Timer").GetComponent<TextMeshProUGUI>();
+        }
+        
         timeRemaining = GameManager.dominationTimer;
     }
 
@@ -30,7 +34,11 @@ public class DominationTimeManager : MonoBehaviour
     {
         timeRemaining = Mathf.MoveTowards(timeRemaining,0f,Time.unscaledDeltaTime);
         GameManager.dominationTimer = timeRemaining;
-        Timer.text = "<color=orange>"+(int)timeRemaining+"</color>s";
+        if(GameManager.IsInBingoLevel)
+        {
+            Timer.text = "<color=orange>"+(int)timeRemaining+"</color>s";
+        }
+        
     }
     
 }

@@ -6,6 +6,7 @@ using AngryLevelLoader.Notifications;
 using TMPro;
 using UltraBINGO.Components;
 using UltrakillBingoClient;
+using UnityEngine;
 using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.UI_Elements;
@@ -296,6 +297,10 @@ public static class BingoMenuController
         GameManager.SetupBingoCardDynamic();
         
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("The game has begun!");
+        
+        GameObject canvas = GetInactiveRootObject("Canvas");
+        canvas.AddComponent<DominationTimeManager>();
+        
         Logging.Warn("Displaying card");
         GameManager.MoveToCard();
         Logging.Warn("GO GO GO");
