@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +25,10 @@ public static class BingoMainMenu
     public static GameObject VersionInfo;
     
     public static GameObject MOTDContainer;
+    public static string MOTD = "";
+    
+    public static GameObject RankSelection;
+    public static List<string> ranks;
     
     public static void Open()
     {
@@ -109,7 +114,22 @@ public static class BingoMainMenu
         VersionInfo = GetGameObjectChild(BingoMenu,"Version");
         
         MOTDContainer = GetGameObjectChild(BingoMenu,"MOTD");
+        GetGameObjectChild(MOTDContainer,"Content").GetComponent<TextMeshProUGUI>().text = MOTD;
         
+        RankSelection = GetGameObjectChild(BingoMenu,"RankSelection");
+        TMP_Dropdown rankSelector;
+        rankSelector = GetGameObjectChild(RankSelection,"Dropdown").GetComponent<TMP_Dropdown>();
+        if(ranks != null)
+        {
+            rankSelector.ClearOptions();
+            rankSelector.AddOptions(ranks);
+        }
+
+        
+        rankSelector.onValueChanged.AddListener(delegate(int arg0)
+        {
+            NetworkManager.requestedRank = rankSelector.options[rankSelector.value].text;
+        });
         
         return Root;
     }

@@ -12,6 +12,7 @@ public class JoinRoomRequest : SendMessage
     public string password;
     public string username;
     public string steamId;
+    public string rank;
     
 }
 

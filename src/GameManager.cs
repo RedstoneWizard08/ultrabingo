@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
@@ -39,6 +40,8 @@ public static class GameManager
     public static GameObject LevelBeingDownloaded = null;
     
     public static float dominationTimer = 0;
+    
+    public static bool hasRankAccess = false;
     
     public static async void SwapRerolledMap(string oldMapId, GameLevel level, int column, int row)
     {
@@ -193,8 +196,16 @@ public static class GameManager
                 {
                     GameObject player = GameObject.Instantiate(PlayerTemplate,PlayerList.transform);
                     
+                    string hostStripped = "";
+                    //If the host name has color tags in their Steam name, strip them.
+                    if(steamId == CurrentGame.gameHost)
+                    {
+                        hostStripped = "<color=orange>"+Regex.Replace(CurrentGame.currentPlayers[steamId].username, @"^<[^>]*>", "")+"</color>";
+                    }
+                    
                     GetGameObjectChild(player,"PlayerName").GetComponent<Text>().text = 
-                        CurrentGame.currentPlayers[steamId].username + (steamId == CurrentGame.gameHost ? "(<color=orange>HOST</color>)" : "");
+                        (steamId == CurrentGame.gameHost ? hostStripped : CurrentGame.currentPlayers[steamId].username)
+                        + (CurrentGame.currentPlayers[steamId].rank != "" ? (" | " + CurrentGame.currentPlayers[steamId].rank) : "");
                     
                     GetGameObjectChild(player,"Kick").GetComponent<Button>().onClick.AddListener(delegate
                     {

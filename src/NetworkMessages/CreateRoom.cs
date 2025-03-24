@@ -16,6 +16,7 @@ public class CreateRoomRequest : SendMessage
     
     public string hostSteamName;
     public string hostSteamId;
+    public string rank;
 }
 
 public class CreateRoomResponse : MessageResponse

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
@@ -29,6 +30,8 @@ public class ModVerificationResponse : MessageResponse
     public string latestVersion;
     
     public string motd;
+    
+    public string availableRanks;
  
 }
 
@@ -56,6 +59,24 @@ public static class ModVerificationHandler
         }
         
         GetGameObjectChild(BingoMainMenu.MOTDContainer,"Content").GetComponent<TextMeshProUGUI>().text = response.motd;
+        BingoMainMenu.MOTD = response.motd;
+        
+        Logging.Warn(response.availableRanks);
+        if(response.availableRanks != "")
+        {
+            TMP_Dropdown rankSelector = GetGameObjectChild(BingoMainMenu.RankSelection,"Dropdown").GetComponent<TMP_Dropdown>();
+            rankSelector.ClearOptions();
+            List<string> ranks = response.availableRanks.Split(',').ToList();
+            rankSelector.AddOptions(ranks);
+            BingoMainMenu.ranks = ranks;
+            NetworkManager.requestedRank = rankSelector.options[0].text;
+            
+            GameManager.hasRankAccess = true;
+        }
+        else
+        {
+            BingoMainMenu.RankSelection.SetActive(false);
+        }
                     
         NetworkManager.modlistCheckDone = true;
         NetworkManager.DisconnectWebSocket(1000,"ModCheckDone");

@@ -8,6 +8,7 @@ using AngryLevelLoader.Fields;
 using AngryLevelLoader.Managers;
 using BepInEx.Configuration;
 using Newtonsoft.Json;
+using TMPro;
 using Tommy;
 using UltraBINGO;
 using UltraBINGO.NetworkMessages;
@@ -67,6 +68,8 @@ public static class NetworkManager
     public static bool modlistCheckDone = false;
     public static bool modlistCheckPassed = false;
     private static string steamTicket;
+    
+    public static string requestedRank = "";
     
     static WebSocket ws;
     static Timer heartbeatTimer;
@@ -381,6 +384,7 @@ public static class NetworkManager
         
         crr.hostSteamName = sanitiseUsername(Steamworks.SteamClient.Name);
         crr.hostSteamId = Steamworks.SteamClient.SteamId.ToString();
+        crr.rank = (GameManager.hasRankAccess ? requestedRank : "");
         
         SendEncodedMessage(JsonConvert.SerializeObject(crr));
     }
@@ -391,6 +395,7 @@ public static class NetworkManager
         jrr.password = password;
         jrr.username = sanitiseUsername(Steamworks.SteamClient.Name);
         jrr.steamId = Steamworks.SteamClient.SteamId.ToString();
+        jrr.rank = (GameManager.hasRankAccess ? requestedRank : "");
         SendEncodedMessage(JsonConvert.SerializeObject(jrr));
     }
     

@@ -25,6 +25,8 @@ public class Player
 {
     public string username;
     public string steamId;
+    
+    public string rank;
 }
 
 public class GameLevel
