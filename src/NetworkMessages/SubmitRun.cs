@@ -62,12 +62,21 @@ public static class LevelClaimHandler
                 case 1: {actionType = "improved "; break;}
                 case 2: {actionType = "reclaimed "; break;}
             }
-        
-            string broadcastString = "<color="+response.team.ToLower()+">"+response.username + "</color> has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team.";
+                        
+            float secs = response.newTimeRequirement;
+            float mins = 0;
+            while (secs >= 60f)
+            {
+                secs -= 60f;
+                mins += 1f;
+            }
+            
+            string formattedTime = mins + ":" + secs.ToString("00.000");
+            string broadcastString = "<color="+response.team.ToLower()+">"+response.username + "</color> has <color=orange>" + actionType + response.levelname + "</color> for the <color="+ response.team.ToLower()+">" + response.team + " </color>team (<color=orange>"+formattedTime+"</color>).";
             
             if(response.isMapVoted)
             {
-                broadcastString += "\n The reroll vote for this map has been cancelled.";
+                broadcastString += "\n Cancelling reroll vote.";
             }
             
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(broadcastString);

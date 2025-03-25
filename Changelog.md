@@ -3,6 +3,7 @@
 - Added Domination gamemode. Teams fight to control as many maps as possible before time runs out.
 - Added Message of the Day section to the bingo main menu. This allows for quick informing of updates, server changes and PSAs for known issues.
 - Added special in-game ranks obtainable by being a noteworthy member of the larger ULTRAKILL community (mapper, modder, speedrunner, etc), or by having supported the mod on Kofi. If you fit any of the criteria, feel free to reach out to me to recieve your in-game role!
+- When a player (re)claims a level, the new time requirement is now displayed in the HUD message that's broadcasted to all players.
 - Visual pass to make UI elements more in line with UI changes from the latest game update.
 
 v.1.0.6
