@@ -445,4 +445,15 @@ public static class GameManager
         
         MonoSingleton<OptionsManager>.Instance.UnPause();
     }
+    
+    public static void PingMapForTeam(string team, int row, int column)
+    {
+        MapPing mp = new MapPing();
+        mp.gameId = GameManager.CurrentGame.gameId;
+        mp.team = team;
+        mp.row = row;
+        mp.column = column;
+        mp.ticket = NetworkManager.CreateRegisterTicket();
+        NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(mp)); 
+    }
 }

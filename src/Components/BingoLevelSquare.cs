@@ -1,10 +1,11 @@
-﻿using UltrakillBingoClient;
+﻿using UltraBINGO.UI_Elements;
+using UltrakillBingoClient;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace UltraBINGO.Components;
 
-public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     BingoLevelData levelData;
     
@@ -34,6 +35,27 @@ public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExi
             {
                 GameManager.RequestReroll(levelData.row,levelData.column);
             }
+        }
+    }
+    
+    public void OnPointerClick(PointerEventData data)
+    {
+        switch(data.button)
+        {
+            case PointerEventData.InputButton.Left:
+            {
+                // Go to map
+                BingoMenuController.LoadBingoLevelFromPauseMenu(gameObject.name,gameObject.GetComponent<BingoLevelData>());
+                break;
+            }
+            case PointerEventData.InputButton.Right:
+            {
+                // Ping map
+                Logging.Info("Pinging map for other players");
+                GameManager.PingMapForTeam(GameManager.CurrentTeam,levelData.row,levelData.column);
+                break;
+            }
+            default: {break;}
         }
     }
 }

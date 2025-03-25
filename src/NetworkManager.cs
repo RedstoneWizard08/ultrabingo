@@ -586,6 +586,12 @@ public static class NetworkManager
                 RerollExpireNotificationHandler.handle(response);
                 break;
             }
+            case "MapPing":
+            {
+                MapPingNotification response = JsonConvert.DeserializeObject<MapPingNotification>(em.contents);
+                MapPingNotificationHandler.handle(response);
+                break;
+            }
             case "Pong":
             {
                 //No need to do anything here, ping/pong just keeps the connection alive

@@ -27,6 +27,8 @@ public static class BingoCardPauseMenu
     
     public static GameObject DescriptorText;
     
+    public static Outline pingedMap = null;
+    
     public static void onMouseEnterLevelSquare(PointerEventData data)
     {
         string angryLevelName = data.pointerEnter.gameObject.GetComponent<BingoLevelData>().levelName.ToLower();
@@ -47,7 +49,12 @@ public static class BingoCardPauseMenu
         Sprite levelSprite = Sprite.Create(levelImg, new Rect(0.0f, 0.0f, levelImg.width, levelImg.height), new Vector2(0.5f, 0.5f), 100.0f);
         
         GetGameObjectChild(Root,"SelectedLevelImage").GetComponent<Image>().overrideSprite = levelSprite;
-        GetGameObjectChild(GetGameObjectChild(Root,"SelectedLevel"),"Text (TMP)").GetComponent<TextMeshProUGUI>().text = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name].levelName;
+        
+        bool canReroll = !data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isClaimed
+                         && !MonoSingleton<BingoVoteManager>.Instance.voteOngoing;
+        
+        GetGameObjectChild(GetGameObjectChild(Root,"SelectedLevel"),"Text (TMP)").GetComponent<TextMeshProUGUI>().text = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name].levelName
+            + (canReroll ? "\n<color=orange>R: Start a reroll vote</color>" : "");
         
         GetGameObjectChild(Root,"SelectedLevel").SetActive(true);
         GetGameObjectChild(Root,"SelectedLevelImage").SetActive(true);
@@ -78,12 +85,7 @@ public static class BingoCardPauseMenu
                 bld.isClaimed = (levelObject.claimedBy != "NONE");
                 bld.claimedTeam = levelObject.claimedBy;
                 
-                levelSquare.AddComponent<Button>();
                 levelSquare.AddComponent<BingoLevelSquare>();
-                levelSquare.GetComponent<Button>().onClick.AddListener(delegate
-                {
-                    BingoMenuController.LoadBingoLevelFromPauseMenu(levelSquare.name,levelSquare.GetComponent<BingoLevelData>());
-                });
                 levelSquare.GetComponent<Image>().color = teamColors[currentGame.grid.levelTable[x+"-"+y].claimedBy];
                 
                 if(GameManager.CurrentRow == x && GameManager.CurrentColumn == y)
