@@ -34,9 +34,18 @@ public class DominationTimeManager : MonoBehaviour
     {
         timeRemaining = Mathf.MoveTowards(timeRemaining,0f,Time.unscaledDeltaTime);
         GameManager.dominationTimer = timeRemaining;
+        
+        float secs = timeRemaining;
+        float mins = 0;
+        while (secs >= 60f)
+        {
+            secs -= 60f;
+            mins += 1f;
+        }
+        
         if(GameManager.IsInBingoLevel)
         {
-            Timer.text = "<color=orange>"+(int)timeRemaining+"</color>s";
+            Timer.text = "<color=orange>"+mins+":"+(int)secs+"</color>";
         }
         
     }
