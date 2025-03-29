@@ -74,6 +74,9 @@ public static class NetworkManager
     static WebSocket ws;
     static Timer heartbeatTimer;
     
+    public static int maxReconnectionAttempts = 3;
+    public static int currentReconnection = 0;
+    
     public static void HandleAsyncConnect()
     {
         SetupHeartbeat();
@@ -275,11 +278,26 @@ public static class NetworkManager
         
         if(GameManager.IsInBingoLevel)
         {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nAttempting reconnection...");
-            await Task.Delay(2000);
+            currentReconnection++;
             
-            TryReconnect();
+            if(currentReconnection > maxReconnectionAttempts)
+            {
+                currentReconnection = 0;
 
+                GameManager.ClearGameVariables();                
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to reconnect. Exitting game in 5 seconds.");
+                
+                await Task.Delay(5000);
+                SceneHelper.LoadScene("Main Menu");
+                
+            }
+            else
+            {
+                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nAttempting reconnection... <color=orange>("+currentReconnection+"/"+maxReconnectionAttempts+")</color>");
+                await Task.Delay(2000);
+            
+                TryReconnect();
+            }
         }
         else
         {

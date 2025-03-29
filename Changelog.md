@@ -6,6 +6,7 @@
 - Added the ability to right click on a level in the bingo card on the pause menu, to ping the level for the rest of your team.
 - Changed text on the pause menu to better indicate possible actions (left click to move to level, right click to ping map, etc.)
 - When a player (re)claims a level, the new time requirement is now displayed in the HUD message that's broadcasted to all players.
+- In the case of a connection error, the client will now try to reconnect up to 3 times before failing and leaving the game.
 - Visual pass to make UI elements more in line with UI changes from the latest game update.
 
 v.1.0.6

@@ -10,9 +10,8 @@ using UltraBINGO.NetworkMessages;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Timers;
+
 using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO;
@@ -441,7 +440,6 @@ public static class GameManager
         
             NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(rr)); 
         }
-
         
         MonoSingleton<OptionsManager>.Instance.UnPause();
     }
