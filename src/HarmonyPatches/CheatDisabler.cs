@@ -6,6 +6,19 @@ using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.HarmonyPatches;
 
+[HarmonyPatch(typeof(CheatsController), "Start")]
+public class RemoveCheatFlagInBingo
+{
+    [HarmonyPostfix]
+    public static void disableCheatFlagInBingo()
+    {
+        if(GameManager.IsInBingoLevel)
+        {
+            MonoSingleton<AssistController>.Instance.cheatsEnabled = false;
+        }
+    }
+}
+
     [HarmonyPatch(typeof(CheatsController), "ActivateCheats")]
     public class CheatDisabler
     {

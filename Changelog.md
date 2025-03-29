@@ -7,6 +7,7 @@
 - Changed text on the pause menu to better indicate possible actions (left click to move to level, right click to ping map, etc.)
 - When a player (re)claims a level, the new time requirement is now displayed in the HUD message that's broadcasted to all players.
 - In the case of a connection error, the client will now try to reconnect up to 3 times before failing and leaving the game.
+- Fixed an issue where enabling cheats in the base game, then joining a bingo game, would still show finished levels in a bingo as having cheats used. (This was only a visual bug that would display a level as having cheats used when cheats are forcibly disabled in a bingo game.)
 - Visual pass to make UI elements more in line with UI changes from the latest game update.
 
 v.1.0.6
