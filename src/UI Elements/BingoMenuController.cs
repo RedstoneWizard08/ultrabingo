@@ -291,7 +291,7 @@ public static class BingoMenuController
         NetworkManager.ConnectWebSocket();
     }
     
-    public static void StartGame()
+    public static void StartGame(int gameType)
     {
         Logging.Warn("Setting up dynamic card");
         GameManager.SetupBingoCardDynamic();
@@ -302,7 +302,7 @@ public static class BingoMenuController
         canvas.AddComponent<DominationTimeManager>();
         
         Logging.Warn("Displaying card");
-        GameManager.MoveToCard();
+        GameManager.MoveToCard(gameType);
         Logging.Warn("GO GO GO");
     }
 }

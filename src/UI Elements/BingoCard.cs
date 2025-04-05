@@ -36,14 +36,18 @@ public class BingoCard
         }
     }
     
-    public static void UpdateTitles()
+    public static void UpdateTitles(int gameType)
     {
+        string bingoDescription = (GameManager.CurrentGame.gameSettings.gameType == 0
+                                      ? "Race to <color=orange>obtain the fastest time</color> for your team on each level."
+                                      : "Rack up <color=orange>the highest style</color> as you can for your team on each level.")
+                                  + "\nClaim " + GameManager.CurrentGame.grid.size + " levels horizontally, vertically or diagonally for your team to win!";
+        
+        string dominationDescription = "Race to <color=orange>claim as many levels</color> for your team as possible.\nThe team with the most claims when time is up is the winner!";
+        
         TeamIndicator.GetComponent<TMP_Text>().text = "-- You are on the <color=" + GameManager.CurrentTeam.ToLower() + ">" + GameManager.CurrentTeam + " team</color> --";
-        ObjectiveIndicator.GetComponent<TMP_Text>().text =
-            (GameManager.CurrentGame.gameSettings.gameType == 0
-                ? "Race to <color=orange>obtain the fastest time</color> for your team on each level."
-                : "Rack up <color=orange>the highest style</color> as you can for your team on each level.")
-            + "\nClaim " + GameManager.CurrentGame.grid.size + " levels horizontally, vertically or diagonally for your team to win!";
+        ObjectiveIndicator.GetComponent<TMP_Text>().text = (gameType == 0 ? bingoDescription : dominationDescription);
+            
         
         if(GameManager.CurrentGame.gameSettings.requiresPRank)
         {

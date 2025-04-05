@@ -48,6 +48,6 @@ public static class StartGameResponseHandler
             }
         }
                 
-        BingoMenuController.StartGame();
+        BingoMenuController.StartGame(response.game.gameSettings.gamemode);
     }
 }
