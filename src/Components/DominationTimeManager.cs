@@ -45,7 +45,9 @@ public class DominationTimeManager : MonoBehaviour
         
         if(GameManager.IsInBingoLevel)
         {
-            Timer.text = "<color=orange>"+mins+":"+(int)secs+"</color>";
+            Timer.text = "<color=orange>"+mins+":"
+                         +(secs < 10f ? ((int)secs).ToString("D2") : (int)secs)
+                         +"</color>";
         }
         
     }
