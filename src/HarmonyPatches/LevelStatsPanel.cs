@@ -38,7 +38,7 @@ public static class LevelStatsPanelPatchStart
                 }
                 default: // Left/middle
                 {
-                    inGamePanel.transform.localPosition += new Vector3(-5f,0f,0f);
+                    inGamePanel.transform.localPosition += new Vector3(-10f,0f,0f);
                     break;
                 }
             }
@@ -64,15 +64,14 @@ public static class LevelStatsPanelPatchStart
             //(Need to put the timeManager component in the root to ensure it remains active even while the panel is closed)
             if(GameManager.CurrentGame.gameSettings.gamemode == 1)
             {
-                GameObject dominationTimeRemaining = GameObject.Instantiate(AssetLoader.BingoDominationTimer,inGamePanel.gameObject.transform);
-                
                 GameObject canvas = GetInactiveRootObject("Canvas");
+                GameObject dominationTimeRemaining = GameObject.Instantiate(AssetLoader.BingoDominationTimer,canvas.transform);
                 
                 canvas.AddComponent<DominationTimeManager>();
                 canvas.GetComponent<DominationTimeManager>().Bind(dominationTimeRemaining);
                 dominationTimeRemaining.name = "BingoDominationTimer";
                 dominationTimeRemaining.SetActive(true);
-                dominationTimeRemaining.transform.localPosition = new Vector3(350f,-25f,0f);
+                dominationTimeRemaining.transform.localPosition -= new Vector3(0f,5f,0f); //Align it better with other UI elements
             }
         }
     }

@@ -28,6 +28,8 @@ public class DominationTimeManager : MonoBehaviour
         }
         
         timeRemaining = GameManager.dominationTimer;
+        
+        Panel.SetActive(false);
     }
 
     public void Update()
@@ -48,6 +50,15 @@ public class DominationTimeManager : MonoBehaviour
             Timer.text = "<color=orange>"+mins+":"
                          +(secs < 10f ? ((int)secs).ToString("D2") : (int)secs)
                          +"</color>";
+        }
+        
+        if(MonoSingleton<InputManager>.Instance.InputSource.Stats.WasPerformedThisFrame || PlayerPrefs.GetInt("LevStaOpe") == 1)
+        {
+            Panel.SetActive(true);
+        }
+        else if (MonoSingleton<InputManager>.Instance.InputSource.Stats.WasCanceledThisFrame)
+        {
+            Panel.SetActive(false);
         }
         
     }

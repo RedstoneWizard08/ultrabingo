@@ -106,6 +106,27 @@ public static class BingoCardPauseMenu
                 levelSquare.SetActive(true);
             }
         }
+        
+        //Center the grid based on grid size.
+        GameObject card = GetGameObjectChild(Root,"Card");
+        
+        switch(GameManager.CurrentGame.grid.size)
+        {
+            case 3:
+            {
+                card.transform.localPosition = new Vector3(-65f,170f,0f);
+                card.transform.localScale = new Vector3(1.25f,1.25f,1.25f);
+                break;
+            }
+            case 4:
+            {
+                card.transform.localPosition = new Vector3(-82.5f,185f,0f);
+                card.transform.localScale = new Vector3(1.1f,1.1f,1.1f);
+                break;
+            }
+            default: {break;}
+        }
+        
     }
     
     public static GameObject Init(ref OptionsManager __instance)

@@ -301,7 +301,7 @@ public static class NetworkManager
         }
         else
         {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost. Returning to menu.");
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the server was lost. Returning to menu.");
             GameManager.ClearGameVariables();
             
             BingoEncapsulator.BingoCardScreen.SetActive(false);
