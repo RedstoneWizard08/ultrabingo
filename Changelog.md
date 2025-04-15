@@ -4,6 +4,8 @@
 - Added Message of the Day section to the bingo main menu. This allows for quick informing of updates, server changes and PSAs for known issues.
 - Added special in-game ranks obtainable by being a noteworthy member of the larger ULTRAKILL community (mapper, modder, speedrunner, etc), or by having supported the mod on Kofi. If you fit any of the criteria, feel free to reach out to me to recieve your in-game role!
 - Added the ability to right click on a level in the bingo card on the pause menu, to ping the level for the rest of your team.
+- Added setting field for setting a time limit in a Domination gamemode.
+- **Removed style claim requirement** due to lack of player usage. All claim types in a bingo game will now be based on time only.
 - Implemented an FPS cap and VSync force enable when accessing the bingo main menu in the hopes of further reducing freezes & crashes related to UI elements failing to render. (This is an experimental change and may remain if it successfully mitigates problems.)
 - Changed text on the pause menu to better indicate possible actions (left click to move to level, right click to ping map, etc.)
 - When a player (re)claims a level, the new time requirement is now displayed in the HUD message that's broadcasted to all players.
