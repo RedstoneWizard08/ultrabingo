@@ -265,6 +265,7 @@ public static class BingoMenuController
     
     public static void ReturnToMenu()
     {
+        UIManager.RemoveLimit();
         BingoEncapsulator.Root.SetActive(false);
         GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").SetActive(true);
     }

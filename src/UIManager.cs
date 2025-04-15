@@ -20,6 +20,9 @@ public static class UIManager
     public static GameObject ultrabingoLockedPanel = null;
     public static GameObject ultrabingoUnallowedModsPanel = null;
     
+    public static bool wasVsyncActive = false;
+    public static int fpsLimit = -1;
+    
     public static void HandleGameSettingsUpdate()
     {
         //Only send if we're the host.
@@ -88,6 +91,21 @@ public static class UIManager
         mods.text = text;
     }
     
+    public static void EnforceLimit()
+    {
+        wasVsyncActive = QualitySettings.vSyncCount == 1;
+        fpsLimit = Application.targetFrameRate;
+        
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 1;
+    }
+    
+    public static void RemoveLimit()
+    {
+        Application.targetFrameRate = fpsLimit;
+        QualitySettings.vSyncCount = wasVsyncActive ? 1 : 0;
+    }
+    
     public static void Open()
     {
         if(!NetworkManager.modlistCheckDone)
@@ -108,6 +126,10 @@ public static class UIManager
                 NetworkManager.DisconnectWebSocket();
                 GameManager.ClearGameVariables();
             }
+            
+            //Enforce FPS and VSync lock to minimize crash/freezing from UI elements.
+            EnforceLimit();
+            
             //Hide chapter select
             ultrabingoButtonObject.transform.parent.gameObject.SetActive(false);
         

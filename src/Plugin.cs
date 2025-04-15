@@ -146,6 +146,7 @@ namespace UltrakillBingoClient
             }
             else
             {
+                UIManager.RemoveLimit();
                 if(GameManager.IsInBingoLevel)
                 {
                     if(GameManager.CurrentGame.gameSettings.disableCampaignAltExits)
