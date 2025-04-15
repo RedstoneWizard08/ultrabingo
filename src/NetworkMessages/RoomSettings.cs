@@ -11,10 +11,10 @@ public class UpdateRoomSettingsRequest : SendMessage
     
     public int maxPlayers;
     public int maxTeams;
+    public int timeLimit;
     public int teamComposition;
     public int gamemode;
     public bool PRankRequired;
-    public int gameType;
     public int difficulty;
     public int gridSize;
     public bool disableCampaignAltExits;
@@ -27,10 +27,10 @@ public class UpdateRoomSettingsNotification : MessageResponse
 {
     public int maxPlayers;
     public int maxTeams;
+    public int timeLimit;
     public int teamComposition;
     public int gamemode;
     public bool PRankRequired;
-    public int gameType;
     public int difficulty;
     public int gridSize;
     public bool disableCampaignAltExits;

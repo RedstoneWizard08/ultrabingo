@@ -45,7 +45,7 @@ public class ShopAddLevelInfo
                 else
                 {
                     origTip.text = "Claimed by: <color="+ teamClaim.ToLower() + ">" + teamClaim + "</color> team\n\n" +
-                    (GameManager.CurrentGame.gameSettings.gameType == 0 ? "TIME" : "STYLE") + " TO BEAT: <color=orange>" + (GameManager.CurrentGame.gameSettings.gameType == 0 ? formattedTime : style) + "</color>\n\n" +
+                    (GameManager.CurrentGame.gameSettings.gamemode == 0 ? "TIME" : "STYLE") + " TO BEAT: <color=orange>" + (GameManager.CurrentGame.gameSettings.gamemode == 0 ? formattedTime : style) + "</color>\n\n" +
                     (teamClaim == GameManager.CurrentTeam ? claimedByOwnTeam : claimedByOtherTeam);
                 }
                 

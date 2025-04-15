@@ -38,7 +38,7 @@ public class BingoCard
     
     public static void UpdateTitles(int gameType)
     {
-        string bingoDescription = (GameManager.CurrentGame.gameSettings.gameType == 0
+        string bingoDescription = (GameManager.CurrentGame.gameSettings.gamemode == 0
                                       ? "Race to <color=orange>obtain the fastest time</color> for your team on each level."
                                       : "Rack up <color=orange>the highest style</color> as you can for your team on each level.")
                                   + "\nClaim " + GameManager.CurrentGame.grid.size + " levels horizontally, vertically or diagonally for your team to win!";

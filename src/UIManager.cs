@@ -32,10 +32,10 @@ public static class UIManager
             urss.roomId = GameManager.CurrentGame.gameId;
             urss.maxPlayers = int.Parse(BingoLobby.MaxPlayers.text);
             urss.maxTeams = int.Parse(BingoLobby.MaxTeams.text);
+            urss.timeLimit = int.Parse(BingoLobby.TimeLimit.text);
             urss.gamemode = BingoLobby.Gamemode.value;
             urss.teamComposition = BingoLobby.TeamComposition.value;
             urss.PRankRequired = BingoLobby.RequirePRank.isOn;
-            urss.gameType = BingoLobby.GameType.value;
             urss.difficulty = BingoLobby.Difficulty.value;
             urss.gridSize = BingoLobby.GridSize.value;
             urss.disableCampaignAltExits = BingoLobby.DisableCampaignAltExits.isOn;

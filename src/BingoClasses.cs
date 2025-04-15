@@ -57,10 +57,10 @@ public class GameSettings
 {
     public int maxPlayers;
     public int maxTeams;
+    public int timeLimit;
     public int teamComposition;
     public int gamemode;
     public int gridSize;
-    public int gameType; //Time/Style - Going to be removed in 1.1
     public int difficulty;
     public bool requiresPRank;
     public bool hasManuallySetTeams;

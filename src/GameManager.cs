@@ -294,9 +294,10 @@ public static class GameManager
         
         BingoLobby.MaxPlayers.interactable = isHost;
         BingoLobby.MaxTeams.interactable = isHost;
+        BingoLobby.TimeLimit.interactable = isHost;
         BingoLobby.TeamComposition.interactable = isHost;
         BingoLobby.GridSize.interactable = isHost;
-        BingoLobby.GameType.interactable = isHost;
+        BingoLobby.Gamemode.interactable = isHost;
         BingoLobby.Difficulty.interactable = isHost;
         BingoLobby.RequirePRank.interactable = isHost;
         BingoLobby.DisableCampaignAltExits.interactable = isHost;
@@ -314,7 +315,8 @@ public static class GameManager
             BingoLobby.MaxTeams.text = 4.ToString();
             BingoLobby.TeamComposition.value = 0;
             BingoLobby.GridSize.value = 0;
-            BingoLobby.GameType.value = 0;
+            BingoLobby.Gamemode.value = 0;
+            BingoLobby.TimeLimit.text = 5.ToString();
             BingoLobby.Difficulty.value = 2;
             BingoLobby.RequirePRank.isOn = false;
             BingoLobby.DisableCampaignAltExits.isOn = false;
@@ -339,7 +341,8 @@ public static class GameManager
             BingoLobby.MaxTeams.text = CurrentGame.gameSettings.maxTeams.ToString();
             BingoLobby.TeamComposition.value = CurrentGame.gameSettings.teamComposition;
             BingoLobby.GridSize.value = CurrentGame.gameSettings.gridSize;
-            BingoLobby.GameType.value = CurrentGame.gameSettings.gameType;
+            BingoLobby.Gamemode.value = CurrentGame.gameSettings.gamemode;
+            BingoLobby.TimeLimit.text = CurrentGame.gameSettings.timeLimit.ToString();
             BingoLobby.Difficulty.value = CurrentGame.gameSettings.difficulty;
             BingoLobby.RequirePRank.isOn = CurrentGame.gameSettings.requiresPRank;
             BingoLobby.DisableCampaignAltExits.isOn = CurrentGame.gameSettings.disableCampaignAltExits;

@@ -21,10 +21,10 @@ public static class BingoLobby
     public static GameObject GameOptions;
     public static TMP_InputField MaxPlayers;
     public static TMP_InputField MaxTeams;
+    public static TMP_InputField TimeLimit;
     public static TMP_Dropdown Gamemode;
     public static TMP_Dropdown TeamComposition;
     public static TMP_Dropdown GridSize;
-    public static TMP_Dropdown GameType;
     public static TMP_Dropdown Difficulty;
     public static Toggle RequirePRank;
     public static Toggle DisableCampaignAltExits;
@@ -47,6 +47,14 @@ public static class BingoLobby
         UIManager.HandleGameSettingsUpdate();
     }
     
+    public static void onTimeLimitUpdate(string timeLimit)
+    {
+        int amount = int.Parse(timeLimit);
+        GameManager.CurrentGame.gameSettings.timeLimit = Mathf.Clamp(amount,5,30);
+        TimeLimit.text = Mathf.Clamp(amount,5,30).ToString();
+        UIManager.HandleGameSettingsUpdate();
+    }
+    
     public static void onGamemodeTypeUpdate(int value)
     {
         GameManager.CurrentGame.gameSettings.gamemode = value;
@@ -64,13 +72,6 @@ public static class BingoLobby
     {
         GridSize.value = value;
         GameManager.CurrentGame.gameSettings.gridSize = value;
-        UIManager.HandleGameSettingsUpdate();
-    }
-    
-    public static void onGameTypeUpdate(int value)
-    {
-        GameType.value = value;
-        GameManager.CurrentGame.gameSettings.gameType = value;
         UIManager.HandleGameSettingsUpdate();
     }
     
@@ -106,10 +107,10 @@ public static class BingoLobby
     {
         MaxPlayers.text = newSettings.maxPlayers.ToString();
         MaxTeams.text = newSettings.maxTeams.ToString();
+        TimeLimit.text = newSettings.timeLimit.ToString();
         Gamemode.value = newSettings.gamemode;
         TeamComposition.value = newSettings.teamComposition;
         RequirePRank.isOn = newSettings.PRankRequired;
-        GameType.value = newSettings.gameType;
         Difficulty.value = newSettings.difficulty;
         GridSize.value = newSettings.gridSize;
         DisableCampaignAltExits.isOn = newSettings.disableCampaignAltExits;
@@ -117,10 +118,10 @@ public static class BingoLobby
         
         GameManager.CurrentGame.gameSettings.maxPlayers = newSettings.maxPlayers;
         GameManager.CurrentGame.gameSettings.maxTeams = newSettings.maxTeams;
+        GameManager.CurrentGame.gameSettings.timeLimit = newSettings.timeLimit;
         GameManager.CurrentGame.gameSettings.gamemode = newSettings.gamemode;
         GameManager.CurrentGame.gameSettings.teamComposition = newSettings.teamComposition;
         GameManager.CurrentGame.gameSettings.requiresPRank = newSettings.PRankRequired;
-        GameManager.CurrentGame.gameSettings.gameType = newSettings.gameType;
         GameManager.CurrentGame.gameSettings.difficulty = newSettings.difficulty;
         GameManager.CurrentGame.gameSettings.gridSize = newSettings.gridSize;
         GameManager.CurrentGame.gameSettings.disableCampaignAltExits = newSettings.disableCampaignAltExits;
@@ -200,6 +201,9 @@ public static class BingoLobby
         MaxTeams = GetGameObjectChild(GetGameObjectChild(GameOptions,"MaxTeams"),"Input").GetComponent<TMP_InputField>();
         MaxTeams.onEndEdit.AddListener(onMaxTeamUpdate);
         
+        TimeLimit = GetGameObjectChild(GetGameObjectChild(GameOptions,"TimeLimit"),"Input").GetComponent<TMP_InputField>();
+        TimeLimit.onEndEdit.AddListener(onTimeLimitUpdate);
+        
         TeamComposition = GetGameObjectChild(GetGameObjectChild(GameOptions,"TeamComposition"),"Dropdown").GetComponent<TMP_Dropdown>();
         TeamComposition.onValueChanged.AddListener(onTeamCompositionUpdate);
         
@@ -208,9 +212,6 @@ public static class BingoLobby
         
         GridSize = GetGameObjectChild(GetGameObjectChild(GameOptions,"GridSize"),"Dropdown").GetComponent<TMP_Dropdown>();
         GridSize.onValueChanged.AddListener(onGridSizeUpdate);
-        
-        GameType = GetGameObjectChild(GetGameObjectChild(GameOptions,"GameType"),"Dropdown").GetComponent<TMP_Dropdown>();
-        GameType.onValueChanged.AddListener(onGameTypeUpdate);
         
         Difficulty = GetGameObjectChild(GetGameObjectChild(GameOptions,"Difficulty"),"Dropdown").GetComponent<TMP_Dropdown>();
         Difficulty.onValueChanged.AddListener(onDifficultyUpdate);

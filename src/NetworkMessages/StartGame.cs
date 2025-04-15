@@ -42,8 +42,9 @@ public static class StartGameResponseHandler
             case 1: //Domination
             {
                 Logging.Message("Domination gamemode");
-                GameManager.dominationTimer = response.game.gameSettings.dominationTimer*60;
-                Logging.Message(response.game.gameSettings.dominationTimer+" minutes");
+                Logging.Warn(response.game.gameSettings.timeLimit.ToString());
+                GameManager.dominationTimer = response.game.gameSettings.timeLimit*60;
+                Logging.Message(response.game.gameSettings.timeLimit+" minutes");
                 break;
             }
         }
