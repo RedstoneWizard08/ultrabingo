@@ -29,6 +29,8 @@ public class BingoSetTeamsMenu
     public static GameObject ResetButton;
     public static GameObject FinishButton;
     public static GameObject TeamSelectionPanel;
+    public static GameObject TeamSelectionBackButton;
+    
     public static GameObject currentPlayerObject = null;
     
     public static List<GameObject> TeamSelectionPanelButtons = new List<GameObject>();
@@ -189,6 +191,12 @@ public class BingoSetTeamsMenu
         GetGameObjectChild(TeamSelectionPanelSub,"Green").GetComponent<Button>().onClick.AddListener(delegate { updatePlayerTeam(2); });
         GetGameObjectChild(TeamSelectionPanelSub,"Blue").GetComponent<Button>().onClick.AddListener(delegate { updatePlayerTeam(3); });
         GetGameObjectChild(TeamSelectionPanelSub,"Yellow").GetComponent<Button>().onClick.AddListener(delegate { updatePlayerTeam(4); });
+        
+        TeamSelectionBackButton = GetGameObjectChild(TeamSelectionPanel,"Back");
+        TeamSelectionBackButton.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            TeamSelectionPanel.SetActive(false);
+        });
         
         CancelButton = GetGameObjectChild(BingoSetTeams,"Cancel");
         CancelButton.GetComponent<Button>().onClick.AddListener(delegate
