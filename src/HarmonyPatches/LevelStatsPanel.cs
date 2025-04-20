@@ -60,6 +60,8 @@ public static class LevelStatsPanelPatchStart
             votePanel.name = "VotePanel";
             votePanel.SetActive(false);
             
+            MonoSingleton<BingoVoteManager>.Instance.CheckOngoingVote();
+            
             //If playing domination, load the domination time remaining panel.
             //(Need to put the timeManager component in the root to ensure it remains active even while the panel is closed)
             if(GameManager.CurrentGame.gameSettings.gamemode == 1)

@@ -10,6 +10,8 @@ using static UltraBINGO.CommonFunctions;
 
 public class BingoVoteManager : MonoSingleton<BingoVoteManager>
 {
+    public GameObject Panel;
+    
     public float timeRemaining;
     public bool voteOngoing = false;
     public bool hasVoted = false;
@@ -25,13 +27,41 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager>
     public static TextMeshProUGUI RerollVotes;
     public static TextMeshProUGUI RerollTimer;
     
+    public void Bind(GameObject source)
+    {
+        Panel = source;
+    }
+    public void CheckOngoingVote()
+    {
+        if (GameManager.voteData != null && GameManager.voteData.voteOngoing)
+        {
+            LoadOngoingVote();
+        }
+        else{Logging.Warn("No vote data");}
+    }
+    
+    public void LoadOngoingVote()
+    {
+        Logging.Warn("Loading vote data");
+        
+        this.voteOngoing = true;
+        timeRemaining = GameManager.voteData.timeLeft;
+        hasVoted = GameManager.voteData.hasVoted;
+        currentVotes = GameManager.voteData.currentVotes;
+        voteThreshold = GameManager.voteData.minimumVotesRequired;
+        map = GameManager.voteData.mapName;
+        this.gameObject.SetActive(true);
+        
+    }
+    
     public void Start()
     {
         RerollText = GetGameObjectChild(gameObject,"RerollText").GetComponent<TextMeshProUGUI>();
         RerollVotes = GetGameObjectChild(gameObject,"RerollVotes").GetComponent<TextMeshProUGUI>();
         RerollTimer = GetGameObjectChild(gameObject,"RerollTimer").GetComponent<TextMeshProUGUI>();
+        
+        //DontDestroyOnLoad(this.gameObject);
     }
-    
     
     public void Update()
     {
@@ -96,4 +126,31 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager>
         currentVotes++;
     }
     
+}
+
+public class VoteData
+{
+    public float timeLeft;
+    
+    public bool voteOngoing;
+    public bool hasVoted;
+    
+    public int minimumVotesRequired;
+    public int currentVotes;
+    
+    public string mapName;
+    
+    public VoteData(bool ongoing)
+    {
+        this.voteOngoing = false;
+    }
+    public VoteData(bool ongoing, bool hasVoted, int minVotes, int curVotes, string mapName, float timeLeft)
+    {
+        this.timeLeft = timeLeft-1f; // Minus 1 second to account for 1s delay before switching maps
+        this.voteOngoing = ongoing;
+        this.hasVoted = hasVoted;
+        this.minimumVotesRequired = minVotes;
+        this.currentVotes = curVotes;
+        this.mapName = mapName;
+    }
 }

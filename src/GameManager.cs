@@ -42,6 +42,8 @@ public static class GameManager
     
     public static bool hasRankAccess = false;
     
+    public static VoteData voteData = new VoteData(false);
+    
     public static async void SwapRerolledMap(string oldMapId, GameLevel level, int column, int row)
     {
         if(IsInBingoLevel && CurrentGame != null)
@@ -81,6 +83,7 @@ public static class GameManager
         IsInBingoLevel = false;
         ReturningFromBingoLevel = false;
         Teammates = null;
+        voteData = null;
 
         BingoMapSelection.ClearList();
         
