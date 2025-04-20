@@ -11,7 +11,6 @@ public class CreateRoomRequest : SendMessage
     public string roomPassword;
     public int maxPlayers;
     
-    public short gameType; //1 = Based on time, 2 = Based on style;
     public bool pRankRequired;
     
     public string hostSteamName;
