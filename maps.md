@@ -3,6 +3,11 @@
 Baphomet's Bingo uses the following maps in its map rotation, taken from the public level catalog for the Angry Level Loader:
 
 - All official levels from the main campaign (minus secret levels & credits museum) by Hakita and co.
+- "Fun Sized Heresy" by FNChannel
+- "Walls Of Wicked Dreams" by Robi
+
+
+## Legacy maps used prior to Pre-Revamp
 - Levels from the fanmade "Project Purgatorio" campaign, by the Purgatorio team: Rem_Safe_Space, Hydraxous, Duv, Raifu, bongwater
 - "Abandoned In Place" by Willem1321
 - "Athena Research Facility - Heart Of The Machine" by Bobot
@@ -25,7 +30,6 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Fraudulence - Fool's Gold" by Spelunky
 - "Fraudulence - High Society" by Spelunky
 - "From Dust To Dust" by Draghtnim
-- "Fun Sized Heresy" by FNChannel
 - "Garden Of Lost Desires" by Doodleman & Bloogoober
 - "Halls Of The Extremist" by Spelunky
 - "Imminent Collapse In The Past" by GGGamesXdLol
