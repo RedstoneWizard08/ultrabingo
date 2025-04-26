@@ -308,8 +308,12 @@ public static class BingoMenuController
         
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("The game has begun!");
         
-        GameObject canvas = GetInactiveRootObject("Canvas");
-        canvas.AddComponent<DominationTimeManager>();
+        if(GameManager.CurrentGame.gameSettings.gamemode == 1)
+        {
+            GameObject canvas = GetInactiveRootObject("Canvas");
+            canvas.AddComponent<DominationTimeManager>();
+        }
+
         
         Logging.Warn("Displaying card");
         GameManager.MoveToCard(gameType);

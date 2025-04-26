@@ -14,7 +14,7 @@ public class WeaponPosPanelPatch
     [HarmonyPostfix]
     public static void changeBingoPanelPos(string key, object value)
     {
-        if(GameManager.IsInBingoLevel && !GameManager.CurrentGame.isGameFinished())
+        if(key == "weaponHoldPosition" && GameManager.IsInBingoLevel && !GameManager.CurrentGame.isGameFinished())
         {
             GameObject ctr = GetGameObjectChild(GetInactiveRootObject("Canvas"),"Level Stats Controller");
             GameObject bingoPanel = GetGameObjectChild(ctr,"BingoInGamePanel");

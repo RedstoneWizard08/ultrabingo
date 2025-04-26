@@ -22,45 +22,46 @@ public class DominationTimeManager : MonoBehaviour
     
     public void Start()
     {
-        if(GameManager.IsInBingoLevel)
+        if(GameManager.CurrentGame.gameSettings.gamemode == 1  && this.gameObject != null)
         {
-            Timer = GetGameObjectChild(Panel,"Timer").GetComponent<TextMeshProUGUI>();
+            if(GameManager.IsInBingoLevel)
+            {
+                Timer = GetGameObjectChild(Panel,"Timer").GetComponent<TextMeshProUGUI>();
+                Panel.SetActive(false); 
+            }
+            timeRemaining = GameManager.dominationTimer;
         }
-        
-        timeRemaining = GameManager.dominationTimer;
-        
-        Panel.SetActive(false);
     }
 
     public void Update()
     {
-        timeRemaining = Mathf.MoveTowards(timeRemaining,0f,Time.unscaledDeltaTime);
-        GameManager.dominationTimer = timeRemaining;
-        
-        float secs = timeRemaining;
-        float mins = 0;
-        while (secs >= 60f)
+        if(GameManager.IsInBingoLevel && GameManager.CurrentGame.gameSettings.gamemode == 1)
         {
-            secs -= 60f;
-            mins += 1f;
-        }
+            timeRemaining = Mathf.MoveTowards(timeRemaining,0f,Time.unscaledDeltaTime);
+            GameManager.dominationTimer = timeRemaining;
         
-        if(GameManager.IsInBingoLevel)
-        {
-            Timer.text = "<color=orange>"+mins+":"
-                         +(secs < 10f ? ((int)secs).ToString("D2") : (int)secs)
-                         +"</color>";
-        }
+            float secs = timeRemaining;
+            float mins = 0;
+            while (secs >= 60f)
+            {
+                secs -= 60f;
+                mins += 1f;
+            }
         
-        if(MonoSingleton<InputManager>.Instance.InputSource.Stats.WasPerformedThisFrame || PlayerPrefs.GetInt("LevStaOpe") == 1)
-        {
-            Panel.SetActive(true);
+            if(GameManager.IsInBingoLevel && Panel != null)
+            {
+                Timer.text = "<color=orange>"+mins+":"
+                             +(secs < 10f ? ((int)secs).ToString("D2") : (int)secs)
+                             +"</color>";
+                if(MonoSingleton<InputManager>.Instance.InputSource.Stats.WasPerformedThisFrame || PlayerPrefs.GetInt("LevStaOpe") == 1)
+                {
+                    Panel.SetActive(true);
+                }
+                else if (MonoSingleton<InputManager>.Instance.InputSource.Stats.WasCanceledThisFrame)
+                {
+                    Panel.SetActive(false);
+                }
+            }
         }
-        else if (MonoSingleton<InputManager>.Instance.InputSource.Stats.WasCanceledThisFrame)
-        {
-            Panel.SetActive(false);
-        }
-        
     }
-    
 }
