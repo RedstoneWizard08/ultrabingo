@@ -1,4 +1,5 @@
-﻿using UltrakillBingoClient;
+﻿using System.Threading.Tasks;
+using UltrakillBingoClient;
 
 namespace UltraBINGO.NetworkMessages;
 
@@ -19,7 +20,7 @@ public class ReconnectResponse : MessageResponse
 
 public static class ReconnectResponseHandler
 {
-    public static void handle(ReconnectResponse response)
+    public static async void handle(ReconnectResponse response)
     {
         switch(response.status)
         {
@@ -39,6 +40,10 @@ public static class ReconnectResponseHandler
             default:
             {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to reconnect. Leaving game in 5 seconds...");
+                GameManager.ClearGameVariables();
+                await Task.Delay(5000);
+                
+                SceneHelper.LoadScene("Main Menu");
                 break;
             }
         }

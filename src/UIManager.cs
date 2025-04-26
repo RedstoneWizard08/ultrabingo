@@ -137,6 +137,8 @@ public static class UIManager
             BingoEncapsulator.BingoLobbyScreen.SetActive(false);
             BingoEncapsulator.Root.SetActive(true);
             BingoEncapsulator.BingoMenu.SetActive(true);
+            
+            NetworkManager.setState(UltrakillBingoClient.State.INMENU);
         }
         else
         {

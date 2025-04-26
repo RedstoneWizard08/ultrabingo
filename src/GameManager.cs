@@ -115,6 +115,7 @@ public static class GameManager
         NetworkManager.DisconnectWebSocket(1000,"Normal close");
         
         ClearGameVariables();
+        NetworkManager.setState(UltrakillBingoClient.State.NORMAL);
         
         if(!isInLevel)
         {
@@ -352,6 +353,7 @@ public static class GameManager
             BingoLobby.GameVisibility.value = CurrentGame.gameSettings.gameVisibility;
         }
         
+        NetworkManager.setState(UltrakillBingoClient.State.INLOBBY);
         NetworkManager.RegisterConnection();
     }
     public static void ShowGameId(string password)

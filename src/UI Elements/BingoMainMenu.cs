@@ -29,22 +29,7 @@ public static class BingoMainMenu
     
     public static GameObject RankSelection;
     public static List<string> ranks;
-    
-    public static void Open()
-    {
-        //Hide chapter select
-        Root.transform.parent.gameObject.SetActive(false);
-        BingoEncapsulator.Root.SetActive(true);
-        Root.SetActive(true);
-    }
-    
-    public static void Close()
-    {
-        //Show chapter select
-        BingoEncapsulator.Root.SetActive(false);
-        Root.SetActive(false);
-        Root.transform.parent.parent.gameObject.SetActive(true);
-    }
+
     
     public static void LockUI()
     {
@@ -86,6 +71,7 @@ public static class BingoMainMenu
         {
             BingoEncapsulator.BingoMenu.SetActive(false);
             BingoEncapsulator.BingoGameBrowser.SetActive(true);
+            NetworkManager.setState(UltrakillBingoClient.State.INBROWSER);
             BingoBrowser.FetchGames();
         });
         
@@ -94,7 +80,6 @@ public static class BingoMainMenu
         {
             MapWarn.SetActive(true);
         });
-        
         
         MapWarn = GetGameObjectChild(BingoMenu,"MapWarn");
         MapWarn.SetActive(false);

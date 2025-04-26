@@ -60,6 +60,7 @@ public static class BingoMenuController
             {
                 GameManager.UpdateGridPosition(row,column);
                 SceneHelper.LoadScene(levelName);
+                NetworkManager.setState(UltrakillBingoClient.State.INGAME);
             }
         }
     }
@@ -138,6 +139,7 @@ public static class BingoMenuController
                         BingoCardPauseMenu.DescriptorText.GetComponent<TextMeshProUGUI>().text = msg;
                     }
                     await Task.Delay(1000);
+                    NetworkManager.setState(UltrakillBingoClient.State.INGAME);
                     AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.gameSettings.difficulty;
                     
                     
@@ -259,6 +261,7 @@ public static class BingoMenuController
                 //Check if game hasn't ended between click and delay. If it has, prevent level load.
                 if(!GameManager.CurrentGame.isGameFinished())
                 {
+                    NetworkManager.setState(UltrakillBingoClient.State.INGAME);
                     GameManager.UpdateGridPosition(row,column);
                     SceneHelper.LoadScene(levelId);
                 }
@@ -271,6 +274,7 @@ public static class BingoMenuController
         UIManager.RemoveLimit();
         BingoEncapsulator.Root.SetActive(false);
         GetGameObjectChild(GetInactiveRootObject("Canvas"),"Difficulty Select (1)").SetActive(true);
+        NetworkManager.setState(UltrakillBingoClient.State.NORMAL);
     }
     
     public static void CreateRoom()
@@ -280,6 +284,7 @@ public static class BingoMenuController
             return;
         }
         
+        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Creating room...");
         NetworkManager.pendingAction = AsyncAction.Host;
         NetworkManager.ConnectWebSocket();
     }
@@ -290,6 +295,7 @@ public static class BingoMenuController
         {
             return;
         }
+        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joining room...");
         NetworkManager.pendingAction = AsyncAction.Join;
         NetworkManager.pendingPassword = roomPassword;
         NetworkManager.ConnectWebSocket();

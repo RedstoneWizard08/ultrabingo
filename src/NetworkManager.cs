@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using AngryLevelLoader.Fields;
 using AngryLevelLoader.Managers;
 using BepInEx.Configuration;
 using Newtonsoft.Json;
-using TMPro;
 using Tommy;
 using UltraBINGO;
 using UltraBINGO.NetworkMessages;
@@ -22,6 +22,15 @@ using ErrorEventArgs = WebSocketSharp.ErrorEventArgs;
 using Object = System.Object;
 
 namespace UltrakillBingoClient;
+
+public enum State
+{
+    NORMAL,
+    INMENU,
+    INLOBBY,
+    INBROWSER,
+    INGAME
+}
 
 public enum AsyncAction
 {
@@ -54,6 +63,7 @@ public static class NetworkManager
     public static string pendingPassword = "";
     public static VerifyModRequest pendingVmr = null;
     public static string QueuedMessage = "";
+    public static State currentState = State.NORMAL;
     
     public static ConfigEntry<string> serverURLConfig;
     public static ConfigEntry<string> serverPortConfig;
@@ -77,6 +87,11 @@ public static class NetworkManager
     public static int maxReconnectionAttempts = 3;
     public static int currentReconnection = 0;
     
+    public static void setState(State newState)
+    {
+        currentState = newState;
+    }
+    
     public static void HandleAsyncConnect()
     {
         SetupHeartbeat();
@@ -84,14 +99,12 @@ public static class NetworkManager
         {
             case AsyncAction.Host:
             {
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connecting to server...");
                 CreateRoom();
                 break;  
             }
 
             case AsyncAction.Join:
             {
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joining game...");
                 JoinGame(pendingPassword);
                 break; 
             }
@@ -117,7 +130,6 @@ public static class NetworkManager
                 rr.roomId = GameManager.CurrentGame.gameId;
                 rr.ticket = CreateRegisterTicket();
                 SendEncodedMessage(JsonConvert.SerializeObject(rr));
-                Logging.Warn("Reconnect request sent");
                 break;
             }
             
@@ -243,7 +255,7 @@ public static class NetworkManager
 
         ws = new WebSocket (serverURL);
         ws.EnableRedirection = true;
-        ws.WaitTime = TimeSpan.FromSeconds(45);
+        ws.WaitTime = TimeSpan.FromSeconds(15);
         
         ws.OnOpen += (sender,e) => { HandleAsyncConnect(); };
         ws.OnMessage += (sender,e) => { onMessageRecieved(e); };
@@ -268,7 +280,7 @@ public static class NetworkManager
     //Handle any errors that happen with the WebSocket connection.
     public static async void HandleError(ErrorEventArgs e)
     {
-        Logging.Warn("Network error happened");
+        Logging.Error("Network error happened");
         Logging.Error(e.Message);
         Logging.Error(e.Exception.ToString());
         if(ws.IsAlive)
@@ -276,39 +288,69 @@ public static class NetworkManager
             ws.CloseAsync();
         }
         
-        if(GameManager.IsInBingoLevel)
-        {
-            currentReconnection++;
-            
-            if(currentReconnection > maxReconnectionAttempts)
-            {
-                currentReconnection = 0;
-
-                GameManager.ClearGameVariables();                
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to reconnect. Exitting game in 5 seconds.");
-                
-                await Task.Delay(5000);
-                SceneHelper.LoadScene("Main Menu");
-                
-            }
-            else
-            {
-                MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nAttempting reconnection... <color=orange>("+currentReconnection+"/"+maxReconnectionAttempts+")</color>");
-                await Task.Delay(2000);
-            
-                TryReconnect();
-            }
-        }
         else
         {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the server was lost. Returning to menu.");
-            GameManager.ClearGameVariables();
+            // If player is on main menu
+            switch(currentState)
+            {
+                case State.INMENU:
+                {
+                    MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to contact server.");
+                    BingoMainMenu.UnlockUI();
+                    break;
+                }
+                case State.INLOBBY:
+                {
+                    MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the lobby was lost. Returning to menu.");
+                    
+                    GameManager.ClearGameVariables();
+                    NetworkManager.setState(State.INMENU);
             
-            BingoEncapsulator.BingoCardScreen.SetActive(false);
-            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
-            BingoEncapsulator.BingoEndScreen.SetActive(false);
-            BingoEncapsulator.BingoMenu.SetActive(true);
+                    BingoEncapsulator.BingoCardScreen.SetActive(false);
+                    BingoEncapsulator.BingoLobbyScreen.SetActive(false);
+                    BingoEncapsulator.BingoEndScreen.SetActive(false);
+                    BingoEncapsulator.BingoMenu.SetActive(true);
+                    
+                    break;
+                }
+                case State.INGAME:
+                {
+                    //Handle in-game reconnection attempts here
+                    if(GameManager.IsInBingoLevel)
+                    {
+                        currentReconnection++;
             
+                        if(currentReconnection > maxReconnectionAttempts)
+                        {
+                            currentReconnection = 0;
+
+                            GameManager.ClearGameVariables();                
+                            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to reconnect. Exitting game in 5 seconds.");
+                            NetworkManager.setState(State.NORMAL);
+                
+                            await Task.Delay(5000);
+                            SceneHelper.LoadScene("Main Menu");
+                
+                        }
+                        else
+                        {
+                            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Connection to the game was lost.\nAttempting reconnection... <color=orange>("+currentReconnection+"/"+maxReconnectionAttempts+")</color>");
+                            await Task.Delay(2000);
+            
+                            TryReconnect();
+                        }
+                    }
+                    break;
+                }
+                case State.INBROWSER:
+                {
+                    if(!BingoBrowser.fetchDone) {BingoBrowser.DisplayError();}
+                    else {BingoBrowser.UnlockUI();}
+                    
+                    break;
+                }
+                default: break;
+            }
         }
     }
     
@@ -397,7 +439,6 @@ public static class NetworkManager
         crr.roomName = "TestRoom";
         crr.roomPassword = "password";
         crr.maxPlayers = 8;
-        crr.gameType = 1;
         crr.pRankRequired = false;
         
         crr.hostSteamName = sanitiseUsername(Steamworks.SteamClient.Name);
