@@ -15,6 +15,7 @@
 - Better handling of error flow if bad stuff happens.
 - Fixed bingo main menu buttons remaining locked if unable to host or join a game.
 - Fixed being able to input non-alphanumeric characters in the join game input field.
+- Potentially fixed UI elements in the lobby screen randomly appearing invisible.
 - Visual pass to make UI elements more in line with UI changes from the latest game update.
 
 v.1.0.6

@@ -291,6 +291,13 @@ public static class GameManager
         
         BingoEncapsulator.BingoMenu.SetActive(false);
         BingoEncapsulator.BingoGameBrowser.SetActive(false);
+        
+        //Small hack to fix the lobby UI elements & player list disappearing. Thanks TextMeshPro
+        foreach(TextMeshProUGUI text in BingoEncapsulator.BingoLobbyScreen.GetComponentsInChildren<TextMeshProUGUI>(true))
+        {
+            text.ForceMeshUpdate();
+        }
+        
         BingoEncapsulator.BingoLobbyScreen.SetActive(true);
         
         ShowGameId(password);
