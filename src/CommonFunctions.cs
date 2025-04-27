@@ -80,4 +80,16 @@ public static class CommonFunctions
     {
         return objectToUse.GetComponent<Text>();
     }
+    
+    public static string getFormattedTime(float time)
+    {
+        float secs = time;
+        float mins = 0;
+        while (secs >= 60f)
+        {
+            secs -= 60f;
+            mins += 1f;
+        }
+        return  mins + ":" + secs.ToString("00.000");
+    }
 }

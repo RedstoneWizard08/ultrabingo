@@ -53,7 +53,10 @@ public static class BingoCardPauseMenu
         bool canReroll = !data.pointerEnter.gameObject.GetComponent<BingoLevelData>().isClaimed
                          && !MonoSingleton<BingoVoteManager>.Instance.voteOngoing;
         
-        GetGameObjectChild(GetGameObjectChild(Root,"SelectedLevel"),"Text (TMP)").GetComponent<TextMeshProUGUI>().text = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name].levelName
+        GameLevel level = GameManager.CurrentGame.grid.levelTable[data.pointerEnter.gameObject.name];
+        
+        GetGameObjectChild(GetGameObjectChild(Root,"SelectedLevel"),"Text (TMP)").GetComponent<TextMeshProUGUI>().text = level.levelName
+            + (level.claimedBy != "NONE" ? "\n<color=orange>" + getFormattedTime(level.timeToBeat) + "</color>" : "")
             + (canReroll ? "\n<color=orange>R: Start a reroll vote</color>" : "");
         
         GetGameObjectChild(Root,"SelectedLevel").SetActive(true);
