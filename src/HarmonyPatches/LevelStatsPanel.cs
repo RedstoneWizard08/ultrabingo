@@ -29,6 +29,10 @@ public static class LevelStatsPanelPatchStart
             inGamePanel.name = "BingoInGamePanel";
             
             GameObject grid = GetGameObjectChild(inGamePanel,"Grid");
+            
+            GameObject card = GameObject.Instantiate(BingoCardPauseMenu.Grid,grid.transform);
+            card.name = "Card";
+            
             switch(MonoSingleton<PrefsManager>.Instance.GetInt("weaponHoldPosition", 0))
             {
                 case 2: // Right
@@ -43,12 +47,29 @@ public static class LevelStatsPanelPatchStart
                 }
             }
             
-            grid.transform.localPosition += new Vector3(-5f,5f,0f);
-            
-            GameObject card = GameObject.Instantiate(BingoCardPauseMenu.Grid,grid.transform);
-            card.name = "Card";
-            card.transform.localScale = new Vector3(0.45f,0.45f,0.45f);
-            card.transform.localPosition = Vector3.zero;    
+            switch(GameManager.CurrentGame.grid.size)
+            {
+                case 3:
+                {
+                    card.transform.localPosition = new Vector3(2.5f,-2.5f,0f);
+                    card.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+                    break;
+                }
+                case 4:
+                {
+                    card.transform.localPosition = new Vector3(-2.5f,0f,0f);
+                    card.transform.localScale = new Vector3(0.55f,0.55f,0.5f);
+                    break;
+                }
+                case 5:
+                {
+                    card.transform.localPosition = new Vector3(-5f,5f,0f);
+                    card.transform.localScale = new Vector3(0.45f,0.45f,0.45f);
+                    break;
+                }
+                
+                default: {break;}
+            }
             
             BingoCardPauseMenu.inGamePanel = card;
             

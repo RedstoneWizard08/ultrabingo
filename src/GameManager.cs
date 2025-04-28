@@ -115,7 +115,6 @@ public static class GameManager
         NetworkManager.DisconnectWebSocket(1000,"Normal close");
         
         ClearGameVariables();
-        NetworkManager.setState(UltrakillBingoClient.State.NORMAL);
         
         if(!isInLevel)
         {
@@ -124,7 +123,10 @@ public static class GameManager
             BingoEncapsulator.BingoLobbyScreen.SetActive(false);
             BingoEncapsulator.BingoEndScreen.SetActive(false);
             BingoEncapsulator.BingoMenu.SetActive(true);
+            
+            NetworkManager.setState(UltrakillBingoClient.State.INMENU);
         }
+        else {NetworkManager.setState(UltrakillBingoClient.State.NORMAL);}
     }
     
     public static void MoveToCard(int gameType)
