@@ -271,7 +271,14 @@ public static class GameManager
                 level.SetActive(true);
             }
         }
-        gridObj.transform.localPosition = new Vector3(-300f,145f,0f);
+        
+        //Shift the position of the grid so it's better centered.
+        switch(CurrentGame.grid.size)
+        {
+            case 3: {gridObj.transform.localPosition = new Vector3(-200f,100f,0f);}break;
+            case 4: {gridObj.transform.localPosition = new Vector3(-275f,122f,0f);}break;
+            case 5: {gridObj.transform.localPosition = new Vector3(-350f,145f,0f);}break;   
+        }
         
         //Display teammates.
         TextMeshProUGUI teammates = GetGameObjectChild(BingoCard.Teammates,"Players").GetComponent<TextMeshProUGUI>();
@@ -285,20 +292,21 @@ public static class GameManager
         alreadyStartedVote = false;
     }
 
-    public static void SetupGameDetails(Game game, string password, bool isHost=true)
+    public static async void SetupGameDetails(Game game, string password, bool isHost=true)
     {
         CurrentGame = game;
         
         BingoEncapsulator.BingoMenu.SetActive(false);
         BingoEncapsulator.BingoGameBrowser.SetActive(false);
         
-        //Small hack to fix the lobby UI elements & player list disappearing. Thanks TextMeshPro
+        //Small hack to fix the lobby UI elements & player list appearing invisible due to a base issue with TextMeshPro and how it works
         foreach(TextMeshProUGUI text in BingoEncapsulator.BingoLobbyScreen.GetComponentsInChildren<TextMeshProUGUI>(true))
         {
+            await Task.Delay(1);
             text.ForceMeshUpdate();
         }
         
-        BingoEncapsulator.BingoLobbyScreen.SetActive(true);
+        BingoEncapsulator.BingoLobbyScreen.SetActive(true); 
         
         ShowGameId(password);
         RefreshPlayerList();
