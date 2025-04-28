@@ -24,6 +24,7 @@
 - Times to beat on a level will now be displayed directly in the pause card menu when highlighting it.
 - When a player (re)claims a level, the new time requirement is now displayed in the HUD message that's broadcasted to all players.
 - In the case of a connection error, the client will now try to reconnect up to 3 times before failing and leaving the game.
+- Added [StyleToasts](https://thunderstore.io/c/ultrakill/p/The0x539/StyleToasts/) to the whitelist.
 
 
 ## Fixes:
@@ -33,6 +34,7 @@
 - Fixed games in the game browser always showing only 1 player when there may be more connected.
 - Fixed bingo main menu buttons remaining locked if unable to host or join a game.
 - Fixed being able to input non-alphanumeric characters in the join game input field.
+- Fixed 1-1, 5-1 and 7-3 secret exits still being accessible via out-of-bounds clipping when "disable campaign alt exits" is enabled.
 - Potentially fixed UI elements in the lobby screen randomly appearing invisible.
 
 --- 

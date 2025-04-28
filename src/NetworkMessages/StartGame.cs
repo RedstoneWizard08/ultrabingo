@@ -30,7 +30,6 @@ public static class StartGameResponseHandler
         GameManager.CurrentTeam = response.teamColor;   
         GameManager.Teammates = response.teammates;
         GameManager.CurrentGame.grid = response.grid;
-        Logging.Message("We are on the "+GameManager.CurrentTeam + " team");
         
         switch(response.game.gameSettings.gamemode)
         {

@@ -31,6 +31,9 @@ public static class CampaignPatches
                 GameObject finalroom = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1 - First Field"),"1 Nonstuff"),"FinalRoom 1");
                 finalroom.SetActive(false);
                 finalroom.GetComponent<FinalRoom>().enabled = false;
+                
+                GameObject pit = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1 - First Field"),"1 Nonstuff"),"FinalRoom SecretEntrance");
+                pit.SetActive(false);
                 break;
             }
             case "Level 2-3":
@@ -63,6 +66,9 @@ public static class CampaignPatches
                 GameObject finalroom = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Elevator"),"2B Secret"),"FinalRoom 1");
                 finalroom.SetActive(false);
                 
+                GameObject pit = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Elevator"),"2B Secret"),"FinalRoom SecretEntrance");
+                pit.SetActive(false);
+                
                 break;   
             }
             case "Level 6-2":
@@ -78,6 +84,10 @@ public static class CampaignPatches
                 
                 GameObject pit = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Garden Maze"),"Secret"),"FinalRoom 1"),"Pit");
                 pit.SetActive(false);
+                
+                GameObject pit2 = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Garden Maze"),"Secret"),"FinalRoom SecretEntrance");
+                pit2.SetActive(false);
+                
                 break;   
             }
             default:
