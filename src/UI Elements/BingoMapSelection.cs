@@ -134,7 +134,6 @@ public class BingoMapSelection
         StringReader read = new StringReader(catalogString);
         TomlTable catalog = TOML.Parse(read);  
         
-        Logging.Message("Scanning received map pool catalog");
         if (catalog["mapPools"] is TomlTable mapPools)
         {
             // Loop through each map pool defined in the file.

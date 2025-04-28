@@ -51,7 +51,6 @@ public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExi
             case PointerEventData.InputButton.Right:
             {
                 // Ping map
-                Logging.Info("Pinging map for other players");
                 GameManager.PingMapForTeam(GameManager.CurrentTeam,levelData.row,levelData.column);
                 break;
             }

@@ -100,9 +100,8 @@ public static class PauseMenu
             GameObject pauseMenu = GetGameObjectChild(canvas,"PauseMenu");
             if(pauseMenu == null)
             {
-                Logging.Error("Pause menu is null? Waiting and trying again");
+                Logging.Warn("Pause menu is null, waiting and trying again");
                 pauseMenu = __instance.pauseMenu;
-                Logging.Error(pauseMenu.name);
             }
             GetGameObjectChild(GetGameObjectChild(pauseMenu,"Quit Mission"),"Text").GetComponent<TextMeshProUGUI>().text = "LEAVE GAME";
             BingoCardPauseMenu.Init(ref __instance);

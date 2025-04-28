@@ -57,7 +57,6 @@ public class BingoSetTeamsMenu
     
     public static void Discard()
     {
-        Logging.Message("Resetting teams");
         ClearTeamSettings cts = new ClearTeamSettings();
         cts.gameId = GameManager.CurrentGame.gameId;
         cts.ticket = NetworkManager.CreateRegisterTicket();
@@ -68,7 +67,6 @@ public class BingoSetTeamsMenu
     
     public static void Submit()
     {
-        Logging.Message("Submitting teams");
         if(playersToMap != playersMapped)
         {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("One or more players have not been assigned to a team.");

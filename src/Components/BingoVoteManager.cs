@@ -37,13 +37,10 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager>
         {
             LoadOngoingVote();
         }
-        else{Logging.Warn("No vote data");}
     }
     
     public void LoadOngoingVote()
     {
-        Logging.Warn("Loading vote data");
-        
         this.voteOngoing = true;
         timeRemaining = GameManager.voteData.timeLeft;
         hasVoted = GameManager.voteData.hasVoted;
@@ -86,17 +83,14 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager>
             }
             else
             {
-                Logging.Warn("Creating vote request");
                 RerollRequest rr = new RerollRequest();
                 rr.gameId = GameManager.CurrentGame.gameId;
                 rr.steamId = Steamworks.SteamClient.SteamId.ToString();
                 rr.row = 0;
                 rr.column = 0;
                 rr.steamTicket = NetworkManager.CreateRegisterTicket();
-        
-                Logging.Warn("Creating vote request");
+                
                 NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(rr)); 
-                Logging.Warn("Done, hasVoted to true");
                 hasVoted = true;
             }
         }

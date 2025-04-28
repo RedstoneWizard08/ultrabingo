@@ -57,11 +57,9 @@ public static class GameManager
             a.levelName = level.levelName;
         }
         
-        Logging.Warn(oldMapId + "-" + getSceneName());
-        Logging.Warn((oldMapId == getSceneName()).ToString());
         if(oldMapId == getSceneName())
         {
-            Logging.Warn("Currently on old map - switching in 5 seconds");
+            Logging.Message("Currently on old map - switching in 5 seconds");
             await Task.Delay(5000);
             Button b = GetGameObjectChild(BingoCardPauseMenu.Grid,(column+"-"+row)).GetComponent<Button>();
             b.onClick.Invoke();
@@ -107,11 +105,10 @@ public static class GameManager
     public static void LeaveGame(bool isInLevel=false)
     {
         //Send a request to the server saying we want to leave.
-        Logging.Warn("Sending leave request");
         NetworkManager.SendLeaveGameRequest(CurrentGame.gameId);
         
         //When that's sent off, close the connection on our end.
-        Logging.Warn("Closing connection");
+        Logging.Message("Closing connection");
         NetworkManager.DisconnectWebSocket(1000,"Normal close");
         
         ClearGameVariables();
@@ -234,7 +231,6 @@ public static class GameManager
     public static void SetupBingoCardDynamic()
     {
         //Resize the GridLayoutGroup based on the grid size.
-        Logging.Message("Dynamic setup with size " + CurrentGame.grid.size);
         GameObject gridObj = GetGameObjectChild(BingoCard.Root,"BingoGrid");
         gridObj.GetComponent<GridLayoutGroup>().constraintCount = CurrentGame.grid.size;
         gridObj.GetComponent<GridLayoutGroup>().spacing = new Vector2(30,30);
@@ -435,7 +431,6 @@ public static class GameManager
                     bld.timeRequirement = newTime;
                     bld.styleRequirement = newStyle;
                     
-                    Logging.Warn("Done");
                 }
             }
         }

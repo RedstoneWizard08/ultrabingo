@@ -29,17 +29,9 @@ public static class FetchGamesReponseHandler
 {
     public static void handle(FetchGamesResponse response)
     {
-        Logging.Message(response.gameData);
-        
         List<PublicGameData> games = JsonConvert.DeserializeObject<List<PublicGameData>>(response.gameData);
         NetworkManager.DisconnectWebSocket(1000,"GameList");
         
         BingoBrowser.PopulateGames(games);
-        
-        foreach(PublicGameData game in games)
-        {
-            Logging.Warn(game.R_PASSWORD);
-        }
-        
     }
 }

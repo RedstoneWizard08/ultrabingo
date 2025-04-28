@@ -174,67 +174,6 @@ public static class NetworkManager
             Logging.Error("Something went wrong while fetching from the URL");
             Logging.Error(e.Message);
             return null;
-            //GetGameObjectChild(BingoMainMenu.MapCheck,"Text").GetComponent<TextMeshProUGUI>().text = "Unable to retrieve level catalog. Please check your connection.";
-            //GetGameObjectChild(BingoMainMenu.MapCheck,"Button").GetComponent<Button>().interactable = false;
-        }
-    }
-    
-    //Analyse and display any maps in the bingo catalog from the server that are not already downloaded.
-    public static async void analyseCatalog()
-    {
-        Logging.Message("--Verifying level catalog...--");
-        
-        List<String> missingMaps = new List<string>();
-        string catalogString = await FetchCatalog(serverURL);
-        if(catalogString == null)
-        {
-            return;
-        }
-        StringReader read = new StringReader(catalogString);
-        
-        TomlTable catalog = TOML.Parse(read);
-        foreach(TomlNode node in catalog["catalog"]["levelCatalog"])
-        { 
-            TomlNode subNode = node.AsArray;
-            if(OnlineLevelsManager.onlineLevels[subNode[1]].status != OnlineLevelField.OnlineLevelStatus.installed)
-            { 
-                missingMaps.Add(subNode[0]);
-            }
-        }
-        
-        Main.missingMaps = missingMaps;
-        if(missingMaps.Count > 0)
-        {
-            Logging.Message(missingMaps.Count + " maps missing from the map pool");
-            PopulateMissingMaps();
-        }
-        else
-        {
-            Logging.Message("All maps downloaded, good to go");
-            BingoMainMenu.MapCheck.SetActive(false);
-        }
-    }
-    
-    //Display missing maps in the UI dialog box.
-    public static void PopulateMissingMaps()
-    {
-        GameObject template = GetGameObjectChild(BingoMainMenu.MissingMapsList,"MapName");
-        template.SetActive(false);
-        
-        //Clear out the previous list before displaying the new one.
-        foreach(Transform child in BingoMainMenu.MissingMapsList.transform)
-        {
-            if(child.gameObject.name != "MapName")
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-        }
-        
-        foreach(string map in Main.missingMaps)
-        {
-            GameObject mapToAdd = GameObject.Instantiate(template,template.transform.parent);
-            mapToAdd.GetComponent<Text>().text = map;
-            mapToAdd.SetActive(true);
         }
     }
     
@@ -262,7 +201,7 @@ public static class NetworkManager
         ws.OnError += (sender,e) => { HandleError(e); };
         ws.OnClose += (sender,e) =>
         {
-            if(e.WasClean) { Logging.Warn("Disconnected cleanly from server"); }
+            if(e.WasClean) { Logging.Message("Disconnected cleanly from server"); }
             else
             {
                 Logging.Error("Network connection error.");
@@ -395,7 +334,7 @@ public static class NetworkManager
     
     public static void RegisterConnection()
     {
-        Logging.Warn("Registering connection with server");
+        Logging.Message("Registering connection with server");
         RegisterTicket rt = CreateRegisterTicket();
         SendEncodedMessage(JsonConvert.SerializeObject(rt));
     }
@@ -418,7 +357,6 @@ public static class NetworkManager
     //Setup WebSocket heartbeat.
     public static void SetupHeartbeat()
     {
-        Logging.Warn("Setting up heartbeat");
         heartbeatTimer = new Timer(10*1000); //Ping once every 10 seconds
         heartbeatTimer.Elapsed += SendPing;
         heartbeatTimer.AutoReset = true;
@@ -519,14 +457,12 @@ public static class NetworkManager
             }
             case "JoinRoomNotification":
             {
-                Logging.Message("Player joined");
                 PlayerJoiningMessage response = JsonConvert.DeserializeObject<PlayerJoiningMessage>(em.contents);
                 PlayerJoiningResponseHandler.handle(response);
                 break;
             }
             case "UpdateTeamsNotif":
             {
-                Logging.Message("Teams in game updated");
                 UpdateTeamsNotification response = JsonConvert.DeserializeObject<UpdateTeamsNotification>(em.contents);
                 UpdateTeamsNotificationHandler.handle(response);
                 break;
@@ -540,35 +476,30 @@ public static class NetworkManager
             }
             case "StartGame":
             {
-                Logging.Message("Starting game");
                 StartGameResponse sgr = JsonConvert.DeserializeObject<StartGameResponse>(em.contents);
                 StartGameResponseHandler.handle(sgr);
                 break;
             }
             case "LevelClaimed":
             {
-                Logging.Message("Player claimed a level");
                 LevelClaimNotification response = JsonConvert.DeserializeObject<LevelClaimNotification>(em.contents);
                 LevelClaimHandler.handle(response);
                 break;
             }
             case "ServerDisconnection":
             {
-                Logging.Message("Server disconnected us");
                 DisconnectSignal response = JsonConvert.DeserializeObject<DisconnectSignal>(em.contents);
                 DisconnectSignalHandler.handle(response);
                 break;
             }
             case "DisconnectNotification":
             {
-                Logging.Message("Player left our game");
                 DisconnectNotification response = JsonConvert.DeserializeObject<DisconnectNotification>(em.contents);
                 DisconnectNotificationHandler.handle(response);
                 break;
             }
             case "TimeoutNotification":
             {
-                Logging.Message("Player in our game timed out");
                 TimeoutSignal response = JsonConvert.DeserializeObject<TimeoutSignal>(em.contents);
                 TimeoutSignalHandler.handle(response);
                 break;
@@ -619,28 +550,24 @@ public static class NetworkManager
             }
             case "FetchGamesResponse":
             {
-                Logging.Warn(em.contents);
                 FetchGamesResponse response = JsonConvert.DeserializeObject<FetchGamesResponse>(em.contents);
                 FetchGamesReponseHandler.handle(response);
                 break;
             }
             case "RerollVote":
             {
-                Logging.Warn("Player wants to reroll map");
                 RerollVoteNotification response = JsonConvert.DeserializeObject<RerollVoteNotification>(em.contents);
                 RerollVoteNotificationHandler.handle(response);
                 break;
             }
             case "RerollSuccess":
             {
-                Logging.Warn("VOTE SUCCESSFUL");
                 RerollSuccessNotification response = JsonConvert.DeserializeObject<RerollSuccessNotification>(em.contents);
                 RerollSuccessNotificationHandler.handle(response);
                 break;
             }
             case "RerollExpire":
             {
-                Logging.Warn("VOTE FAILED");
                 RerollExpireNotification response = JsonConvert.DeserializeObject<RerollExpireNotification>(em.contents);
                 RerollExpireNotificationHandler.handle(response);
                 break;

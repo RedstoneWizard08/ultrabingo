@@ -84,8 +84,7 @@ public static class BingoBrowser
         
         if(games.Count == 0)
         {
-            Logging.Warn("No public games available");
-            FetchText.GetComponent<TextMeshProUGUI>().text = "No public games found. Check back later.";
+            FetchText.GetComponent<TextMeshProUGUI>().text = "No public games currently available.";
             return;
         }
         

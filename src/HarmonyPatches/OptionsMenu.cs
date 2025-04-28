@@ -39,8 +39,6 @@ public static class OptionsMenuPatcher
             {
                 GameObject assistsList = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(optionsMenu.gameObject,"Pages"),"Assist"),"Scroll Rect"),"Contents");
         
-                Logging.Warn(assistsList.gameObject.name);
-        
                 GetGameObjectChild(assistsList,"-- Major Assists --").SetActive(false);
                 GetGameObjectChild(assistsList,"Game Speed").SetActive(false);
                 GetGameObjectChild(assistsList,"Damage Taken").SetActive(false);

@@ -14,7 +14,7 @@ public static class Patch
 	{
 		if(GameManager.CurrentGame != null && !GameManager.EnteringAngryLevel)
 		{
-			Logging.Warn("Download done");
+			Logging.Info("Download of " + BingoMenuController.currentlyDownloadingLevel + " finished");
 			GameManager.IsDownloadingLevel = false;
 			
 			MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("<color=orange>"+BingoMenuController.currentlyDownloadingLevel + "</color> has finished downloading.\nClick level button again to enter!");

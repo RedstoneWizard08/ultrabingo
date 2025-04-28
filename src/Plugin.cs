@@ -57,7 +57,7 @@ namespace UltrakillBingoClient
         //Mod init logic
         private void Awake()
         {
-            Logging.Warn("--Now loading Baphomet's Bingo...--");
+            Logging.Message("--Now loading Baphomet's Bingo...--");
             Debug.unityLogger.filterLogType = LogType.Warning;
             
             Logging.Message("--Loading asset bundle...--");

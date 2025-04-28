@@ -50,7 +50,7 @@ public static class ModVerificationHandler
         {
             case -1:
             {
-                Logging.Message("UPDATE AVAILABLE!");
+                Logging.Message("--UPDATE AVAILABLE--");
                 Main.UpdateAvailable = true;
                 GetGameObjectChild(BingoMainMenu.VersionInfo,"UpdateText").SetActive(true);
                 break;
@@ -61,7 +61,6 @@ public static class ModVerificationHandler
         GetGameObjectChild(BingoMainMenu.MOTDContainer,"Content").GetComponent<TextMeshProUGUI>().text = response.motd;
         BingoMainMenu.MOTD = response.motd;
         
-        Logging.Warn(response.availableRanks);
         if(response.availableRanks != "")
         {
             TMP_Dropdown rankSelector = GetGameObjectChild(BingoMainMenu.RankSelection,"Dropdown").GetComponent<TMP_Dropdown>();

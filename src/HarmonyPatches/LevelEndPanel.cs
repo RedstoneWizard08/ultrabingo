@@ -64,15 +64,10 @@ public class FinalRankFanfare
         {
             if(GameManager.CurrentGame.gameSettings.requiresPRank)
             {
-                Logging.Message("P-Rank required, checking validation");
                 StatsManager sman = MonoSingleton<StatsManager>.Instance;
                 if(sman != null)
                 {
-                    if(sman.seconds <= sman.timeRanks.Last() && sman.kills >= sman.killRanks.Last() && sman.stylePoints >= sman.styleRanks.Last() && sman.restarts == 0)
-                    {
-                        Logging.Message("P-Rank obtained, continuing");
-                    }
-                    else
+                    if(!(sman.seconds <= sman.timeRanks.Last() && sman.kills >= sman.killRanks.Last() && sman.stylePoints >= sman.styleRanks.Last() && sman.restarts == 0))
                     {
                         Logging.Message("P-Rank not obtained, rejecting run");
                         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You must finish the level with a <color=yellow>P</color>-Rank to claim it.");

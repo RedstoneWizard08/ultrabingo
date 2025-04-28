@@ -34,19 +34,12 @@ public static class StartGameResponseHandler
         
         switch(response.game.gameSettings.gamemode)
         {
-            case 0: //Bingo
-            {
-                Logging.Message("Bingo gamemode");
-                break;
-            }
             case 1: //Domination
             {
-                Logging.Message("Domination gamemode");
-                Logging.Warn(response.game.gameSettings.timeLimit.ToString());
                 GameManager.dominationTimer = response.game.gameSettings.timeLimit*60;
-                Logging.Message(response.game.gameSettings.timeLimit+" minutes");
                 break;
             }
+            default: {break;}
         }
                 
         BingoMenuController.StartGame(response.game.gameSettings.gamemode);

@@ -108,7 +108,6 @@ public static class BingoMenuController
             }
         
             //First check if the level exists locally.
-            Logging.Message("Checking if level exists locally");
             Dictionary<string,AngryBundleContainer> locallyDownloadedLevels = AngryLevelLoader.Plugin.angryBundles;
             bool isAlreadyDownloaded = locallyDownloadedLevels.TryGetValue(angryLevelData.angryParentBundle, out AngryBundleContainer bundleContainer);
             
@@ -116,7 +115,6 @@ public static class BingoMenuController
             if(isAlreadyDownloaded)
             {
                 //Need to (re)load the bundle before accessing it to make sure the level fields are accessible.
-                Logging.Message("Level bundle exists locally, loading bundle");
                 GameManager.EnteringAngryLevel = true;
                 await bundleContainer.UpdateScenes(true,false);
                 await Task.Delay(250);
@@ -127,7 +125,6 @@ public static class BingoMenuController
                 if(containsLevel)
                 {
                     //...if it does, gather all the necessary data and ask Angry to load it.
-                    Logging.Message("Loading specified Angry level");
                     string msg = (getSceneName() != "Main Menu" ? "MOVING TO <color=orange>" + angryLevelData.levelName + "</color>..." : "LOADING <color=orange>" + angryLevelData.levelName + "</color>...");
                     
                     if(getSceneName() == "Main Menu")
@@ -147,14 +144,14 @@ public static class BingoMenuController
                     List<string> requiredAngryScripts = ScriptManager.GetRequiredScriptsFromBundle(bundleContainer);
                     if(requiredAngryScripts.Count > 0)
                     {
-                        Logging.Warn("Level requires custom scripts, checking if locally loaded");
+                        Logging.Message("Level requires custom scripts, checking if locally loaded");
                         
                         //If they do, check if the scripts are already downloaded and loaded locally.
                         foreach(string scriptName in requiredAngryScripts)
                         {
                             if(!ScriptManager.ScriptExists(scriptName))
                             {
-                                Logging.Warn("Asking Angry to download " + scriptName);
+                                Logging.Message("Asking Angry to download " + scriptName);
                                  bool downloadResult = await DownloadAngryScript(scriptName);
                                  if(downloadResult == true)
                                  {
@@ -208,7 +205,7 @@ public static class BingoMenuController
                 }
                 
                 //If level does not already exist locally, get Angry to download it first.
-                Logging.Warn("Level does not already exist locally - Downloading from online repo");
+                Logging.Message("Level does not already exist locally - Downloading from online repo");
                 GameManager.IsDownloadingLevel = true;
                 
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("-- DOWNLOADING "+ angryLevelData.levelName + " --\nYou can continue to play in the meantime.");
@@ -303,7 +300,6 @@ public static class BingoMenuController
     
     public static void StartGame(int gameType)
     {
-        Logging.Warn("Setting up dynamic card");
         GameManager.SetupBingoCardDynamic();
         
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("The game has begun!");
@@ -313,10 +309,6 @@ public static class BingoMenuController
             GameObject canvas = GetInactiveRootObject("Canvas");
             canvas.AddComponent<DominationTimeManager>();
         }
-
-        
-        Logging.Warn("Displaying card");
         GameManager.MoveToCard(gameType);
-        Logging.Warn("GO GO GO");
     }
 }
