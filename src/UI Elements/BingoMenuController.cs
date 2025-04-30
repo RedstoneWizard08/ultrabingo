@@ -210,6 +210,7 @@ public static class BingoMenuController
                 
                 //If level does not already exist locally, get Angry to download it first.
                 Logging.Message("Level does not already exist locally - Downloading from online repo");
+                MonoSingleton<OptionsManager>.Instance.UnPause();
                 GameManager.IsDownloadingLevel = true;
                 
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("-- DOWNLOADING "+ angryLevelData.levelName + " --\nYou can continue to play in the meantime.");
