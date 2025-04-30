@@ -6,7 +6,7 @@
   - **Added the ability to vote to reroll a map.**
   - **Removed style claim requirement due to lack of player usage**. All claim types in a bingo game will now be based on time only.
   - **Added Message of the Day section to the bingo main menu**. This allows for quick informing of updates, server changes and PSAs for known issues.
-  - **Begun readding Angry map pools.** (Only 2 maps are available for now, more will be added over time as map makers upload their works.)
+  - **Begun readding Angry map pools.** (Only a small handful of maps are available for now, more will be added over time as map makers upload their works.)
   - **Added special in-game ranks obtainable** by being a noteworthy member of the larger ULTRAKILL community (mapper, modder, speedrunner, etc), or by having supported the mod on Kofi. If you fit any of the criteria, feel free to apply [on the Discord](https://discord.gg/VyzFJwEWtJ) to receive your in-game role!
     - Developer: Developers and code contributors to Baphomet's Bingo.
     - Tester: All those who helped beta test the mod prior to public releases and gave feedback.
