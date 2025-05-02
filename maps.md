@@ -5,7 +5,12 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - All official levels from the main campaign (minus secret levels & credits museum) by Hakita and co.
 - "Fun Sized Heresy" by FNChannel
 - "Walls Of Wicked Dreams" by Robi
-
+- "Re-Lude" by Elequacity
+- "Starry Night... Freedom Dive" by Holawenasx2
+- "A Primum Mobile" by YoullTim
+- "Epitaph" by Willem3231
+- "Fraudulence - Fool's Gold" by Spelunky
+- "Fraudulence - High Society" by Spelunky
 
 ## Legacy maps used prior to Pre-Revamp
 - Levels from the fanmade "Project Purgatorio" campaign, by the Purgatorio team: Rem_Safe_Space, Hydraxous, Duv, Raifu, bongwater
@@ -25,10 +30,7 @@ Baphomet's Bingo uses the following maps in its map rotation, taken from the pub
 - "Darkcastle" by Grapes
 - "Death Around The Corner" by ballfartchungus43
 - "Death Descent - Free Mind Loop" by PrestoPesto
-- "Epitaph" by Willem3231
 - "False Ascendence 2" by PhantomBlader
-- "Fraudulence - Fool's Gold" by Spelunky
-- "Fraudulence - High Society" by Spelunky
 - "From Dust To Dust" by Draghtnim
 - "Garden Of Lost Desires" by Doodleman & Bloogoober
 - "Halls Of The Extremist" by Spelunky
