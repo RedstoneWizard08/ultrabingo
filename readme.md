@@ -2,15 +2,16 @@
 
 # Baphomet's Bingo
 
-Baphomet's Bingo is a modification (mod) for ULTRAKILL that  adds a multiplayer competitive bingo-like gamemode that tasks teams of players to race through levels with the quickest time or highest style to claim them for their team, and to be the first team to claim a bingo by claiming a complete row, column or diagonal for their team color.
+Baphomet's Bingo is a modification (mod) for ULTRAKILL that  adds a multiplayer competitive bingo-like gamemode that tasks teams of players to race through levels with the quickest time to claim them for their team, and to be the first team to claim a bingo by claiming a complete row, column or diagonal for their team color.
 
-### Join the Discord to look for games, drop suggestions and feedback: https://discord.gg/VyzFJwEWtJ
+### Join the Baphomet's Bingo Discord to look for games, drop suggestions and feedback:
+## https://discord.gg/VyzFJwEWtJ
 
 # Features
 
 - A new multiplayer gamemode centered around bingo
-- Support for Angry custom maps for a bigger map pool, with additional maps regularly being added
-- Configuration of game settings and criteria (Time or style, requiring P-Ranks...)
+- Support for Angry custom maps for various map pools, with additional maps regularly being added
+- Configuration of game settings and criteria (Requiring P-Ranks, private or public games, setting teams, various gamemodes...)
 - Allows for mid-game downloading of maps
 
 # Download & Installation
@@ -38,7 +39,7 @@ You may be in one of two scenarios:
 
 ### I am unable to connect to the Baphomet's Bingo servers.
 Please try using a VPN if possible. The Baphomet's Bingo servers are proxied behind Cloudflare, the latter of which may not allow some specific IP ranges for reasons I am not able to directly provide support for.
-If you are still having problems, please join the [Baphomet's Bingo Discord](https://discord.gg/VyzFJwEWtJ)and mention your problem, and I will try to help you to the best of my ability.
+If you are still having problems, please join the [Baphomet's Bingo Discord](https://discord.gg/VyzFJwEWtJ) and mention your problem, and I will try to help you to the best of my ability.
 
 ### My game freezes/crashes when joining/starting a game, or loading a level.
 
@@ -63,7 +64,9 @@ View [maps.md](maps.md) for full credits and information.
 - Baphomet's Bingo created & maintained by Clearwater
 - Angry integration support and consultation by EternalUnion
 
-A **huge** thank you to the following members of the ULTRAKILL and Angry community who helped me test this mod out and helped me track down bugs and other problems: Frizou, FruitCircuit, JOE, LambCG, Lena, CEO of Gaming, Draghtnim, FNChannel, RedNova, yusufturk, Darkn, fishy, CATPERFECT, AshleyInnit
+A **huge** thank you to the following members of the ULTRAKILL and Angry community who helped me test this mod out and helped me track down bugs and other problems:
+
+Frizou, FruitCircuit, JOE, LambCG, Lena, CEO of Gaming, Draghtnim, FNChannel, RedNova, yusufturk, Darkn, fishy, CATPERFECT, AshleyInnit, Mercy, Tootaroni, Vlad
 
 ### Baphomet's Bingo uses the following libraries and dependencies:
 

@@ -379,7 +379,7 @@ public static class GameManager
         NetworkManager.SendStartGameSignal(CurrentGame.gameId);
     }
     
-    public static void UpdateCards(int row, int column, string team, string playername, float newTime, int newStyle)
+    public static void UpdateCards(int row, int column, string team, string playername, float newTime)
     {
         string coordLookup = row+"-"+column;
         List<string> dictKeys = CurrentGame.grid.levelTable.Keys.ToList();
@@ -396,7 +396,6 @@ public static class GameManager
         {
             CurrentGame.grid.levelTable[coordLookup].claimedBy = team;
             CurrentGame.grid.levelTable[coordLookup].timeToBeat = newTime;
-            CurrentGame.grid.levelTable[coordLookup].styleToBeat = newStyle;
         
             if(getSceneName() == "Main Menu")
             {
@@ -407,7 +406,6 @@ public static class GameManager
                 GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedTeam = team;
                 GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().claimedPlayer = playername;
                 GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().timeRequirement = newTime;
-                GetGameObjectChild(bingoGrid,coordLookup).GetComponent<BingoLevelData>().styleRequirement = newStyle;
             }
             else
             {
@@ -429,8 +427,6 @@ public static class GameManager
                     bld.claimedTeam = team;
                     bld.claimedPlayer = playername;
                     bld.timeRequirement = newTime;
-                    bld.styleRequirement = newStyle;
-                    
                 }
             }
         }

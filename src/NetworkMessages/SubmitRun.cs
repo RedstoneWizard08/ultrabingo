@@ -20,7 +20,6 @@ public class SubmitRunRequest : SendMessage
     public string steamId;
     
     public float time;
-    public float style;
     
     public RegisterTicket ticket;
 }
@@ -38,10 +37,8 @@ public class LevelClaimNotification : PlayerNotification
     public int column;
     
     public float newTimeRequirement;
-    public int newStyleRequirement;
     
     public bool isMapVoted;
-    
 }
 
 public static class LevelClaimHandler
@@ -80,7 +77,7 @@ public static class LevelClaimHandler
             }
             
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(broadcastString);
-            GameManager.UpdateCards(response.row,response.column,response.team,response.username,response.newTimeRequirement,response.newStyleRequirement);
+            GameManager.UpdateCards(response.row,response.column,response.team,response.username,response.newTimeRequirement);
         }
         
         catch (Exception e)

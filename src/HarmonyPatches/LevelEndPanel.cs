@@ -40,7 +40,7 @@ public static class LevelEndPanel
 public static class LevelEndChanger
 {
     [HarmonyPrefix]
-    public static bool handleBingoLevelChange(FinalRank __instance, float ___savedTime, int ___savedStyle, bool force = false)
+    public static bool handleBingoLevelChange(FinalRank __instance, float ___savedTime, bool force = false)
     {
         if(GameManager.IsInBingoLevel && !GameManager.CurrentGame.isGameFinished())
         {
@@ -82,7 +82,6 @@ public class FinalRankFanfare
             }
             
             float time = ___savedTime;
-            int style = ___savedStyle;
 
             SubmitRunRequest srr = new SubmitRunRequest();
             
@@ -91,7 +90,6 @@ public class FinalRankFanfare
             srr.team = GameManager.CurrentTeam;
             srr.gameId = GameManager.CurrentGame.gameId;
             srr.time = time;
-            srr.style = style;
             srr.levelName = getSceneName();
             srr.levelId = GameManager.CurrentGame.grid.levelTable[GameManager.CurrentRow+"-"+GameManager.CurrentColumn].levelId;
             srr.column = GameManager.CurrentColumn;
@@ -99,9 +97,7 @@ public class FinalRankFanfare
             srr.ticket = NetworkManager.CreateRegisterTicket();
             
             NetworkManager.SubmitRun(srr);  
-            
             GameManager.HasSent = true;
-            
         }
     }
 }

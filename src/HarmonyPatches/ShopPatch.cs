@@ -23,7 +23,6 @@ public class ShopAddLevelInfo
                 
                 string teamClaim = GameManager.CurrentGame.grid.levelTable[coords].claimedBy;
                 float time = GameManager.CurrentGame.grid.levelTable[coords].timeToBeat;
-                int style = GameManager.CurrentGame.grid.levelTable[coords].styleToBeat;
                 
                 float secs = time;
                 float mins = 0;
@@ -45,7 +44,7 @@ public class ShopAddLevelInfo
                 else
                 {
                     origTip.text = "Claimed by: <color="+ teamClaim.ToLower() + ">" + teamClaim + "</color> team\n\n" +
-                    (GameManager.CurrentGame.gameSettings.gamemode == 0 ? "TIME" : "STYLE") + " TO BEAT: <color=orange>" + (GameManager.CurrentGame.gameSettings.gamemode == 0 ? formattedTime : style) + "</color>\n\n" +
+                    "TIME TO BEAT: <color=orange>" + formattedTime  + "</color>\n\n" +
                     (teamClaim == GameManager.CurrentTeam ? claimedByOwnTeam : claimedByOtherTeam);
                 }
                 

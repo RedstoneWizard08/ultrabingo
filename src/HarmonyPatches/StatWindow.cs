@@ -107,21 +107,18 @@ public class StatWindow
             //If we're in a Prime or Encore level, use major assists text for to beat, and challenge text for claimed by.
             if(getSceneName().Contains("P-") || getSceneName().Contains("-E"))
             {
-                __instance.majorAssists.GetComponent<TextMeshProUGUI>().text = (GameManager.CurrentGame.gameSettings.gamemode == 0 ?  (formattedTime) : GameManager.CurrentGame.grid.levelTable[coords].styleToBeat.ToString());
+                __instance.majorAssists.GetComponent<TextMeshProUGUI>().text = formattedTime;
 
                 GetGameObjectChild(GetGameObjectChild(__instance.gameObject,"Challenge Title"),"Challenge").GetComponent<TextMeshProUGUI>().text = colorTag;
                 GetGameObjectChild(GetGameObjectChild(__instance.gameObject,"Challenge Title"),"Challenge").GetComponent<TextMeshProUGUI>().fontSize = 20;
             }
             else
             {
-                __instance.challenge.GetComponent<TextMeshProUGUI>().text = (GameManager.CurrentGame.gameSettings.gamemode == 0 ?  (formattedTime) : GameManager.CurrentGame.grid.levelTable[coords].styleToBeat.ToString());
+                __instance.challenge.GetComponent<TextMeshProUGUI>().text = formattedTime;
                 
                 __instance.majorAssists.GetComponent<TextMeshProUGUI>().text = colorTag;
                 __instance.majorAssists.GetComponent<TextMeshProUGUI>().fontSize = 20;
             }
-
-
-          
         }
     }
 }

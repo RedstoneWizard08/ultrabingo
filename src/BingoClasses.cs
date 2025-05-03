@@ -37,7 +37,6 @@ public class GameLevel
     public string claimedBy;
     public string personToBeat;
     public float timeToBeat;
-    public int styleToBeat;
     
     public int row;
     public int column;

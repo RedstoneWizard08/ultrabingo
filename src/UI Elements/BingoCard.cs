@@ -38,9 +38,7 @@ public class BingoCard
     
     public static void UpdateTitles(int gameType)
     {
-        string bingoDescription = (GameManager.CurrentGame.gameSettings.gamemode == 0
-                                      ? "Race to <color=orange>obtain the fastest time</color> for your team on each level."
-                                      : "Rack up <color=orange>the highest style</color> as you can for your team on each level.")
+        string bingoDescription = "Race to <color=orange>obtain the fastest time</color> for your team on each level."
                                   + "\nClaim " + GameManager.CurrentGame.grid.size + " levels horizontally, vertically or diagonally for your team to win!";
         
         string dominationDescription = "Race to <color=orange>claim as many levels</color> for your team as possible.\nThe team with the most claims when time is up is the winner!";
@@ -76,7 +74,6 @@ public class BingoCard
         }
         
         //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter causes crashes.
-        //ButtonTemplate = UIHelper.CreateButtonLegacy("LevelExample","LevelButtonTemplate",275f,25f,12);
         ButtonTemplate = GameObject.Instantiate(AssetLoader.BingoCardButtonTemplate,Root.transform);
         ButtonTemplate.transform.SetParent(Root.transform);
         ButtonTemplate.SetActive(false);

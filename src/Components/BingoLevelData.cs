@@ -15,7 +15,6 @@ public class BingoLevelData : MonoBehaviour
     public int column;
     
     public float timeRequirement = 0;
-    public float styleRequirement = 0;
     
     public string levelName = "";
     

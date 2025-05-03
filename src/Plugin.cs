@@ -44,7 +44,6 @@ namespace UltrakillBingoClient
         public static bool HasUnlocked = true;
         public static bool UpdateAvailable = false;
         
-        public static List<String> missingMaps = new List<string>();
         public static List<string> LoadedMods = new List<string>();
 
         public static string CatalogFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"bingocatalog.toml");
