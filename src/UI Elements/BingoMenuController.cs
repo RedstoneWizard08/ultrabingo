@@ -109,15 +109,15 @@ public static class BingoMenuController
             }
         
             //First check if the level exists locally, and is up to date.
-            
             bool isLevelReady = OnlineLevelsManager.onlineLevels[angryLevelData.angryParentBundle]._status == OnlineLevelField.OnlineLevelStatus.installed;
-            
-            Dictionary<string,AngryBundleContainer> locallyDownloadedLevels = AngryLevelLoader.Plugin.angryBundles;
-            AngryBundleContainer bundleContainer = locallyDownloadedLevels[angryLevelData.angryParentBundle];
             
             //If already downloaded and up to date, load the bundle.
             if(isLevelReady)
             {
+                Dictionary<string,AngryBundleContainer> locallyDownloadedLevels = AngryLevelLoader.Plugin.angryBundles;
+                AngryBundleContainer bundleContainer = locallyDownloadedLevels[angryLevelData.angryParentBundle];
+                
+                Logging.Message("Loading Angry level");
                 //Need to (re)load the bundle before accessing it to make sure the level fields are accessible.
                 GameManager.EnteringAngryLevel = true;
                 await bundleContainer.UpdateScenes(true,false);
