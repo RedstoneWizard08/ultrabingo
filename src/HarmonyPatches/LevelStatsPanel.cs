@@ -25,6 +25,8 @@ public static class LevelStatsPanelPatchStart
         
         if(GameManager.IsInBingoLevel && getSceneName() != "Main Menu")
         {
+            __instance.gameObject.SetActive(true);
+            
             GameObject inGamePanel = GameObject.Instantiate(AssetLoader.BingoInGameGridPanel,__instance.gameObject.transform);
             inGamePanel.name = "BingoInGamePanel";
             
