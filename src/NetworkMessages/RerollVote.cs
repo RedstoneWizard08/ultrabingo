@@ -60,6 +60,8 @@ public static class RerollVoteNotificationHandler
         {
             MonoSingleton<BingoVoteManager>.Instance.addVote();
         }
+        
+        GameManager.voteData = new VoteData(true,MonoSingleton<BingoVoteManager>.Instance.hasVoted,MonoSingleton<BingoVoteManager>.Instance.voteThreshold,MonoSingleton<BingoVoteManager>.Instance.currentVotes,MonoSingleton<BingoVoteManager>.Instance.map,MonoSingleton<BingoVoteManager>.Instance.timeRemaining);
     }
 }
 
