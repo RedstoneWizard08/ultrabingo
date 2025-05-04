@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BepInEx.Configuration;
 using TMPro;
 using UltraBINGO.UI_Elements;
 using UltrakillBingoClient;
@@ -65,10 +66,19 @@ public static class ModVerificationHandler
         {
             TMP_Dropdown rankSelector = GetGameObjectChild(BingoMainMenu.RankSelection,"Dropdown").GetComponent<TMP_Dropdown>();
             rankSelector.ClearOptions();
+            
             List<string> ranks = response.availableRanks.Split(',').ToList();
             rankSelector.AddOptions(ranks);
+            
             BingoMainMenu.ranks = ranks;
             NetworkManager.requestedRank = rankSelector.options[0].text;
+            
+            //Check if the previously used rank is available in the list. If so, set it as default.
+            if(ranks.Contains(NetworkManager.lastRankUsedConfig.Value));
+            {
+                //NetworkManager.requestedRank = NetworkManager.lastRankUsedConfig.Value;
+                rankSelector.value = ranks.IndexOf(NetworkManager.lastRankUsedConfig.Value);
+            }
             
             GameManager.hasRankAccess = true;
         }

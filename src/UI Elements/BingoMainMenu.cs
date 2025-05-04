@@ -114,6 +114,7 @@ public static class BingoMainMenu
         rankSelector.onValueChanged.AddListener(delegate(int arg0)
         {
             NetworkManager.requestedRank = rankSelector.options[rankSelector.value].text;
+            NetworkManager.lastRankUsedConfig.Value = NetworkManager.requestedRank;
         });
         
         return Root;

@@ -67,6 +67,7 @@ public static class NetworkManager
     
     public static ConfigEntry<string> serverURLConfig;
     public static ConfigEntry<string> serverPortConfig;
+    public static ConfigEntry<string> lastRankUsedConfig;
     
     public static string serverURL;
     
@@ -86,6 +87,7 @@ public static class NetworkManager
     
     public static int maxReconnectionAttempts = 3;
     public static int currentReconnection = 0;
+    
     
     public static void setState(State newState)
     {
