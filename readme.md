@@ -66,7 +66,7 @@ View [maps.md](maps.md) for full credits and information.
 
 A **huge** thank you to the following members of the ULTRAKILL and Angry community who helped me test this mod out and helped me track down bugs and other problems:
 
-Frizou, FruitCircuit, JOE, LambCG, Lena, CEO of Gaming, Draghtnim, FNChannel, RedNova, yusufturk, Darkn, fishy, CATPERFECT, AshleyInnit, Mercy, Tootaroni, Vlad
+Frizou, FruitCircuit, JOE, LambCG, Lena, CEO of Gaming, Draghtnim, FNChannel, RedNova, yusufturk, Darkn, fishy, CATPERFECT, AshleyInnit, Mercy, Tootaroni, Vlad, willem1321
 
 ### Baphomet's Bingo uses the following libraries and dependencies:
 
