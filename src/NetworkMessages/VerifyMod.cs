@@ -26,7 +26,7 @@ public class VerifyModRequest : SendMessage
 
 public class ModVerificationResponse : MessageResponse
 {
-    public bool status;
+    public List<string> nonWhitelistedMods;
     
     public string latestVersion;
     
@@ -40,7 +40,9 @@ public static class ModVerificationHandler
 {
     public static void handle(ModVerificationResponse response)
     {
-        NetworkManager.modlistCheckPassed = response.status;
+        NetworkManager.modlistCheckPassed = (response.nonWhitelistedMods.Count == 0);
+        
+        if(!NetworkManager.modlistCheckPassed) {UIManager.nonWhitelistedMods = response.nonWhitelistedMods;}
         
         Version localVersion = new Version(Main.pluginVersion);
         Version latestVersion = new Version(response.latestVersion);

@@ -23,6 +23,8 @@ public static class UIManager
     public static bool wasVsyncActive = false;
     public static int fpsLimit = -1;
     
+    public static List<String> nonWhitelistedMods = new List<string>();
+
     public static void HandleGameSettingsUpdate()
     {
         //Only send if we're the host.
@@ -76,16 +78,11 @@ public static class UIManager
     {
         TextMeshProUGUI mods = GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(ultrabingoUnallowedModsPanel,"BingoLockedPanel"),"Panel"),"ModList").GetComponent<TextMeshProUGUI>();
         
-        List<string> whitelistedMods = new List<string>()
-        {
-            "PluginConfigurator","AngryLevelLoader","Baphomet's BINGO"
-        };
-        
         string text = "<color=orange>";
         
-        foreach (string mod in Main.LoadedMods)
+        foreach (string mod in UIManager.nonWhitelistedMods)
         {
-            if(!whitelistedMods.Contains(mod)) {text += mod + "\n";}
+           {text += mod + "\n";}
         }
         text += "</color>";
         mods.text = text;

@@ -1,4 +1,8 @@
-﻿# v.1.1.0
+﻿ # v.1.1.1
+ 
+- Fixed non-whitelisted mods displaying incorrectly.
+
+# v.1.1.0
 
 ## Major changes:
   - **Added Domination gamemode.** Teams fight to control as many maps as possible before time runs out.
