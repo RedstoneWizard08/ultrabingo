@@ -1,6 +1,7 @@
 ﻿ # v.1.1.1
  
 - Fixed non-whitelisted mods displaying incorrectly.
+- Added [BetterWeaponHUDs](https://thunderstore.io/c/ultrakill/p/Jade_Harley/Better_Weapon_HUDs/) and [JadeLib](https://thunderstore.io/c/ultrakill/p/Jade_Harley/JadeLib/) (used by betterWeaponHUDs) to the whitelist.
 
 # v.1.1.0
 
