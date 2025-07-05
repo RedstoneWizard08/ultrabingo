@@ -3,7 +3,7 @@ using UltraBINGO.NetworkMessages;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Windows;
-
+using UltraBINGO.Components;
 using static UltraBINGO.CommonFunctions;
 
 namespace UltraBINGO.UI_Elements;
@@ -29,6 +29,8 @@ public static class BingoLobby
     public static Toggle RequirePRank;
     public static Toggle DisableCampaignAltExits;
     public static TMP_Dropdown GameVisibility;
+    
+    public static GameObject chatWindow;
     
     public static void onMaxPlayerUpdate(string playerAmount)
     {
@@ -224,6 +226,15 @@ public static class BingoLobby
         
         GameVisibility = GetGameObjectChild(GetGameObjectChild(GameOptions,"GameVisibility"),"Dropdown").GetComponent<TMP_Dropdown>();
         GameVisibility.onValueChanged.AddListener(onGameVisibilityUpdate);
+        
+        if(chatWindow == null)
+        {
+            chatWindow = GameObject.Instantiate(AssetLoader.BingoChat,BingoLobby.transform);
+            chatWindow.name = "BingoChat";
+            chatWindow.AddComponent<BingoChatManager>();
+            chatWindow.GetComponent<BingoChatManager>().Bind(chatWindow);
+        }
+        
         
         BingoLobby.SetActive(false);
     }

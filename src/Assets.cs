@@ -27,6 +27,7 @@ public static class AssetLoader
     public static GameObject BingoGameBrowser;
     public static GameObject BingoVotePanel;
     public static GameObject BingoDominationTimer;
+    public static GameObject BingoChat;
     
     public static GameObject BingoInGameGridPanel;
     public static GameObject BingoLockedPanel;
@@ -55,6 +56,7 @@ public static class AssetLoader
         BingoUnallowedModsPanel = Assets.LoadAsset<GameObject>("BingoUnallowedMods");
         BingoInGameGridPanel = Assets.LoadAsset<GameObject>("BingoInGameGrid");
         BingoDominationTimer = Assets.LoadAsset<GameObject>("BingoDominationTimer");
+        BingoChat = Assets.LoadAsset<GameObject>("BingoChat");
          
         UISprite = Assets.LoadAsset<Sprite>("UISprite");
         GameOverSound = Assets.LoadAsset<AudioClip>("gameEnd");

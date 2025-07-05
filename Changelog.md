@@ -1,4 +1,8 @@
-﻿ # v.1.1.1
+﻿# v1.2.0
+
+- **Added chat system.** Players in chat with other players in the same game with all-chat and team chat.
+
+# v.1.1.1
  
 - Fixed non-whitelisted mods displaying incorrectly.
 - Added [BetterWeaponHUDs](https://thunderstore.io/c/ultrakill/p/Jade_Harley/Better_Weapon_HUDs/) and [JadeLib](https://thunderstore.io/c/ultrakill/p/Jade_Harley/JadeLib/) (used by betterWeaponHUDs) to the whitelist.

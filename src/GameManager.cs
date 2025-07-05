@@ -41,6 +41,7 @@ public static class GameManager
     public static float dominationTimer = 0;
     
     public static bool hasRankAccess = false;
+    public static bool canUseChat = true;
     
     public static VoteData voteData = new VoteData(false);
     
@@ -366,6 +367,9 @@ public static class GameManager
             BingoLobby.GameVisibility.value = CurrentGame.gameSettings.gameVisibility;
         }
         
+        //Display chat window
+        MonoSingleton<BingoChatManager>.Instance.updateChatPanel();
+
         NetworkManager.setState(UltrakillBingoClient.State.INLOBBY);
         NetworkManager.RegisterConnection();
     }

@@ -18,13 +18,23 @@ namespace UltraBINGO.HarmonyPatches;
 public static class LevelStatsPanelPatchStart
 {
     [HarmonyPostfix]
-    public static async void showBingoPanel(LevelStatsEnabler __instance)
+    public static async void loadInGameBingoUI(LevelStatsEnabler __instance)
     {
-        //Give the game a sec to load in before displaying the tab panel.
+        //Give the game a sec to load in before loading everything in.
         await Task.Delay(250);
+        
+        GameObject canvas = GetInactiveRootObject("Canvas");
+        GameObject pauseMenu = GetGameObjectChild(canvas, "PauseMenu");
         
         if(GameManager.IsInBingoLevel && getSceneName() != "Main Menu")
         {
+            //Load in the chat window.
+            GameObject chatPanel = GameObject.Instantiate(AssetLoader.BingoChat,pauseMenu.transform);
+            chatPanel.name = "BingoChatMenu";
+                
+            canvas.AddComponent<BingoChatManager>();
+            canvas.GetComponent<BingoChatManager>().Bind(chatPanel);
+            
             __instance.gameObject.SetActive(true);
             
             GameObject inGamePanel = GameObject.Instantiate(AssetLoader.BingoInGameGridPanel,__instance.gameObject.transform);
@@ -89,7 +99,6 @@ public static class LevelStatsPanelPatchStart
             //(Need to put the timeManager component in the root to ensure it remains active even while the panel is closed)
             if(GameManager.CurrentGame.gameSettings.gamemode == 1)
             {
-                GameObject canvas = GetInactiveRootObject("Canvas");
                 GameObject dominationTimeRemaining = GameObject.Instantiate(AssetLoader.BingoDominationTimer,canvas.transform);
                 
                 canvas.AddComponent<DominationTimeManager>();

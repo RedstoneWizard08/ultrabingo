@@ -585,6 +585,18 @@ public static class NetworkManager
                 //No need to do anything here, ping/pong just keeps the connection alive
                 break;
             }
+            case "ChatMessage":
+            {
+                ChatMessageReceive response = JsonConvert.DeserializeObject<ChatMessageReceive>(em.contents);
+                ChatMessageReceiveHandler.handle(response);
+                break;
+            }
+            case "ChatWarn":
+            {
+                ChatWarn response = JsonConvert.DeserializeObject<ChatWarn>(em.contents);
+                ChatWarnHandler.handle(response);
+                break;
+            }
             default: {Logging.Warn("Unknown or unimplemented packet received from server ("+em.header+"), discarding");break;}
         }
     }

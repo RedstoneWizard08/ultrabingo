@@ -37,18 +37,13 @@ namespace UltrakillBingoClient
         
         public static string ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         
-        public static bool IsDevelopmentBuild = false;
+        public static bool IsDevelopmentBuild = true;
         public static bool IsSteamAuthenticated = false;
         public static bool HasUnlocked = true;
         public static bool UpdateAvailable = false;
         
         public static List<string> LoadedMods = new List<string>();
-        
-        string allAssets = "";
-        bool ran = false;
-        int index = 0;
-        int totalAssets = 0;
-        
+
         //Mod init logic
         private void Awake()
         {

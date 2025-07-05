@@ -33,7 +33,9 @@ public class ModVerificationResponse : MessageResponse
     public string motd;
     
     public string availableRanks;
- 
+
+    public bool canUseChat;
+
 }
 
 public static class ModVerificationHandler
@@ -76,7 +78,7 @@ public static class ModVerificationHandler
             NetworkManager.requestedRank = rankSelector.options[0].text;
             
             //Check if the previously used rank is available in the list. If so, set it as default.
-            if(ranks.Contains(NetworkManager.lastRankUsedConfig.Value));
+            if(ranks.Contains(NetworkManager.lastRankUsedConfig.Value))
             {
                 //NetworkManager.requestedRank = NetworkManager.lastRankUsedConfig.Value;
                 rankSelector.value = ranks.IndexOf(NetworkManager.lastRankUsedConfig.Value);
@@ -90,6 +92,7 @@ public static class ModVerificationHandler
         }
                     
         NetworkManager.modlistCheckDone = true;
+        GameManager.canUseChat = response.canUseChat;
         NetworkManager.DisconnectWebSocket(1000,"ModCheckDone");
     }
 }
