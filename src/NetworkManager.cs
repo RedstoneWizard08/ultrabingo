@@ -597,6 +597,12 @@ public static class NetworkManager
                 ChatWarnHandler.handle(response);
                 break;
             }
+            case "MapPools":
+            {
+                MapPoolResponse response = JsonConvert.DeserializeObject<MapPoolResponse>(em.contents);
+                MapPoolResponseHandler.handle(response);
+                break;
+            }
             default: {Logging.Warn("Unknown or unimplemented packet received from server ("+em.header+"), discarding");break;}
         }
     }

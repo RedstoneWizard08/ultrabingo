@@ -1,7 +1,7 @@
 ﻿# v1.2.0
 
 - **Added chat system.** Players in chat with other players in the same game with all-chat and team chat.
-
+- Ongoing refactoring work to allow for better map pool selection and custom level selection.
 # v.1.1.1
  
 - Fixed non-whitelisted mods displaying incorrectly.

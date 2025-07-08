@@ -36,7 +36,7 @@ public class BingoMapSelection
     
     public static int NumOfMapsTotal = 0;
     
-    public static HashSet<string> SelectedIds = new HashSet<string>();
+    public static HashSet<int> SelectedIds = new HashSet<int>();
     public static List<GameObject> MapPoolButtons = new List<GameObject>();
     public static List<MapPoolContainer> AvailableMapPools = new List<MapPoolContainer>();
     public static bool HasAlreadyFetched = false;
@@ -81,7 +81,7 @@ public class BingoMapSelection
         NumOfMapsTotal += mapPool.GetComponent<MapPoolData>().mapPoolNumOfMaps*(isEnabled ? 1 : -1);
         UpdateNumber();
         
-        string mapPoolId = mapPool.GetComponent<MapPoolData>().mapPoolId;
+        int mapPoolId = mapPool.GetComponent<MapPoolData>().mapPoolId;
         if(isEnabled && !SelectedIds.Contains(mapPoolId))
         {
             SelectedIds.Add(mapPoolId);
@@ -170,13 +170,65 @@ public class BingoMapSelection
             return -1;
         }
     }
+
+    public static async void setupMapPools(List<MapPool> mapPools)
+    {
+        foreach (MapPool m in mapPools)
+        {
+            Logging.Warn(m.MapPoolName);
+            GameObject newMapPool = GameObject.Instantiate(MapListButtonTemplate,MapListButtonTemplate.transform.parent);
+                    
+            MapPoolData poolData = newMapPool.AddComponent<MapPoolData>();
+            poolData.mapPoolId = m.MapPoolId;
+            poolData.mapPoolName = m.MapPoolName;
+            poolData.mapPoolDescription = m.MapPoolDescription;
+            poolData.mapPoolNumOfMaps = m.MapPoolLevelCount;
+            poolData.mapPoolMapList = new List<string>() { "" };
+
+            GetGameObjectChild(newMapPool, "Text").GetComponent<Text>().text = m.MapPoolName;
+                    
+            newMapPool.AddComponent<EventTrigger>();
+            EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
+            mouseEnter.eventID = EventTriggerType.PointerEnter;
+            mouseEnter.callback.AddListener((data) =>
+            {
+                ShowMapPoolData((PointerEventData)data);
+            });
+            newMapPool.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
+                
+            EventTrigger.Entry mouseExit = new EventTrigger.Entry();
+            mouseExit.eventID = EventTriggerType.PointerExit;
+            mouseExit.callback.AddListener((data) =>
+            {
+                HideMapPoolData();
+            });
+                    
+            newMapPool.GetComponent<Button>().onClick.AddListener(delegate
+            {
+                ToggleMapPool(ref newMapPool);
+            });
+                    
+            MapPoolButtons.Add(newMapPool);
+            newMapPool.SetActive(true);
+        }
+        HasAlreadyFetched = true;
+        FetchText.SetActive(false);
+        MapContainer.SetActive(true);
+    }
     
     public static async void Setup()
     {
         if(!HasAlreadyFetched)
         {
             Logging.Message("Fetching map pool catalog...");
-            int obtainResult = await ObtainMapPools();
+
+            MapPoolRequest mpr = new MapPoolRequest();
+            mpr.ticket = NetworkManager.CreateRegisterTicket();
+            mpr.steamId = Steamworks.SteamClient.SteamId.ToString();
+            mpr.gameId = GameManager.CurrentGame.gameId;
+            NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(mpr));
+            
+            /*int obtainResult = await ObtainMapPools();
             if(obtainResult == 0)
             {
                 foreach(MapPoolContainer currentMapPool in AvailableMapPools)
@@ -219,7 +271,7 @@ public class BingoMapSelection
             }
             HasAlreadyFetched = true;
             FetchText.SetActive(false);
-            MapContainer.SetActive(true);
+            MapContainer.SetActive(true);*/
         }
     }
     

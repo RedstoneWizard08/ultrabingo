@@ -5,7 +5,7 @@ namespace UltraBINGO.Components;
 
 public class MapPoolData : MonoBehaviour
 {
-    public string mapPoolId = "id";
+    public int mapPoolId = 0;
     public string mapPoolName = "MapPoolName";
     public string mapPoolDescription = "Desc";
     public bool mapPoolEnabled = false;

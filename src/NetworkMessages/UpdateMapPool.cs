@@ -7,7 +7,7 @@ public class UpdateMapPool : SendMessage
 {
     public string messageType = "UpdateMapPool";
     public int gameId;
-    public List<string> mapPoolIds;
+    public List<int> mapPoolIds;
     
     public RegisterTicket ticket;
 }
