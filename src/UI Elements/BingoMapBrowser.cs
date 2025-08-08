@@ -29,10 +29,9 @@ public class BingoMapBrowser
 
     public static string catalogURL = "https://raw.githubusercontent.com/eternalUnion/AngryLevels/release/V2/LevelCatalog.json";
     public static string thumbnailURL = "https://raw.githubusercontent.com/eternalUnion/AngryLevels/release/Levels/";
-
+    
     public static GameObject MapTemplate;
-   
-
+    
     public static bool hasFetched = false;
 
     public static AngryMapCatalog catalog = null;
@@ -163,6 +162,10 @@ public class BingoMapBrowser
     {
         foreach(GameObject angryLevel in levelCatalog)
         {
+            if (angryLevel.name.Contains("Level "))
+            {
+                continue;
+            }
             Texture2D bundleImg = await FetchThumbnail(angryLevel.GetComponent<BingoMapSelectionID>().bundleId);
             if (bundleImg != null)
             {
@@ -174,6 +177,18 @@ public class BingoMapBrowser
         }
     }
 
+    public static void ResetListPosition()
+    {
+        foreach (GameObject tab in levelCatalog)
+        {
+            Logging.Warn(tab.name);
+            GetGameObjectChild(tab,"SelectionIndicator").SetActive(false);
+        }
+
+        SelectedMapsList.GetComponent<TextMeshProUGUI>().text = "";
+        selectedMapsCount.GetComponent<TextMeshProUGUI>().text = "";
+    }
+    
     public static async void Setup()
     {
         if (!hasFetched)
@@ -219,13 +234,13 @@ public class BingoMapBrowser
                     });
 
                     string path = "assets/bingo/lvlimg/campaign/"+GetMissionName.GetSceneName(campaignLevel)+".png";
-                    Logging.Warn(path);
-                    
+
                     Texture2D levelImg = AssetLoader.Assets.LoadAsset<Texture2D>(path);
                     Sprite levelSprite = Sprite.Create(levelImg, new Rect(0.0f, 0.0f, levelImg.width, levelImg.height), new Vector2(0.5f, 0.5f), 100.0f);
                     GetGameObjectChild(levelPanel, "BundleImage").GetComponent<Image>().sprite = levelSprite;
                     levelPanel.name = GetMissionName.GetSceneName(campaignLevel);
                     levelPanel.SetActive(true);
+                    levelCatalog.Add(levelPanel);
                 }
                 
                 //Then show all the Angry levels...
@@ -233,7 +248,6 @@ public class BingoMapBrowser
                 {
                     foreach (AngryLevel level in bundle.Levels)
                     {
-                        Logging.Warn(level.LevelName);
                         GameObject levelPanel = GameObject.Instantiate(MapTemplate, MapTemplate.transform.parent);
                         
                         GetGameObjectChild(levelPanel, "BundleName").GetComponent<Text>().text = bundle.Name;

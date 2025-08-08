@@ -119,8 +119,6 @@ public static class GameManager
         
         BingoMapBrowser.selectedLevels.Clear();
         BingoMapBrowser.selectedLevelNames.Clear();
-        BingoMapBrowser.hasFetched = false;
-        BingoMapBrowser.levelCatalog.Clear();
         
         if(!isInLevel)
         {
@@ -131,11 +129,15 @@ public static class GameManager
             BingoEncapsulator.BingoMenu.SetActive(true);
             
             NetworkManager.setState(UltrakillBingoClient.State.INMENU);
+            
+            BingoMapBrowser.ResetListPosition();
 
         }
         else
         {
             NetworkManager.setState(UltrakillBingoClient.State.NORMAL);
+            BingoMapBrowser.hasFetched = false;
+            BingoMapBrowser.levelCatalog = new List<GameObject>();
         }
     }
     
