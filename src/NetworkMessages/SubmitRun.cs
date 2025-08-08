@@ -84,7 +84,6 @@ public static class LevelClaimHandler
         {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("A level was claimed by someone but was unable to update the grid.\nCheck BepInEx console and report it to Clearwater!");
             Logging.Error(e.Message);
-            throw;
         }
     }
 }
