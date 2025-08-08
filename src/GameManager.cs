@@ -35,6 +35,9 @@ public static class GameManager
     public static bool IsDownloadingLevel = false;
     public static bool IsSwitchingLevels = false;
     public static bool alreadyStartedVote = false;
+
+    public static bool isUsingCustomMappool = false;
+    public static List<string> customMappool = new List<string>();
     
     public static GameObject LevelBeingDownloaded = null;
     
@@ -84,7 +87,7 @@ public static class GameManager
         Teammates = null;
         voteData = null;
 
-        BingoMapSelection.ClearList();
+        BingoMapPoolSelection.ClearList();
         
         //Cleanup the bingo grid if on the main menu.
         if(getSceneName() == "Main Menu")
@@ -114,6 +117,11 @@ public static class GameManager
         
         ClearGameVariables();
         
+        BingoMapBrowser.selectedLevels.Clear();
+        BingoMapBrowser.selectedLevelNames.Clear();
+        BingoMapBrowser.hasFetched = false;
+        BingoMapBrowser.levelCatalog.Clear();
+        
         if(!isInLevel)
         {
             //If dc'ing from lobby/card/end screen, return to the bingo menu.
@@ -123,8 +131,12 @@ public static class GameManager
             BingoEncapsulator.BingoMenu.SetActive(true);
             
             NetworkManager.setState(UltrakillBingoClient.State.INMENU);
+
         }
-        else {NetworkManager.setState(UltrakillBingoClient.State.NORMAL);}
+        else
+        {
+            NetworkManager.setState(UltrakillBingoClient.State.NORMAL);
+        }
     }
     
     public static void MoveToCard(int gameType)
@@ -148,10 +160,10 @@ public static class GameManager
         int gridSize = CurrentGame.gameSettings.gridSize+3;
         int requiredMaps = gridSize*gridSize;
         
-        if(BingoMapSelection.NumOfMapsTotal < requiredMaps)
+        if(BingoMapBrowser.selectedLevels.Count < requiredMaps)
         {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Not enough maps selected. Add more map pools, or reduce the grid size.\n" +
-                                                                      "(<color=orange>" + requiredMaps + " </color>required, <color=orange>" + BingoMapSelection.NumOfMapsTotal + "</color> selected)");
+                                                                      "(<color=orange>" + requiredMaps + " </color>required, <color=orange>" + BingoMapBrowser.selectedLevels.Count + "</color> selected)");
             return false;
         }
         
@@ -340,13 +352,13 @@ public static class GameManager
             BingoLobby.DisableCampaignAltExits.isOn = false;
             BingoLobby.GameVisibility.value = 0;
             
-            BingoMapSelection.NumOfMapsTotal = 0;
-            BingoMapSelection.UpdateNumber();
-            BingoMapSelection.SelectedIds.Clear();
+            BingoMapPoolSelection.NumOfMapsTotal = 0;
+            BingoMapPoolSelection.UpdateNumber();
+            BingoMapPoolSelection.SelectedIds.Clear();
             
-            if(BingoMapSelection.MapPoolButtons.Count > 0)
+            if(BingoMapPoolSelection.MapPoolButtons.Count > 0)
             {
-                foreach(GameObject mapPoolButton in BingoMapSelection.MapPoolButtons)
+                foreach(GameObject mapPoolButton in BingoMapPoolSelection.MapPoolButtons)
                 {
                     GetGameObjectChild(mapPoolButton,"Image").GetComponent<Image>().color = new Color(1,1,1,0);
                     mapPoolButton.GetComponent<MapPoolData>().mapPoolEnabled = false;

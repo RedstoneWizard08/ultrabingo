@@ -89,7 +89,7 @@ public static class BingoEnd
         LeaveGame.GetComponent<Button>().onClick.AddListener(delegate
         {
             GameManager.LeaveGame();
-            BingoMapSelection.ClearList(true);
+            BingoMapPoolSelection.ClearList(true);
         });
         LeaveGame.transform.SetParent(BingoEndScreen.transform);
         BingoEndScreen.SetActive(false);    

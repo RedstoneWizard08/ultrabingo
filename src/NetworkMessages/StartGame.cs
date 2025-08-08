@@ -11,7 +11,9 @@ public class StartGameRequest : SendMessage
     
     public int roomId;
     public RegisterTicket ticket;
-    
+
+    public List<string> selectedMapIds;
+
 }
 
 public class StartGameResponse : MessageResponse

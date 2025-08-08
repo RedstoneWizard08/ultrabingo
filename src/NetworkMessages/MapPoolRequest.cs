@@ -29,6 +29,6 @@ public static class MapPoolResponseHandler
 {
     public static void handle(MapPoolResponse response)
     {
-        BingoMapSelection.setupMapPools(response.mapPools);
+        BingoMapPoolSelection.setupMapPools(response.mapPools);
     }
 }

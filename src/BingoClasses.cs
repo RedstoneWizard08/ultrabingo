@@ -3,6 +3,31 @@ using System.Linq;
 
 namespace UltraBINGO;
 
+public class AngryMapCatalog
+{
+    public List<AngryBundle> Levels;
+}
+
+public class AngryBundle
+{
+    public List<AngryLevel> Levels;
+    
+    public string Name;
+    public string Author;
+    public int size;
+    public string Guid;
+    public string Hash;
+    public string ThumbnailHash;
+    public bool locked;
+}
+
+public class AngryLevel
+{
+    public string LevelName;
+    public string LevelId;
+    
+}
+
 public class MapPoolContainer
 {
     public string mapPoolId;

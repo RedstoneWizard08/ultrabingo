@@ -12,7 +12,7 @@ public static class Patch
 	[HarmonyPostfix]
 	public static void notifyDownloadComplete(AngryBundleContainer __instance)
 	{
-		if(GameManager.CurrentGame != null && !GameManager.EnteringAngryLevel)
+		if(GameManager.CurrentGame != null && !GameManager.EnteringAngryLevel && BingoMenuController.currentlyDownloadingLevel.Length > 0)
 		{
 			Logging.Info("Download of " + BingoMenuController.currentlyDownloadingLevel + " finished");
 			GameManager.IsDownloadingLevel = false;

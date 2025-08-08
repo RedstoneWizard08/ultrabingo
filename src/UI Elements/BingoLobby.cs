@@ -160,8 +160,8 @@ public static class BingoLobby
         SelectMaps.GetComponent<Button>().onClick.AddListener( delegate
         {
             BingoEncapsulator.BingoLobbyScreen.SetActive(false);
-            BingoEncapsulator.BingoMapSelectionMenu.SetActive(true);
-            BingoMapSelection.Setup();
+            BingoEncapsulator.BingoMapSelection.SetActive(true);
+            BingoMapBrowser.Setup();
         });
         
         SetTeams = GetGameObjectChild(BingoLobby,"SetTeams");

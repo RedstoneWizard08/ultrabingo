@@ -61,6 +61,12 @@ namespace UltrakillBingoClient
             NetworkManager.serverURLConfig = Config.Bind("ServerConfig","serverUrl","clearwaterbirb.uk","Server URL");
             NetworkManager.serverPortConfig = Config.Bind("ServerConfig","serverPort","2052","Server Port");
             NetworkManager.lastRankUsedConfig = Config.Bind("ServerConfig","lastRankUsed","None","Last Rank Used (Only works if your SteamID has access to this rank)");
+
+            if (!Directory.Exists(Path.Combine(ModFolder, "ThumbnailCache")))
+            {
+                Logging.Message("--Thumbnail cache folder doesn't exist, creating now---");
+                Directory.CreateDirectory(Path.Combine(ModFolder, "ThumbnailCache"));
+            }
             
             string url = NetworkManager.serverURLConfig.Value;
             string port = NetworkManager.serverPortConfig.Value;

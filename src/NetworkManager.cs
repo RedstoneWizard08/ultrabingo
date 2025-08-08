@@ -252,6 +252,8 @@ public static class NetworkManager
                     BingoEncapsulator.BingoEndScreen.SetActive(false);
                     BingoEncapsulator.BingoMenu.SetActive(true);
                     
+                    BingoLobby.UnlockUI();
+                    
                     break;
                 }
                 case State.INGAME:
@@ -403,6 +405,7 @@ public static class NetworkManager
         StartGameRequest gameRequest = new StartGameRequest();
         gameRequest.roomId = roomId;
         gameRequest.ticket = CreateRegisterTicket();
+        gameRequest.selectedMapIds = BingoMapBrowser.selectedLevels;
         
         SendEncodedMessage(JsonConvert.SerializeObject(gameRequest));
     }

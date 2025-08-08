@@ -16,7 +16,7 @@ using UnityEngine.UI;
 
 using static UltraBINGO.CommonFunctions;
 
-public class BingoMapSelection
+public class BingoMapPoolSelection
 {
     public static GameObject FetchText;
     public static GameObject SelectedMapsTotal;
@@ -33,6 +33,7 @@ public class BingoMapSelection
     public static GameObject MapListButtonTemplate;
     
     public static GameObject Back;
+    public static GameObject Custom;
     
     public static int NumOfMapsTotal = 0;
     
@@ -43,8 +44,15 @@ public class BingoMapSelection
     
     public static void ReturnToLobby()
     {
-        BingoEncapsulator.BingoMapSelectionMenu.SetActive(false);
+        BingoEncapsulator.BingoMappoolSelectionMenu.SetActive(false);
         BingoEncapsulator.BingoLobbyScreen.SetActive(true);
+    }
+
+    public static void DisplayMapSelection()
+    {
+        BingoEncapsulator.BingoMappoolSelectionMenu.SetActive(false);
+        BingoEncapsulator.BingoMapSelection.SetActive(true);
+        BingoMapBrowser.Setup();
     }
     
     public static void ClearList(bool force=false)
@@ -227,51 +235,6 @@ public class BingoMapSelection
             mpr.steamId = Steamworks.SteamClient.SteamId.ToString();
             mpr.gameId = GameManager.CurrentGame.gameId;
             NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(mpr));
-            
-            /*int obtainResult = await ObtainMapPools();
-            if(obtainResult == 0)
-            {
-                foreach(MapPoolContainer currentMapPool in AvailableMapPools)
-                {
-                    GameObject newMapPool = GameObject.Instantiate(MapListButtonTemplate,MapListButtonTemplate.transform.parent);
-                    
-                    MapPoolData poolData = newMapPool.AddComponent<MapPoolData>();
-                    poolData.mapPoolId = currentMapPool.mapPoolId;
-                    poolData.mapPoolName = currentMapPool.mapPoolName;
-                    poolData.mapPoolDescription = currentMapPool.description;
-                    poolData.mapPoolNumOfMaps = currentMapPool.numOfMaps;
-                    poolData.mapPoolMapList = currentMapPool.mapList;
-                    
-                    GetGameObjectChild(newMapPool,"Text").GetComponent<Text>().text = currentMapPool.mapPoolName;
-                    
-                    newMapPool.AddComponent<EventTrigger>();
-                    EventTrigger.Entry mouseEnter = new EventTrigger.Entry();
-                    mouseEnter.eventID = EventTriggerType.PointerEnter;
-                    mouseEnter.callback.AddListener((data) =>
-                    {
-                        ShowMapPoolData((PointerEventData)data);
-                    });
-                    newMapPool.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
-                
-                    EventTrigger.Entry mouseExit = new EventTrigger.Entry();
-                    mouseExit.eventID = EventTriggerType.PointerExit;
-                    mouseExit.callback.AddListener((data) =>
-                    {
-                        HideMapPoolData();
-                    });
-                    
-                    newMapPool.GetComponent<Button>().onClick.AddListener(delegate
-                    {
-                        ToggleMapPool(ref newMapPool);
-                    });
-                    
-                    MapPoolButtons.Add(newMapPool);
-                    newMapPool.SetActive(true);
-                }
-            }
-            HasAlreadyFetched = true;
-            FetchText.SetActive(false);
-            MapContainer.SetActive(true);*/
         }
     }
     
@@ -295,6 +258,12 @@ public class BingoMapSelection
         Back.GetComponent<Button>().onClick.AddListener(delegate
         {
             ReturnToLobby();
+        });
+        
+        Custom = GetGameObjectChild(MapSelection, "CustomMappool");
+        Custom.GetComponent<Button>().onClick.AddListener(delegate
+        {
+            DisplayMapSelection();
         });
     }
 }

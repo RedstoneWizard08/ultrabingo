@@ -22,12 +22,14 @@ public static class AssetLoader
     public static GameObject BingoCardElements;
     public static GameObject BingoEndScreen;
     public static GameObject BingoSetTeams;
-    public static GameObject BingoMapSelectionMenu;
+    public static GameObject BingoMapPoolSelection;
     public static GameObject BingoCardButtonTemplate;
     public static GameObject BingoGameBrowser;
     public static GameObject BingoVotePanel;
     public static GameObject BingoDominationTimer;
     public static GameObject BingoChat;
+
+    public static GameObject BingoMapSelection;
     
     public static GameObject BingoInGameGridPanel;
     public static GameObject BingoLockedPanel;
@@ -49,7 +51,7 @@ public static class AssetLoader
         BingoCardElements = Assets.LoadAsset<GameObject>("BingoCard");
         BingoEndScreen = Assets.LoadAsset<GameObject>("BingoEndScreen");
         BingoSetTeams = Assets.LoadAsset<GameObject>("BingoSetTeams");
-        BingoMapSelectionMenu = Assets.LoadAsset<GameObject>("BingoMapSelection");
+        BingoMapPoolSelection = Assets.LoadAsset<GameObject>("BingoMappoolSelection"); //Basic mappool selection
         BingoCardButtonTemplate = Assets.LoadAsset<GameObject>("BingoGridButtonTemplate");
         BingoGameBrowser = Assets.LoadAsset<GameObject>("BingoMatchBrowser");
         BingoLockedPanel = Assets.LoadAsset<GameObject>("BingoLocked");
@@ -57,6 +59,7 @@ public static class AssetLoader
         BingoInGameGridPanel = Assets.LoadAsset<GameObject>("BingoInGameGrid");
         BingoDominationTimer = Assets.LoadAsset<GameObject>("BingoDominationTimer");
         BingoChat = Assets.LoadAsset<GameObject>("BingoChat");
+        BingoMapSelection = Assets.LoadAsset<GameObject>("BingoMapSelection"); //Full map selection
          
         UISprite = Assets.LoadAsset<Sprite>("UISprite");
         GameOverSound = Assets.LoadAsset<AudioClip>("gameEnd");
