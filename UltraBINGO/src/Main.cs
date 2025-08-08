@@ -1,0 +1,143 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using BepInEx;
+using BepInEx.Bootstrap;
+using HarmonyLib;
+using Steamworks;
+using Steamworks.Data;
+using TMPro;
+using UltraBINGO.NetworkMessages;
+using UltraBINGO.UI_Elements;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using static UltraBINGO.CommonFunctions;
+
+/*
+ * Baphomet's Bingo
+ *
+ * Adds a bingo multiplayer gamemode.
+ *
+ * Created by Clearwater.
+ * */
+
+namespace UltraBINGO;
+
+[BepInPlugin(PluginId, PluginName, PluginVersion)]
+[BepInDependency("com.eternalUnion.angryLevelLoader")]
+public class Main : BaseUnityPlugin {
+    private const string PluginId = "clearwater.ultrakillbingo.ultrakillbingo";
+    private const string PluginName = "Baphomet's BINGO";
+    public const string PluginVersion = "1.1.1";
+
+    public static string? ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+    public const bool IsDevelopmentBuild = false;
+    public static bool IsSteamAuthenticated;
+    public static bool HasUnlocked = true;
+    public static bool UpdateAvailable = false;
+
+    private static readonly List<string> LoadedMods = [];
+
+    //Mod init logic
+    private void Awake() {
+        Logging.Message("--Now loading Baphomet's Bingo...--");
+        Debug.unityLogger.filterLogType = LogType.Warning;
+
+        Logging.Message("--Loading asset bundle...--");
+        AssetLoader.LoadAssets();
+
+        Logging.Message("--Applying patches...--");
+
+        var harmony = new Harmony(PluginId);
+
+        harmony.PatchAll();
+
+        Logging.Message("--Network manager init...--");
+
+        NetworkManager.serverURLConfig =
+            Config.Bind("ServerConfig", "serverUrl", "clearwaterbirb.uk", "Server URL");
+        NetworkManager.serverPortConfig = Config.Bind("ServerConfig", "serverPort", "2052", "Server Port");
+        NetworkManager.lastRankUsedConfig = Config.Bind("ServerConfig", "lastRankUsed", "None",
+            "Last Rank Used (Only works if your SteamID has access to this rank)");
+
+        var url = NetworkManager.serverURLConfig.Value;
+        var port = NetworkManager.serverPortConfig.Value;
+
+        NetworkManager.Initialise(url, port);
+
+        Logging.Message("--Done!--");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    //Make sure the client is running a legit copy of the game
+    private static void Authenticate() {
+        Logging.Message("Authenticating game ownership with Steam...");
+        try {
+            var ticket = SteamUser.GetAuthSessionTicket(new NetIdentity());
+            var ticketString = BitConverter.ToString(ticket.Data, 0, ticket.Data.Length).Replace("-", string.Empty);
+
+            if (ticketString.Length <= 0) return;
+
+            IsSteamAuthenticated = true;
+            NetworkManager.SetSteamTicket(ticketString);
+        } catch (Exception) {
+            Logging.Error("Unable to authenticate with Steam!");
+        }
+    }
+
+    public void VerifyModWhitelist() {
+        foreach (var modData in
+                 Chainloader.PluginInfos.Select(plugin => plugin.Value.ToString().Split(' ').ToList())) {
+            modData.RemoveAt(modData.Count - 1);
+            var modName = string.Join(" ", modData);
+            LoadedMods.Add(modName);
+        }
+
+        var vmr = new VerifyModRequest(LoadedMods, SteamClient.SteamId.ToString());
+        NetworkManager.SendModCheck(vmr);
+    }
+
+
+    //Scene switch
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        GameManager.ResetVars();
+
+        if (GetSceneName() == "Main Menu") {
+            HasUnlocked = HasUnlockedMod();
+            if (!IsSteamAuthenticated) {
+                Authenticate();
+                VerifyModWhitelist();
+            }
+
+            if (GameManager.currentSetGame?.isGameFinished() ?? false) {
+                BingoEnd.ShowEndScreen();
+                MonoSingleton<AssistController>.Instance.majorEnabled = false;
+                MonoSingleton<AssistController>.Instance.gameSpeed = 1f;
+            }
+
+            UIManager.ultrabingoLockedPanel = Instantiate(AssetLoader.BingoLockedPanel,
+                GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.transform);
+            UIManager.ultrabingoUnallowedModsPanel = Instantiate(AssetLoader.BingoUnallowedModsPanel,
+                GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.transform);
+
+            var num = GetGameObjectChild(BingoMainMenu.VersionInfo, "VersionNum");
+
+            if (num != null)
+                num.GetComponent<TextMeshProUGUI>().text =
+                    PluginVersion;
+
+            UIManager.ultrabingoLockedPanel?.SetActive(false);
+            UIManager.ultrabingoUnallowedModsPanel?.SetActive(false);
+        } else {
+            UIManager.RemoveLimit();
+
+            if (!GameManager.IsInBingoLevel) return;
+
+            if (GameManager.currentSetGame?.gameSettings.disableCampaignAltExits ?? false)
+                CampaignPatches.Apply(GetSceneName());
+        }
+    }
+}

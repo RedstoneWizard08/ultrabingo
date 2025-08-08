@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>UltraBINGO</AssemblyName>
+        <Description>A custom bingo gamemode for ULTRAKILL!</Description>
+        <Version>1.0.0</Version>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <RootNamespace>UltraBINGO</RootNamespace>
+        <Nullable>enable</Nullable>
+
+        <RestoreAdditionalProjectSources>
+            https://api.nuget.org/v3/index.json;
+            https://nuget.bepinex.dev/v3/index.json;
+            https://nuget.samboy.dev/v3/index.json
+        </RestoreAdditionalProjectSources>
+    </PropertyGroup>
+
+    <Import Project="../Path.props" />
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" ExcludeAssets="RUNTIME"/>
+<!--        <PackageReference Include="BepInEx.Core" Version="5.*" ExcludeAssets="RUNTIME"/>-->
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" ExcludeAssets="RUNTIME"/>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all"/>
+
+<!--        <PackageReference Include="UnityEngine.Modules" Version="2022.3.29" IncludeAssets="compile" ExcludeAssets="RUNTIME"/>-->
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="Tommy" Version="3.1.2"/>
+        <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="/home/redstone/.local/share/com.kesomannen.gale/ultrakill/profiles/Dev/BepInEx/core/BepInEx.dll" />
+        <Reference Include="/home/redstone/.local/share/com.kesomannen.gale/ultrakill/profiles/Dev/BepInEx/core/BepInEx.Harmony.dll" />
+        <Reference Include="/home/redstone/.local/share/com.kesomannen.gale/ultrakill/profiles/Dev/BepInEx/core/0Harmony.dll" />
+        
+        <Reference Include="$(ManagedPath)/UnityEngine.CoreModule.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.UIModule.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.AudioModule.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.TextRenderingModule.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.AssetBundleModule.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.InputModule.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.InputLegacyModule.dll" />
+        <Reference Include="$(ManagedPath)/UnityEngine.IMGUIModule.dll" />
+        <Reference Include="$(ManagedPath)/Unity.InputSystem.dll" />
+        
+        <Reference Include="../Lib/AngryLevelLoader.dll" Publicize="true" />
+        <Reference Include="../Lib/PluginConfigurator.dll"/>
+        <Reference Include="../Lib/RudeLevelScripts.Essentials.dll"/>
+
+        <Reference Include="$(ManagedPath)/Assembly-CSharp.dll"/>
+        <Reference Include="$(ManagedPath)/Facepunch.Steamworks.Win64.dll"/>
+        <Reference Include="$(ManagedPath)/plog.dll"/>
+        <Reference Include="$(ManagedPath)/Unity.Addressables.dll"/>
+        <Reference Include="$(ManagedPath)/Unity.ResourceManager.dll"/>
+        <Reference Include="$(ManagedPath)/Unity.TextMeshPro.dll"/>
+        <Reference Include="$(ManagedPath)/UnityEngine.UI.dll"/>
+        <Reference Include="$(ManagedPath)/UnityUIExtensions.dll"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="HarmonyPatches\"/>
+        <Folder Include="Properties\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="Server\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Remove="Server\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Server\**"/>
+    </ItemGroup>
+</Project>

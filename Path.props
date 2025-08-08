@@ -1,0 +1,15 @@
+<Project>
+    <Import Project="./Path.local.props" />
+    
+    <PropertyGroup>
+        <!-- Windows -->
+        <!-- C:/Program Files (x86)/Steam/steamapps/common/ULTRAKILL -->
+
+        <!-- Linux -->
+        <!-- $(HOME)/.local/share/Steam/steamapps/common/ULTRAKILL -->
+        
+        <!-- Pick the correct path for your OS and put it in <GamePath> in Path.local.props. -->
+        
+        <ManagedPath>$(GamePath)/ULTRAKILL_Data/Managed</ManagedPath>
+    </PropertyGroup>
+</Project>

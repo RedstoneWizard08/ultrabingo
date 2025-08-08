@@ -7,3 +7,7 @@ riderModule.iml
 .idea/
 UltraBINGO.sln.DotSettings.user
 slnx.sqlite
+old_server
+data.db
+target
+Path.local.props

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltraBINGO", "UltraBINGO.csproj", "{E51B5A12-C07E-4A5D-AFAD-CE9E59CEBB7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "Build\Build.csproj", "{3A548B8E-2315-41D1-ACF7-AC34EDB20E6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltraBINGO", "UltraBINGO\UltraBINGO.csproj", "{4D001265-3BDE-4D45-92FB-F5753506249B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E51B5A12-C07E-4A5D-AFAD-CE9E59CEBB7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E51B5A12-C07E-4A5D-AFAD-CE9E59CEBB7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E51B5A12-C07E-4A5D-AFAD-CE9E59CEBB7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E51B5A12-C07E-4A5D-AFAD-CE9E59CEBB7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A548B8E-2315-41D1-ACF7-AC34EDB20E6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A548B8E-2315-41D1-ACF7-AC34EDB20E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A548B8E-2315-41D1-ACF7-AC34EDB20E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A548B8E-2315-41D1-ACF7-AC34EDB20E6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D001265-3BDE-4D45-92FB-F5753506249B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D001265-3BDE-4D45-92FB-F5753506249B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D001265-3BDE-4D45-92FB-F5753506249B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D001265-3BDE-4D45-92FB-F5753506249B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

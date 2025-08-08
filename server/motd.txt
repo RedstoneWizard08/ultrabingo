@@ -1,0 +1,2 @@
+<color=orange>Update 1.1 is out!</color>
+Domination mode, reroll votes, team pings and bug fixes!
