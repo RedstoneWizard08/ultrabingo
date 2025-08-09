@@ -1,22 +1,18 @@
-﻿using System;
-using UltraBINGO.UI_Elements;
-using UnityEngine;
+﻿using UnityEngine;
+
+// ReSharper disable InconsistentNaming
 
 namespace UltraBINGO.Components;
 
 public class BingoLevelData : MonoBehaviour {
-    public bool isClaimed;
-    public string claimedTeam = "none";
-    public string claimedPlayer = "none";
-
-    public int row;
-    public int column;
-
-    public float timeRequirement;
-
-    public string levelName = "";
-
-    public bool isAngryLevel;
-    public string angryParentBundle = "";
-    public string angryLevelId = "";
+    public bool IsClaimed;
+    public string ClaimedTeam = "none";
+    public string ClaimedPlayer = "none";
+    public int Row;
+    public int Column;
+    public float TimeRequirement;
+    public string LevelName = "";
+    public bool IsAngryLevel;
+    public string AngryParentBundle = "";
+    public string AngryLevelId = "";
 }

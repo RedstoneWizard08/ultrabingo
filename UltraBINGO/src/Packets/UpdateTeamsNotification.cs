@@ -1,0 +1,31 @@
+using System.Threading.Tasks;
+using UltraBINGO.API;
+
+namespace UltraBINGO.Packets;
+
+[Packet(PacketDirection.ServerToClient)]
+public class UpdateTeamsNotification : IncomingPacket {
+    public required int Status;
+
+    public override Task Handle() {
+        string msg;
+
+        if (GameManager.PlayerIsHost()) {
+            msg = Status == 0
+                ? "Teams have been set. The room has been locked."
+                : "Teams have been cleared. The room has been unlocked.";
+
+            GameManager.CurrentGame.GameSettings.HasManuallySetTeams = true;
+        } else {
+            msg = Status == 0
+                ? "The host has set the teams. The room has been locked."
+                : "The host has cleared the teams. The room has been unlocked.";
+
+            GameManager.CurrentGame.GameSettings.HasManuallySetTeams = false;
+        }
+
+        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
+
+        return Task.CompletedTask;
+    }
+}

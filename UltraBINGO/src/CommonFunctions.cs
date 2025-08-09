@@ -26,7 +26,9 @@ public static class CommonFunctions {
             Path.Combine(
                 (SystemInfo.deviceType == DeviceType.Desktop
                     ? Directory.GetParent(Application.dataPath)?.FullName
-                    : Application.persistentDataPath) ?? throw new InvalidOperationException(), "Saves");
+                    : Application.persistentDataPath) ?? throw new InvalidOperationException(),
+                "Saves"
+            );
 
         var _74Beat = CheckIfLevelSaveExists(savePath, "lvl29progress.bepis");
 
@@ -39,6 +41,7 @@ public static class CommonFunctions {
 
     public static GameObject? GetInactiveRootObject(string objectName) {
         var rootList = new List<GameObject>();
+        
         SceneManager.GetActiveScene().GetRootGameObjects(rootList);
 
         return rootList.FirstOrDefault(child => child.name == objectName);
@@ -55,6 +58,15 @@ public static class CommonFunctions {
         } catch (Exception) {
             return null;
         }
+    }
+
+    public static GameObject? FindObject(GameObject? parent, params string[] path) =>
+        path.Aggregate(parent, GetGameObjectChild);
+
+    public static GameObject? FindObjectWithInactiveRoot(params string[] path) {
+        var actual = new Queue<string>(path);
+
+        return actual.Aggregate(GetInactiveRootObject(actual.Dequeue()), GetGameObjectChild);
     }
 
     public static TextMeshProUGUI GetTextMeshProGUI(GameObject objectToUse) {
@@ -75,6 +87,6 @@ public static class CommonFunctions {
             mins += 1f;
         }
 
-        return mins + ":" + secs.ToString("00.000");
+        return $"{mins}:{secs:00.000}";
     }
 }

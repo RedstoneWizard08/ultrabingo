@@ -1,49 +1,49 @@
-﻿using UltraBINGO.UI_Elements;
+﻿using UltraBINGO.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace UltraBINGO.Components;
 
 public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
-    private BingoLevelData levelData;
-
-    private bool isHovered;
+    private BingoLevelData _levelData;
+    private bool _isHovered;
 
     public void OnPointerEnter(PointerEventData data) {
-        isHovered = true;
+        _isHovered = true;
     }
 
     public void OnPointerExit(PointerEventData data) {
-        isHovered = false;
+        _isHovered = false;
     }
 
     public void Start() {
-        levelData = GetComponentInParent<BingoLevelData>();
+        _levelData = GetComponentInParent<BingoLevelData>();
     }
 
     public void Update() {
-        if (Input.GetKeyDown(KeyCode.R) && isHovered && !MonoSingleton<BingoVoteManager>.Instance.voteOngoing)
-            //Make sure the level isn't already claimed
-            if (!levelData.isClaimed)
-                GameManager.RequestReroll(levelData.row, levelData.column);
+        if (!Input.GetKeyDown(KeyCode.R) || !_isHovered || MonoSingleton<BingoVoteManager>.Instance.voteOngoing) return;
+
+        //Make sure the level isn't already claimed
+        if (!_levelData.IsClaimed)
+            GameManager.RequestReroll(_levelData.Row, _levelData.Column).Wait();
     }
 
     public void OnPointerClick(PointerEventData data) {
         switch (data.button) {
-            case PointerEventData.InputButton.Left: {
+            case PointerEventData.InputButton.Left:
                 // Go to map
-                BingoMenuController.LoadBingoLevelFromPauseMenu(gameObject.name,
-                    gameObject.GetComponent<BingoLevelData>());
+                BingoMenuController.LoadBingoLevelFromPauseMenu(
+                    gameObject.name,
+                    gameObject.GetComponent<BingoLevelData>()
+                );
                 break;
-            }
-            case PointerEventData.InputButton.Right: {
+            case PointerEventData.InputButton.Right:
                 // Ping map
-                GameManager.PingMapForTeam(GameManager.CurrentTeam, levelData.row, levelData.column);
+                GameManager.PingMapForTeam(GameManager.CurrentTeam, _levelData.Row, _levelData.Column).Wait();
                 break;
-            }
-            default: {
+            case PointerEventData.InputButton.Middle:
+            default:
                 break;
-            }
         }
     }
 }

@@ -9,8 +9,10 @@ using HarmonyLib;
 using Steamworks;
 using Steamworks.Data;
 using TMPro;
-using UltraBINGO.NetworkMessages;
-using UltraBINGO.UI_Elements;
+using UltraBINGO.Net;
+using UltraBINGO.Packets;
+using UltraBINGO.UI;
+using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static UltraBINGO.CommonFunctions;
@@ -41,34 +43,44 @@ public class Main : BaseUnityPlugin {
 
     private static readonly List<string> LoadedMods = [];
 
-    //Mod init logic
+    // Mod init logic
     private void Awake() {
-        Logging.Message("--Now loading Baphomet's Bingo...--");
+        Logging.LoadStep("Now loading Baphomet's Bingo...");
+
         Debug.unityLogger.filterLogType = LogType.Warning;
 
-        Logging.Message("--Loading asset bundle...--");
+        Logging.LoadStep("Loading packets...");
+
+        PacketLoader.Load();
+
+        Logging.LoadStep("Loading asset bundle...");
+
         AssetLoader.LoadAssets();
 
-        Logging.Message("--Applying patches...--");
+        Logging.LoadStep("Applying patches...");
 
         var harmony = new Harmony(PluginId);
 
         harmony.PatchAll();
 
-        Logging.Message("--Network manager init...--");
+        Logging.LoadStep("Initializing the network manager...");
 
         NetworkManager.serverURLConfig =
             Config.Bind("ServerConfig", "serverUrl", "clearwaterbirb.uk", "Server URL");
+
         NetworkManager.serverPortConfig = Config.Bind("ServerConfig", "serverPort", "2052", "Server Port");
-        NetworkManager.lastRankUsedConfig = Config.Bind("ServerConfig", "lastRankUsed", "None",
-            "Last Rank Used (Only works if your SteamID has access to this rank)");
 
-        var url = NetworkManager.serverURLConfig.Value;
-        var port = NetworkManager.serverPortConfig.Value;
+        NetworkManager.lastRankUsedConfig = Config.Bind(
+            "ServerConfig",
+            "lastRankUsed",
+            "None",
+            "Last Rank Used (Only works if your SteamID has access to this rank)"
+        );
 
-        NetworkManager.Initialise(url, port);
+        NetworkManager.Initialise(NetworkManager.serverURLConfig.Value, NetworkManager.serverPortConfig.Value);
 
-        Logging.Message("--Done!--");
+        Logging.LoadStep("Done!");
+
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -96,7 +108,11 @@ public class Main : BaseUnityPlugin {
             LoadedMods.Add(modName);
         }
 
-        var vmr = new VerifyModRequest(LoadedMods, SteamClient.SteamId.ToString());
+        var vmr = new VerifyModRequest {
+            ClientModList = LoadedMods,
+            SteamId = SteamClient.SteamId.ToString()
+        };
+
         NetworkManager.SendModCheck(vmr);
     }
 
@@ -112,16 +128,20 @@ public class Main : BaseUnityPlugin {
                 VerifyModWhitelist();
             }
 
-            if (GameManager.currentSetGame?.isGameFinished() ?? false) {
+            if (GameManager.currentSetGame?.IsGameFinished() ?? false) {
                 BingoEnd.ShowEndScreen();
                 MonoSingleton<AssistController>.Instance.majorEnabled = false;
                 MonoSingleton<AssistController>.Instance.gameSpeed = 1f;
             }
 
-            UIManager.ultrabingoLockedPanel = Instantiate(AssetLoader.BingoLockedPanel,
-                GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.transform);
-            UIManager.ultrabingoUnallowedModsPanel = Instantiate(AssetLoader.BingoUnallowedModsPanel,
-                GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.transform);
+            UIManager.ultrabingoLockedPanel = Instantiate(
+                AssetLoader.BingoLockedPanel,
+                GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.transform
+            );
+            UIManager.ultrabingoUnallowedModsPanel = Instantiate(
+                AssetLoader.BingoUnallowedModsPanel,
+                GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.transform
+            );
 
             var num = GetGameObjectChild(BingoMainMenu.VersionInfo, "VersionNum");
 
@@ -136,7 +156,7 @@ public class Main : BaseUnityPlugin {
 
             if (!GameManager.IsInBingoLevel) return;
 
-            if (GameManager.currentSetGame?.gameSettings.disableCampaignAltExits ?? false)
+            if (GameManager.currentSetGame?.GameSettings.DisableCampaignAltExits ?? false)
                 CampaignPatches.Apply(GetSceneName());
         }
     }

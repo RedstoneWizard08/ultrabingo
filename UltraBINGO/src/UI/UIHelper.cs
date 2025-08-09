@@ -1,0 +1,78 @@
+﻿using TMPro;
+using UltraBINGO.Util;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace UltraBINGO.UI;
+
+public static class UIHelper {
+    public static GameObject CreateText(string textString = "Text", int fontSize = 32, string idName = "Text") {
+        var text = new GameObject {
+            name = idName
+        };
+        text.AddComponent<RectTransform>();
+        text.GetComponent<RectTransform>().sizeDelta = new Vector2(200f, 50f);
+        text.AddComponent<CanvasRenderer>();
+        text.AddComponent<TextMeshProUGUI>();
+        text.GetComponent<TextMeshProUGUI>().text = textString;
+        text.GetComponent<TextMeshProUGUI>().font = AssetLoader.GameFont;
+        text.GetComponent<TextMeshProUGUI>().fontSize = fontSize;
+        text.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
+        text.GetComponent<TextMeshProUGUI>().color = Color.white;
+        text.GetComponent<TextMeshProUGUI>().enableWordWrapping = false;
+        return text;
+    }
+
+    public static GameObject CreateButtonLegacy(string buttonText = "Text", string buttonName = "Button",
+        float rectX = 200f, float rectY = 50f, int fontSize = 32) {
+        var colors = new ColorBlock {
+            normalColor = new Color(1, 1, 1, 1),
+            highlightedColor = new Color(1, 1, 1, 0.502f),
+            pressedColor = new Color(1, 0, 0, 1),
+            selectedColor = new Color(1, 1, 1, 1),
+            disabledColor = new Color(0, 0, 0, 1f),
+            colorMultiplier = 1f,
+            fadeDuration = 0.1f
+        };
+
+        var button = new GameObject {
+            name = buttonName
+        };
+        button.AddComponent<RectTransform>();
+        button.GetComponent<RectTransform>().sizeDelta = new Vector2(rectX, rectY);
+        button.AddComponent<CanvasRenderer>();
+        button.AddComponent<Image>();
+        button.GetComponent<Image>().sprite = AssetLoader.UISprite;
+        button.GetComponent<Image>().fillCenter = false;
+        button.GetComponent<Image>().fillClockwise = true;
+        button.GetComponent<Image>().type = Image.Type.Sliced;
+        button.AddComponent<Button>();
+        button.GetComponent<Button>().targetGraphic = button.GetComponent<Image>();
+
+        var text = CreateTextLegacy(buttonText, fontSize);
+        button.GetComponent<Button>().colors = colors;
+        text.GetComponent<RectTransform>().SetParent(button.GetComponent<RectTransform>());
+        text.GetComponent<RectTransform>().sizeDelta = new Vector2(150f, 50f);
+        text.name = "Text";
+
+        return button;
+    }
+
+    public static GameObject CreateTextLegacy(string textString = "Text", int fontSize = 32, string idName = "Text") {
+        var text = new GameObject {
+            name = idName
+        };
+        
+        text.AddComponent<RectTransform>();
+        text.AddComponent<CanvasRenderer>();
+        text.GetComponent<RectTransform>().sizeDelta = new Vector2(200f, 50f);
+        text.AddComponent<Text>();
+        text.GetComponent<Text>().text = textString;
+        text.GetComponent<Text>().font = AssetLoader.GameFontLegacy;
+        text.GetComponent<Text>().fontSize = fontSize;
+        text.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+        text.GetComponent<Text>().color = Color.white;
+        
+        return text;
+    }
+}

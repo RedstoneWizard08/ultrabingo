@@ -1,26 +1,29 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace UltraBINGO.Components;
 
 public class BingoMenuManager : MonoBehaviour {
-    private UnityEvent tryResetUI = new();
-
+    private readonly UnityEvent _tryResetUI = new();
+    
     public void OnEnable() {
-        tryResetUI.AddListener(resetUI);
+        _tryResetUI.AddListener(ResetUI);
     }
 
     public void Update() {
-        if (Input.GetKeyDown(KeyCode.F10)) tryResetUI.Invoke();
+        if (Input.GetKeyDown(KeyCode.F10)) _tryResetUI.Invoke();
     }
 
-    public async void resetUI() {
+    public void ResetUI() {
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Resetting bingo UI...");
+        
         gameObject.SetActive(false);
-        await Task.Delay(1000);
+        
+        Task.Delay(1000).Wait();
+        
         gameObject.SetActive(true);
+        
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("UI reset.");
     }
 }

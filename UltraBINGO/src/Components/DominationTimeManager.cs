@@ -18,7 +18,7 @@ public class DominationTimeManager : MonoBehaviour {
     }
 
     public void Start() {
-        if (GameManager.CurrentGame.gameSettings.gamemode == 1 && gameObject != null) {
+        if (GameManager.CurrentGame.GameSettings.Gamemode == 1 && gameObject != null) {
             if (GameManager.IsInBingoLevel) {
                 Timer = GetGameObjectChild(Panel, "Timer").GetComponent<TextMeshProUGUI>();
                 Panel.SetActive(false);
@@ -29,7 +29,7 @@ public class DominationTimeManager : MonoBehaviour {
     }
 
     public void Update() {
-        if (GameManager.IsInBingoLevel && GameManager.CurrentGame.gameSettings.gamemode == 1) {
+        if (GameManager.IsInBingoLevel && GameManager.CurrentGame.GameSettings.Gamemode == 1) {
             timeRemaining = Mathf.MoveTowards(timeRemaining, 0f, Time.unscaledDeltaTime);
             GameManager.dominationTimer = timeRemaining;
 
@@ -41,9 +41,7 @@ public class DominationTimeManager : MonoBehaviour {
             }
 
             if (GameManager.IsInBingoLevel && Panel != null) {
-                Timer.text = "<color=orange>" + mins + ":"
-                             + (secs < 10f ? ((int)secs).ToString("D2") : (int)secs)
-                             + "</color>";
+                Timer.text = $"<color=orange>{mins}:{(secs < 10f ? ((int)secs).ToString("D2") : (int)secs)}</color>";
                 if (MonoSingleton<InputManager>.Instance.InputSource.Stats.WasPerformedThisFrame ||
                     PlayerPrefs.GetInt("LevStaOpe") == 1)
                     Panel.SetActive(true);
