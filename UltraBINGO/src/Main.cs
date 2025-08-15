@@ -15,7 +15,7 @@ using UltraBINGO.UI;
 using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 /*
  * Baphomet's Bingo
@@ -40,6 +40,8 @@ public class Main : BaseUnityPlugin {
     public static bool IsSteamAuthenticated;
     public static bool HasUnlocked = true;
     public static bool UpdateAvailable = false;
+    public static ModConfig ModConfig = null!;
+    public static NetworkManager NetworkManager = null!;
 
     private static readonly List<string> LoadedMods = [];
 
@@ -63,21 +65,13 @@ public class Main : BaseUnityPlugin {
 
         harmony.PatchAll();
 
+        Logging.LoadStep("Binding config...");
+
+        ModConfig = new ModConfig(Config);
+
         Logging.LoadStep("Initializing the network manager...");
 
-        NetworkManager.serverURLConfig =
-            Config.Bind("ServerConfig", "serverUrl", "clearwaterbirb.uk", "Server URL");
-
-        NetworkManager.serverPortConfig = Config.Bind("ServerConfig", "serverPort", "2052", "Server Port");
-
-        NetworkManager.lastRankUsedConfig = Config.Bind(
-            "ServerConfig",
-            "lastRankUsed",
-            "None",
-            "Last Rank Used (Only works if your SteamID has access to this rank)"
-        );
-
-        NetworkManager.Initialise(NetworkManager.serverURLConfig.Value, NetworkManager.serverPortConfig.Value);
+        NetworkManager = new NetworkManager();
 
         Logging.LoadStep("Done!");
 
@@ -94,26 +88,25 @@ public class Main : BaseUnityPlugin {
             if (ticketString.Length <= 0) return;
 
             IsSteamAuthenticated = true;
-            NetworkManager.SetSteamTicket(ticketString);
+            SteamManager.SetSteamTicket(ticketString);
         } catch (Exception) {
             Logging.Error("Unable to authenticate with Steam!");
         }
     }
 
     public void VerifyModWhitelist() {
-        foreach (var modData in
-                 Chainloader.PluginInfos.Select(plugin => plugin.Value.ToString().Split(' ').ToList())) {
+        foreach (var modData in Chainloader.PluginInfos.Select(plugin => plugin.Value.ToString().Split(' ').ToList())) {
             modData.RemoveAt(modData.Count - 1);
             var modName = string.Join(" ", modData);
             LoadedMods.Add(modName);
         }
 
-        var vmr = new VerifyModRequest {
-            ClientModList = LoadedMods,
-            SteamId = SteamClient.SteamId.ToString()
-        };
-
-        NetworkManager.SendModCheck(vmr);
+        Requests.SendModCheck(
+            new VerifyModRequest {
+                ClientModList = LoadedMods,
+                SteamId = SteamClient.SteamId.ToString()
+            }
+        );
     }
 
 
@@ -123,6 +116,7 @@ public class Main : BaseUnityPlugin {
 
         if (GetSceneName() == "Main Menu") {
             HasUnlocked = HasUnlockedMod();
+            
             if (!IsSteamAuthenticated) {
                 Authenticate();
                 VerifyModWhitelist();

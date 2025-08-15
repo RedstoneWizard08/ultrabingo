@@ -1,7 +1,9 @@
+using Newtonsoft.Json;
+
 namespace UltraBINGO.Types;
 
 public class Player {
-    public string Username;
-    public string SteamId;
-    public string Rank;
+    [JsonProperty] public required string Username;
+    [JsonProperty] public required string SteamId;
+    [JsonProperty] public required string Rank;
 }

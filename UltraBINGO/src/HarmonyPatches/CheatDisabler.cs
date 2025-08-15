@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using UnityEngine.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.HarmonyPatches;
 

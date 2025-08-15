@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Components;
 using UltraBINGO.UI;
+using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +11,8 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class MapPingNotification : IncomingPacket {
-    public required int Row;
-    public required int Column;
+    [JsonProperty] public required int Row;
+    [JsonProperty] public required int Column;
 
     public override Task Handle() {
         var location = $"{Row}-{Column}";

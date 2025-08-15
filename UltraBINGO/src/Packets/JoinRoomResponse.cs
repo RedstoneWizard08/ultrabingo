@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Net;
 using UltraBINGO.Types;
@@ -9,9 +10,9 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class JoinRoomResponse : IncomingPacket {
-    public required int Status;
-    public required int RoomId;
-    public required Game RoomDetails;
+    [JsonProperty] public required int Status;
+    [JsonProperty] public required int RoomId;
+    [JsonProperty] public required Game RoomDetails;
 
     private static readonly Dictionary<int, string> Messages = new() {
         { -6, "You have been kicked from this game." },
@@ -28,7 +29,7 @@ public class JoinRoomResponse : IncomingPacket {
         if (Status < 0) {
             msg += Messages[Status];
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
-            NetworkManager.DisconnectWebSocket(1000, "Normal close");
+            Main.NetworkManager.Socket.Disconnect(1000, "Normal close");
         } else {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game.");
             await GameManager.SetupGameDetails(RoomDetails, "", false);

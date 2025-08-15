@@ -9,7 +9,7 @@ using UltraBINGO.Packets;
 using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 using Object = UnityEngine.Object;
 
 namespace UltraBINGO.UI;
@@ -29,7 +29,7 @@ public static class UIManager {
         // Only send if we're the host.
         if (!GameManager.PlayerIsHost()) return;
 
-        await NetworkManager.SendEncodedMessage(
+        await Main.NetworkManager.Socket.Send(
             new UpdateRoomSettingsRequest {
                 RoomId = GameManager.CurrentGame.GameId,
                 MaxPlayers = int.Parse(BingoLobby.MaxPlayers?.text ?? "8"),
@@ -42,7 +42,7 @@ public static class UIManager {
                 GridSize = BingoLobby.GridSize?.value ?? 3,
                 DisableCampaignAltExits = BingoLobby.DisableCampaignAltExits?.isOn ?? false,
                 GameVisibility = BingoLobby.GameVisibility?.value ?? 0,
-                Ticket = NetworkManager.CreateRegisterTicket()
+                Ticket = RegisterTicket.Create()
             }
         );
     }
@@ -99,22 +99,22 @@ public static class UIManager {
     }
 
     private static void Open() {
-        if (!NetworkManager.modlistCheckDone) {
+        if (!GameManager.ModListCheckDone) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
                 "Mod check failed, please restart your game.\nIf this keeps happening, please check your internet."
             );
             return;
         }
 
-        if (!NetworkManager.modlistCheckPassed) {
+        if (!GameManager.ModListCheckPassed) {
             PopulateUnallowedMods();
             ultrabingoUnallowedModsPanel?.SetActive(true);
             return;
         }
 
         if (Main.HasUnlocked) {
-            if (NetworkManager.IsConnectionUp()) {
-                NetworkManager.DisconnectWebSocket();
+            if (Main.NetworkManager.Socket.IsAlive) {
+                Main.NetworkManager.Socket.Disconnect();
                 GameManager.ClearGameVariables();
             }
 
@@ -128,7 +128,7 @@ public static class UIManager {
             BingoEncapsulator.Root?.SetActive(true);
             BingoEncapsulator.BingoMenu?.SetActive(true);
 
-            NetworkManager.SetState(Types.State.InMenu);
+            Main.NetworkManager.SetState(Types.State.InMenu);
         } else {
             //Show locked panel
             ultrabingoLockedPanel?.SetActive(true);

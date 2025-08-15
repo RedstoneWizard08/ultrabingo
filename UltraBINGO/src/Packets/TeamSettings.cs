@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet("UpdateTeamSettings")]
 public class TeamSettings : BasePacket {
-    public required int GameId;
-    public required Dictionary<string, int> Teams;
-    public required RegisterTicket Ticket;
+    [JsonProperty] public required int GameId;
+    [JsonProperty] public required Dictionary<string, int> Teams;
+    [JsonProperty] public required RegisterTicket Ticket;
 }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Types;
 using UltraBINGO.UI;
@@ -8,10 +9,10 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class CreateRoomResponse : IncomingPacket {
-    public required string Status;
-    public required int RoomId;
-    public required Game RoomDetails;
-    public required string RoomPassword;
+    [JsonProperty] public required string Status;
+    [JsonProperty] public required int RoomId;
+    [JsonProperty] public required Game RoomDetails;
+    [JsonProperty] public required string RoomPassword;
     
     public override async Task Handle() {
         if (Status == "ban") {

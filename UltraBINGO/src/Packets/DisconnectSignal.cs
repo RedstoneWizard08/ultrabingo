@@ -1,14 +1,15 @@
 ﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class DisconnectSignal : IncomingPacket {
-    public int? DisconnectCode = null;
-    public required string DisconnectMessage;
+    [JsonProperty] public int? DisconnectCode;
+    [JsonProperty] public required string DisconnectMessage;
 
     public override async Task Handle() {
         var disconnectReason = DisconnectMessage switch {

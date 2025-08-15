@@ -1,10 +1,11 @@
-﻿using UltraBINGO.API;
+﻿using Newtonsoft.Json;
+using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet]
 public class KickPlayer : BasePacket {
-    public required int GameId;
-    public required string PlayerToKick;
-    public required RegisterTicket Ticket;
+    [JsonProperty] public required int GameId;
+    [JsonProperty] public required string PlayerToKick;
+    [JsonProperty] public required RegisterTicket Ticket;
 }

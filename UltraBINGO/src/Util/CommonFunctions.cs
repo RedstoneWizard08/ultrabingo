@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
@@ -9,39 +9,31 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UltraBINGO;
+namespace UltraBINGO.Util;
 
 public static class CommonFunctions {
-    public static string SanitiseUsername(string rawUsername) {
-        return Regex.Replace(rawUsername, @"\p{Cs}", "");
-    }
+    public static string SanitiseUsername(string rawUsername) => Regex.Replace(rawUsername, @"\p{Cs}", "");
 
-    private static bool CheckIfLevelSaveExists(string savePath, string fileName) {
-        var fullPath = Path.Combine(savePath, string.Format("Slot{0}/" + fileName, GameProgressSaver.currentSlot + 1));
-        return File.Exists(fullPath);
-    }
+    private static bool CheckIfLevelSaveExists(string savePath, string fileName) => File.Exists(
+        Path.Combine(savePath, string.Format("Slot{0}/" + fileName, GameProgressSaver.currentSlot + 1))
+    );
 
-    public static bool HasUnlockedMod() {
-        var savePath =
+    public static bool HasUnlockedMod() =>
+        CheckIfLevelSaveExists(
             Path.Combine(
                 (SystemInfo.deviceType == DeviceType.Desktop
                     ? Directory.GetParent(Application.dataPath)?.FullName
                     : Application.persistentDataPath) ?? throw new InvalidOperationException(),
                 "Saves"
-            );
+            ),
+            "lvl29progress.bepis"
+        );
 
-        var _74Beat = CheckIfLevelSaveExists(savePath, "lvl29progress.bepis");
-
-        return _74Beat;
-    }
-
-    public static string GetSceneName() {
-        return SceneHelper.CurrentScene;
-    }
+    public static string GetSceneName() => SceneHelper.CurrentScene;
 
     public static GameObject? GetInactiveRootObject(string objectName) {
         var rootList = new List<GameObject>();
-        
+
         SceneManager.GetActiveScene().GetRootGameObjects(rootList);
 
         return rootList.FirstOrDefault(child => child.name == objectName);
@@ -69,13 +61,10 @@ public static class CommonFunctions {
         return actual.Aggregate(GetInactiveRootObject(actual.Dequeue()), GetGameObjectChild);
     }
 
-    public static TextMeshProUGUI GetTextMeshProGUI(GameObject objectToUse) {
-        return objectToUse.GetComponent<TextMeshProUGUI>();
-    }
+    public static TextMeshProUGUI GetTextMeshProGUI(GameObject objectToUse) =>
+        objectToUse.GetComponent<TextMeshProUGUI>();
 
-    public static Text GetTextFromGameObject(GameObject objectToUse) {
-        return objectToUse.GetComponent<Text>();
-    }
+    public static Text GetTextFromGameObject(GameObject objectToUse) => objectToUse.GetComponent<Text>();
 
     public static string GetFormattedTime(float time) {
         var secs = time;

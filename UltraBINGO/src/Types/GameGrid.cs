@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace UltraBINGO.Types;
 
 public class GameGrid {
-    public int Size;
-    public Dictionary<string, GameLevel> LevelTable;
+    [JsonProperty] public required int Size;
+    [JsonProperty] public required Dictionary<string, GameLevel> LevelTable;
 }

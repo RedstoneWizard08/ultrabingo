@@ -1,9 +1,11 @@
+using Newtonsoft.Json;
+
 namespace UltraBINGO.Types;
 
-public record PublicGameData {
-    public required string Password;
-    public required int CurrentPlayers;
-    public required string HostUsername;
-    public required int MaxPlayers;
-    public required int Difficulty;
+public class PublicGameData {
+    [JsonProperty] public required string Password;
+    [JsonProperty] public required int CurrentPlayers;
+    [JsonProperty] public required string HostUsername;
+    [JsonProperty] public required int MaxPlayers;
+    [JsonProperty] public required int Difficulty;
 }

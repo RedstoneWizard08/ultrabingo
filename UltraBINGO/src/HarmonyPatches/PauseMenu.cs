@@ -3,7 +3,7 @@ using HarmonyLib;
 using TMPro;
 using UltraBINGO.UI;
 using UltraBINGO.Util;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.HarmonyPatches;
 

@@ -3,7 +3,7 @@ using TMPro;
 using UltraBINGO.Net;
 using UnityEngine;
 using UnityEngine.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.UI;
 
@@ -43,29 +43,35 @@ public static class BingoMainMenu {
 
     public static GameObject Init(ref GameObject bingoMenu) {
         HostGame = GetGameObjectChild(bingoMenu, "Host Game");
-        HostGame.GetComponent<Button>().onClick.AddListener(delegate {
-            LockUI();
-            BingoMenuController.CreateRoom();
-        });
+        HostGame.GetComponent<Button>().onClick.AddListener(
+            delegate {
+                LockUI();
+                BingoMenuController.CreateRoom();
+            }
+        );
 
         JoinGame = GetGameObjectChild(bingoMenu, "Join Game");
-        JoinGame.GetComponent<Button>().onClick.AddListener(delegate {
-            LockUI();
-            var input = GetGameObjectChild(JoinGameInput, "InputField (TMP)");
+        JoinGame.GetComponent<Button>().onClick.AddListener(
+            delegate {
+                LockUI();
+                var input = GetGameObjectChild(JoinGameInput, "InputField (TMP)");
 
-            var password = input.GetComponent<TMP_InputField>().text;
-            BingoMenuController.JoinRoom(password);
-        });
+                var password = input.GetComponent<TMP_InputField>().text;
+                BingoMenuController.JoinRoom(password);
+            }
+        );
 
         JoinGameInput = GetGameObjectChild(JoinGame, "IdInput");
 
         GameBrowser = GetGameObjectChild(bingoMenu, "Match Browser");
-        GameBrowser.GetComponent<Button>().onClick.AddListener(delegate {
-            BingoEncapsulator.BingoMenu.SetActive(false);
-            BingoEncapsulator.BingoGameBrowser.SetActive(true);
-            NetworkManager.SetState(Types.State.InBrowser);
-            BingoBrowser.FetchGames();
-        });
+        GameBrowser.GetComponent<Button>().onClick.AddListener(
+            delegate {
+                BingoEncapsulator.BingoMenu.SetActive(false);
+                BingoEncapsulator.BingoGameBrowser.SetActive(true);
+                Main.NetworkManager.SetState(Types.State.InBrowser);
+                BingoBrowser.FetchGames();
+            }
+        );
 
         MapCheck = GetGameObjectChild(bingoMenu, "MapCheck");
         MapCheck.GetComponent<Button>().onClick.AddListener(delegate { MapWarn.SetActive(true); });
@@ -78,9 +84,8 @@ public static class BingoMainMenu {
         Back.GetComponent<Button>().onClick.AddListener(delegate { BingoMenuController.ReturnToMenu(); });
 
         DiscordButton = GetGameObjectChild(bingoMenu, "Discord");
-        DiscordButton.GetComponent<Button>().onClick.AddListener(delegate {
-            Application.OpenURL("https://discord.gg/VyzFJwEWtJ");
-        });
+        DiscordButton.GetComponent<Button>().onClick
+            .AddListener(delegate { Application.OpenURL("https://discord.gg/VyzFJwEWtJ"); });
         VersionInfo = GetGameObjectChild(bingoMenu, "Version");
 
         motdContainer = GetGameObjectChild(bingoMenu, "MOTD");
@@ -95,10 +100,12 @@ public static class BingoMainMenu {
         }
 
 
-        rankSelector.onValueChanged.AddListener(delegate(int _) {
-            NetworkManager.requestedRank = rankSelector.options[rankSelector.value].text;
-            NetworkManager.lastRankUsedConfig.Value = NetworkManager.requestedRank;
-        });
+        rankSelector.onValueChanged.AddListener(
+            delegate(int _) {
+                GameManager.RequestedRank = rankSelector.options[rankSelector.value].text;
+                Main.ModConfig.LastRankUsed.Value = GameManager.RequestedRank;
+            }
+        );
 
         return Root;
     }

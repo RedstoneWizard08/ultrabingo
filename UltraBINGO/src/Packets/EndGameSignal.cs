@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.UI;
 using UltraBINGO.Util;
 using UnityEngine;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 using Object = UnityEngine.Object;
 
 namespace UltraBINGO.Packets;
 
 [Packet("GameEnd", PacketDirection.ServerToClient)]
 public class EndGameSignal : IncomingPacket {
-    public required string WinningTeam;
-    public required List<string> WinningPlayers;
-    public required string TimeElapsed;
-    public required int Claims;
-    public required string FirstMapClaimed;
-    public required string LastMapClaimed;
-    public required float BestStatValue;
-    public required string BestStatMap;
-    public required int EndStatus;
-    public required List<string> TiedTeams;
+    [JsonProperty] public required string WinningTeam;
+    [JsonProperty] public required List<string> WinningPlayers;
+    [JsonProperty] public required string TimeElapsed;
+    [JsonProperty] public required int Claims;
+    [JsonProperty] public required string FirstMapClaimed;
+    [JsonProperty] public required string LastMapClaimed;
+    [JsonProperty] public required float BestStatValue;
+    [JsonProperty] public required string BestStatMap;
+    [JsonProperty] public required int EndStatus;
+    [JsonProperty] public required List<string> TiedTeams;
 
     private static void PlayEndSound() {
         var go = new GameObject();

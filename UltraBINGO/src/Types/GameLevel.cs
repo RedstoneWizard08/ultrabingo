@@ -1,14 +1,16 @@
+using Newtonsoft.Json;
+
 namespace UltraBINGO.Types;
 
 public class GameLevel {
-    public required string LevelName;
-    public required string LevelId;
-    public required string ClaimedBy;
-    public required string PersonToBeat;
-    public required float TimeToBeat;
-    public required int Row;
-    public required int Column;
-    public required bool IsAngryLevel;
-    public required string AngryParentBundle;
-    public required string AngryLevelId;
+    [JsonProperty] public required string LevelName;
+    [JsonProperty] public required string LevelId;
+    [JsonProperty] public required string ClaimedBy;
+    [JsonProperty] public required string PersonToBeat;
+    [JsonProperty] public required float TimeToBeat;
+    [JsonProperty] public required int Row;
+    [JsonProperty] public required int Column;
+    [JsonProperty] public required bool IsAngryLevel;
+    [JsonProperty] public required string AngryParentBundle;
+    [JsonProperty] public required string AngryLevelId;
 }

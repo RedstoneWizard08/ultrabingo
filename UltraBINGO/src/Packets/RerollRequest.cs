@@ -1,12 +1,13 @@
-﻿using UltraBINGO.API;
+﻿using Newtonsoft.Json;
+using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet]
 public class RerollRequest : BasePacket {
-    public required RegisterTicket SteamTicket;
-    public required string SteamId;
-    public required int GameId;
-    public required int Row;
-    public required int Column;
+    [JsonProperty] public required RegisterTicket SteamTicket;
+    [JsonProperty] public required string SteamId;
+    [JsonProperty] public required int GameId;
+    [JsonProperty] public required int Row;
+    [JsonProperty] public required int Column;
 }

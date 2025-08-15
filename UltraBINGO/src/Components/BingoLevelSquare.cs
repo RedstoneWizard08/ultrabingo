@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace UltraBINGO.Components;
 
 public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
-    private BingoLevelData _levelData;
+    private BingoLevelData? _levelData;
     private bool _isHovered;
 
     public void OnPointerEnter(PointerEventData data) {
@@ -24,7 +24,7 @@ public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (!Input.GetKeyDown(KeyCode.R) || !_isHovered || MonoSingleton<BingoVoteManager>.Instance.voteOngoing) return;
 
         //Make sure the level isn't already claimed
-        if (!_levelData.IsClaimed)
+        if (_levelData?.IsClaimed == false)
             GameManager.RequestReroll(_levelData.Row, _levelData.Column).Wait();
     }
 
@@ -37,10 +37,14 @@ public class BingoLevelSquare : MonoBehaviour, IPointerEnterHandler, IPointerExi
                     gameObject.GetComponent<BingoLevelData>()
                 );
                 break;
+            
             case PointerEventData.InputButton.Right:
                 // Ping map
-                GameManager.PingMapForTeam(GameManager.CurrentTeam, _levelData.Row, _levelData.Column).Wait();
+                if (_levelData != null)
+                    GameManager.PingMapForTeam(GameManager.CurrentTeam, _levelData.Row, _levelData.Column).Wait();
+                
                 break;
+            
             case PointerEventData.InputButton.Middle:
             default:
                 break;

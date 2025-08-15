@@ -1,10 +1,11 @@
-﻿using UltraBINGO.API;
+﻿using Newtonsoft.Json;
+using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet]
 public class CheatActivation : BasePacket {
-    public required int GameId;
-    public required string Username;
-    public required string SteamId;
+    [JsonProperty] public required int GameId;
+    [JsonProperty] public required string Username;
+    [JsonProperty] public required string SteamId;
 }

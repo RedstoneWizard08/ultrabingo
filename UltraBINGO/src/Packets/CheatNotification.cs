@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class CheatNotification : IncomingPacket {
-    [UsedImplicitly] public required string PlayerToHumiliate;
+    [JsonProperty] public required string PlayerToHumiliate;
 
     private static readonly List<string> Messages = [
         "Unfortunately, I ate them all.",

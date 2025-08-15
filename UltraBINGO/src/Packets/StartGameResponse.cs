@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Types;
 using UltraBINGO.UI;
@@ -8,10 +9,10 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class StartGameResponse : IncomingPacket {
-    public required Game Game;
-    public required string TeamColor;
-    public required List<string> Teammates;
-    public required GameGrid Grid;
+    [JsonProperty] public required Game Game;
+    [JsonProperty] public required string TeamColor;
+    [JsonProperty] public required List<string> Teammates;
+    [JsonProperty] public required GameGrid Grid;
 
     public override Task Handle() {
         GameManager.CurrentTeam = TeamColor;

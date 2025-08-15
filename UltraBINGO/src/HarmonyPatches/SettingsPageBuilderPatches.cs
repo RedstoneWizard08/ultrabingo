@@ -4,7 +4,7 @@ using SettingsMenu.Components;
 using SettingsMenu.Models;
 using UltraBINGO.UI;
 using UltraBINGO.Util;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.HarmonyPatches;
 

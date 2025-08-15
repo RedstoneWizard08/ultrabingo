@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Components;
 
@@ -6,13 +7,13 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class RerollVoteNotification : IncomingPacket {
-    public required string MapName;
-    public required string VoteStarter;
-    public required string VoteStarterSteamId;
-    public required string NumVotes;
-    public required int VotesRequired;
-    public required int NotifType;
-    public required int Timer;
+    [JsonProperty] public required string MapName;
+    [JsonProperty] public required string VoteStarter;
+    [JsonProperty] public required string VoteStarterSteamId;
+    [JsonProperty] public required string NumVotes;
+    [JsonProperty] public required int VotesRequired;
+    [JsonProperty] public required int NotifType;
+    [JsonProperty] public required int Timer;
 
     public override Task Handle() {
         var type = NotifType == 0 ? " started a vote to reroll " : " voted to reroll ";

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.UI;
 
@@ -6,17 +7,17 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class UpdateRoomSettingsNotification : IncomingPacket {
-    public required int MaxPlayers;
-    public required int MaxTeams;
-    public required int TimeLimit;
-    public required int TeamComposition;
-    public required int GameMode;
-    public required bool PRankRequired;
-    public required int Difficulty;
-    public required int GridSize;
-    public required bool DisableCampaignAltExits;
-    public required int GameVisibility;
-    public required bool WereTeamsReset;
+    [JsonProperty] public required int MaxPlayers;
+    [JsonProperty] public required int MaxTeams;
+    [JsonProperty] public required int TimeLimit;
+    [JsonProperty] public required int TeamComposition;
+    [JsonProperty] public required int GameMode;
+    [JsonProperty] public required bool PRankRequired;
+    [JsonProperty] public required int Difficulty;
+    [JsonProperty] public required int GridSize;
+    [JsonProperty] public required bool DisableCampaignAltExits;
+    [JsonProperty] public required int GameVisibility;
+    [JsonProperty] public required bool WereTeamsReset;
 
     public override Task Handle() {
         BingoLobby.UpdateFromNotification(this);

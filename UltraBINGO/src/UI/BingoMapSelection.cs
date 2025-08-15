@@ -12,7 +12,7 @@ using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.UI;
 
@@ -89,11 +89,13 @@ public static class BingoMapSelection {
                 break;
         }
 
-        NetworkManager.SendEncodedMessage(new UpdateMapPool {
-            GameId = GameManager.CurrentGame.GameId,
-            MapPoolIds = SelectedIds.ToList(),
-            Ticket = NetworkManager.CreateRegisterTicket()
-        }).Wait();
+        Main.NetworkManager.Socket.Send(
+            new UpdateMapPool {
+                GameId = GameManager.CurrentGame.GameId,
+                MapPoolIds = SelectedIds.ToList(),
+                Ticket = RegisterTicket.Create()
+            }
+        ).Wait();
     }
 
     private static void ShowMapPoolData(PointerEventData data) {
@@ -127,8 +129,7 @@ public static class BingoMapSelection {
     }
 
     private static async Task<int> ObtainMapPools() {
-        var catalogString = await NetworkManager.FetchCatalog(NetworkManager.serverMapPoolCatalogURL ?? "");
-
+        var catalogString = await Main.NetworkManager.FetchCatalog(Main.NetworkManager.ServerMapPoolCatalogURL);
         var read = new StringReader(catalogString ?? "");
         var catalog = TOML.Parse(read);
 
@@ -227,8 +228,14 @@ public static class BingoMapSelection {
 
         _mapList = GetGameObjectChild(
             GetGameObjectChild(
-                GetGameObjectChild(GetGameObjectChild(GetGameObjectChild(_mapContainer, "MapPoolList"), "Scroll View"),
-                    "Scroll Rect"), "Content"), "List");
+                GetGameObjectChild(
+                    GetGameObjectChild(GetGameObjectChild(_mapContainer, "MapPoolList"), "Scroll View"),
+                    "Scroll Rect"
+                ),
+                "Content"
+            ),
+            "List"
+        );
 
         _mapListButtonTemplate = GetGameObjectChild(_mapList, "MapListButton");
 

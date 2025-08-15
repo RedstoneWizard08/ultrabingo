@@ -1,12 +1,13 @@
-﻿using UltraBINGO.API;
+﻿using Newtonsoft.Json;
+using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet]
 public class MapPing : BasePacket {
-    public required int GameId;
-    public required string Team;
-    public required int Row;
-    public required int Column;
-    public required RegisterTicket Ticket;
+    [JsonProperty] public required int GameId;
+    [JsonProperty] public required string Team;
+    [JsonProperty] public required int Row;
+    [JsonProperty] public required int Column;
+    [JsonProperty] public required RegisterTicket Ticket;
 }

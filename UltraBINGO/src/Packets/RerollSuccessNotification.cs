@@ -1,17 +1,19 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Components;
 using UltraBINGO.Types;
+using UltraBINGO.Util;
 
 namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class RerollSuccessNotification : IncomingPacket {
-    public required string OldMapId;
-    public required string OldMapName;
-    public required GameLevel MapData;
-    public required int LocationX;
-    public required int LocationY;
+    [JsonProperty] public required string OldMapId;
+    [JsonProperty] public required string OldMapName;
+    [JsonProperty] public required GameLevel MapData;
+    [JsonProperty] public required int LocationX;
+    [JsonProperty] public required int LocationY;
 
     public override async Task Handle() {
         MonoSingleton<BingoVoteManager>.Instance.StopVote();

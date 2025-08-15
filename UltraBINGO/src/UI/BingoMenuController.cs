@@ -7,7 +7,8 @@ using UltraBINGO.Components;
 using UltraBINGO.Net;
 using UltraBINGO.Types;
 using UltraBINGO.Util;
-using static UltraBINGO.CommonFunctions;
+using UnityEngine;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.UI;
 
@@ -18,13 +19,15 @@ public static class BingoMenuController {
     public static bool CheckSteamAuthentication() {
         if (Main.UpdateAvailable) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                "<color=orange>An update is available! Please update your mod to play Baphomet's Bingo.</color>");
+                "<color=orange>An update is available! Please update your mod to play Baphomet's Bingo.</color>"
+            );
             return false;
         }
 
         if (!Main.IsSteamAuthenticated) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                "Unable to authenticate with Steam.\nYou must be connected to the Steam servers, and own a legal copy of ULTRAKILL to play Baphomet's Bingo.");
+                "Unable to authenticate with Steam.\nYou must be connected to the Steam servers, and own a legal copy of ULTRAKILL to play Baphomet's Bingo."
+            );
             return false;
         }
 
@@ -52,7 +55,7 @@ public static class BingoMenuController {
             } else {
                 GameManager.UpdateGridPosition(row, column);
                 SceneHelper.LoadScene(levelName);
-                NetworkManager.SetState(Types.State.InGame);
+                Main.NetworkManager.SetState(Types.State.InGame);
             }
         }
     }
@@ -84,7 +87,8 @@ public static class BingoMenuController {
         //Prevent changing levels while downloading to avoid problems.
         if (GameManager.IsDownloadingLevel == true) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                "Please wait for the current download to complete before switching to a different level.");
+                "Please wait for the current download to complete before switching to a different level."
+            );
             return;
         }
 
@@ -117,7 +121,7 @@ public static class BingoMenuController {
                 else
                     BingoCardPauseMenu.DescriptorText.GetComponent<TextMeshProUGUI>().text = msg;
                 await Task.Delay(1000);
-                NetworkManager.SetState(Types.State.InGame);
+                Main.NetworkManager.SetState(Types.State.InGame);
                 AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.GameSettings.Difficulty;
 
 
@@ -147,23 +151,34 @@ public static class BingoMenuController {
                         AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0; //Prevent nomo override
 
                         GameManager.UpdateGridPosition(row, column);
-                        AngrySceneManager.LoadLevelWithScripts(requiredAngryScripts, bundleContainer, customLevel,
-                            customLevel.data, customLevel.data.scenePath);
+                        AngrySceneManager.LoadLevelWithScripts(
+                            requiredAngryScripts,
+                            bundleContainer,
+                            customLevel,
+                            customLevel.data,
+                            customLevel.data.scenePath
+                        );
                     }
                 } else {
                     if (!GameManager.CurrentGame.IsGameFinished()) {
                         GameManager.IsSwitchingLevels = true;
                         AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0; //Prevent nomo override
                         GameManager.UpdateGridPosition(row, column);
-                        AngrySceneManager.LoadLevel(bundleContainer, customLevel, customLevel.data,
-                            customLevel.data.scenePath, true);
+                        AngrySceneManager.LoadLevel(
+                            bundleContainer,
+                            customLevel,
+                            customLevel.data,
+                            customLevel.data.scenePath,
+                            true
+                        );
                     }
                 }
             } else {
                 Logging.Error("Given level ID does not exist inside the bundle!");
                 Logging.Error($"Given level ID: {angryLevelData.AngryLevelId}");
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                    "<color=orange>Failed to load level, something went wrong.</color>");
+                    "<color=orange>Failed to load level, something went wrong.</color>"
+                );
             }
         } else {
             //Prevent multiple downloads.
@@ -179,7 +194,8 @@ public static class BingoMenuController {
             GameManager.IsDownloadingLevel = true;
 
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                $"-- DOWNLOADING {angryLevelData.LevelName} --\nYou can continue to play in the meantime.");
+                $"-- DOWNLOADING {angryLevelData.LevelName} --\nYou can continue to play in the meantime."
+            );
             currentlyDownloadingLevel = angryLevelData.LevelName;
             OnlineLevelsManager.onlineLevels[angryLevelData.AngryParentBundle].Download();
             while (OnlineLevelsManager.onlineLevels[angryLevelData.AngryParentBundle].downloading)
@@ -206,10 +222,14 @@ public static class BingoMenuController {
 
             //Save vote data if a vote is ongoing, so the panel can reappear after scene switch.
             GameManager.VoteData = MonoSingleton<BingoVoteManager>.Instance.voteOngoing
-                ? new VoteData(true, MonoSingleton<BingoVoteManager>.Instance.hasVoted,
+                ? new VoteData(
+                    true,
+                    MonoSingleton<BingoVoteManager>.Instance.hasVoted,
                     MonoSingleton<BingoVoteManager>.Instance.voteThreshold,
-                    MonoSingleton<BingoVoteManager>.Instance.currentVotes, MonoSingleton<BingoVoteManager>.Instance.map,
-                    MonoSingleton<BingoVoteManager>.Instance.timeRemaining)
+                    MonoSingleton<BingoVoteManager>.Instance.currentVotes,
+                    MonoSingleton<BingoVoteManager>.Instance.map,
+                    MonoSingleton<BingoVoteManager>.Instance.timeRemaining
+                )
                 : new VoteData(false);
 
             if (levelData.IsAngryLevel) {
@@ -221,11 +241,11 @@ public static class BingoMenuController {
 
                 await Task.Delay(1000);
                 //Check if game hasn't ended between click and delay. If it has, prevent level load.
-                if (!GameManager.CurrentGame.IsGameFinished()) {
-                    NetworkManager.SetState(Types.State.InGame);
-                    GameManager.UpdateGridPosition(row, column);
-                    SceneHelper.LoadScene(levelId);
-                }
+                if (GameManager.CurrentGame.IsGameFinished()) return;
+
+                Main.NetworkManager.SetState(Types.State.InGame);
+                GameManager.UpdateGridPosition(row, column);
+                SceneHelper.LoadScene(levelId);
             }
         }
     }
@@ -234,23 +254,23 @@ public static class BingoMenuController {
         UIManager.RemoveLimit();
         BingoEncapsulator.Root.SetActive(false);
         GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)").SetActive(true);
-        NetworkManager.SetState(Types.State.Normal);
+        Main.NetworkManager.SetState(Types.State.Normal);
     }
 
     public static void CreateRoom() {
         if (!CheckSteamAuthentication()) return;
 
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Creating room...");
-        NetworkManager.pendingAction = AsyncAction.Host;
-        NetworkManager.ConnectWebSocket();
+        ActionQueue.PendingAction = AsyncAction.Host;
+        Main.NetworkManager.Socket.Connect();
     }
 
     public static void JoinRoom(string roomPassword) {
         if (!CheckSteamAuthentication()) return;
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joining room...");
-        NetworkManager.pendingAction = AsyncAction.Join;
-        NetworkManager.pendingPassword = roomPassword;
-        NetworkManager.ConnectWebSocket();
+        ActionQueue.PendingAction = AsyncAction.Join;
+        ActionQueue.PendingPassword = roomPassword;
+        Main.NetworkManager.Socket.Connect();
     }
 
     public static void StartGame(int gameType) {
@@ -259,8 +279,7 @@ public static class BingoMenuController {
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("The game has begun!");
 
         if (GameManager.CurrentGame.GameSettings.Gamemode == 1) {
-            var canvas = GetInactiveRootObject("Canvas");
-            canvas.AddComponent<DominationTimeManager>();
+            GetInactiveRootObject("Canvas")?.AddComponent<DominationTimeManager>();
         }
 
         GameManager.MoveToCard(gameType);

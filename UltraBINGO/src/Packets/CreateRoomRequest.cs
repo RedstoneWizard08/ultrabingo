@@ -1,14 +1,15 @@
+using Newtonsoft.Json;
 using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet("CreateRoom")]
 public class CreateRoomRequest : BasePacket {
-    public required string RoomName;
-    public required string RoomPassword;
-    public required int MaxPlayers;
-    public required bool PRankRequired;
-    public required string HostSteamName;
-    public required string HostSteamId;
-    public required string Rank;
+    [JsonProperty] public required string RoomName;
+    [JsonProperty] public required string RoomPassword;
+    [JsonProperty] public required int MaxPlayers;
+    [JsonProperty] public required bool PRankRequired;
+    [JsonProperty] public required string HostSteamName;
+    [JsonProperty] public required string HostSteamId;
+    [JsonProperty] public required string Rank;
 }

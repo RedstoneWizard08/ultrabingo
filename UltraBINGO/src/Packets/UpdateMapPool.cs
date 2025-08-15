@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet]
 public class UpdateMapPool : BasePacket {
-    public required int GameId;
-    public required List<string> MapPoolIds;
-    public required RegisterTicket Ticket;
+    [JsonProperty] public required int GameId;
+    [JsonProperty] public required List<string> MapPoolIds;
+    [JsonProperty] public required RegisterTicket Ticket;
 }

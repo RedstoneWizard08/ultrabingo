@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using UltraBINGO.API;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.Packets;
 

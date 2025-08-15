@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class RerollExpireNotification : IncomingPacket {
-    public required string MapName;
+    [JsonProperty] public required string MapName;
 
     public override Task Handle() {
         var msg = $"Vote to reroll <color=orange>{MapName}</color> has expired.";

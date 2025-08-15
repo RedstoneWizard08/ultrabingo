@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace UltraBINGO.Types;
 
 public class Game {
-    public required int GameId;
-    public required Dictionary<string, Player> CurrentPlayers; //<SteamID,Player>
-    public required GameGrid Grid;
-    public required string GameHost; //SteamID
-    public required int GameState;
-    public required GameSettings GameSettings;
-    public required string WinningTeam;
+    [JsonProperty] public required int GameId;
+    [JsonProperty] public required Dictionary<string, Player> CurrentPlayers; //<SteamID,Player>
+    [JsonProperty] public required GameGrid Grid;
+    [JsonProperty] public required string GameHost; //SteamID
+    [JsonProperty] public required int GameState;
+    [JsonProperty] public required GameSettings GameSettings;
+    [JsonProperty] public required string WinningTeam;
 
     public List<Player> GetPlayers() {
         return CurrentPlayers.Values.ToList();

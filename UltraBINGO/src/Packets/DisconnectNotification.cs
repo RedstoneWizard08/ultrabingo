@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.UI;
 
@@ -6,8 +7,8 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class DisconnectNotification : IncomingPacket {
-    public required string Username;
-    public required string SteamId;
+    [JsonProperty] public required string Username;
+    [JsonProperty] public required string SteamId;
 
     public override Task Handle() {
         var message = $"{Username} has left the game.";

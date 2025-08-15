@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Types;
 
@@ -6,8 +7,8 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class ReconnectResponse : IncomingPacket {
-    public required string Status;
-    public required Game GameData;
+    [JsonProperty] public required string Status;
+    [JsonProperty] public required Game GameData;
 
     public override async Task Handle() {
         switch (Status) {

@@ -8,6 +8,7 @@
         <LangVersion>latest</LangVersion>
         <RootNamespace>UltraBINGO</RootNamespace>
         <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
         <RestoreAdditionalProjectSources>
             https://api.nuget.org/v3/index.json;

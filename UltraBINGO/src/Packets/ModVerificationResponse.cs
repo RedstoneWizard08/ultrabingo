@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TMPro;
 using UltraBINGO.API;
 using UltraBINGO.Net;
@@ -12,15 +13,15 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class ModVerificationResponse : IncomingPacket {
-    public required List<string> NonWhitelistedMods;
-    public required string LatestVersion;
-    public required string Motd;
-    public required string AvailableRanks;
+    [JsonProperty] public required List<string> NonWhitelistedMods;
+    [JsonProperty] public required string LatestVersion;
+    [JsonProperty] public required string Motd;
+    [JsonProperty] public required string AvailableRanks;
 
     public override Task Handle() {
-        NetworkManager.modlistCheckPassed = NonWhitelistedMods.Count == 0;
+        GameManager.ModListCheckPassed = NonWhitelistedMods.Count == 0;
 
-        if (!NetworkManager.modlistCheckPassed) UIManager.nonWhitelistedMods = NonWhitelistedMods;
+        if (!GameManager.ModListCheckPassed) UIManager.nonWhitelistedMods = NonWhitelistedMods;
 
         var localVersion = new Version(Main.PluginVersion);
         var latestVersion = new Version(LatestVersion);
@@ -61,16 +62,16 @@ public class ModVerificationResponse : IncomingPacket {
             rankSelector?.AddOptions(ranks);
 
             BingoMainMenu.ranks = ranks;
-            NetworkManager.requestedRank = rankSelector?.options[0].text;
+            GameManager.RequestedRank = rankSelector?.options[0].text;
 
             //Check if the previously used rank is available in the list. If so, set it as default.
-            if (ranks.Contains(NetworkManager.lastRankUsedConfig?.Value ?? string.Empty)) {
+            if (ranks.Contains(Main.ModConfig.LastRankUsed.Value ?? string.Empty)) {
                 // Why does this empty block exist?
             }
 
             if (rankSelector is not null) {
                 //NetworkManager.requestedRank = NetworkManager.lastRankUsedConfig.Value;
-                rankSelector.value = ranks.IndexOf(NetworkManager.lastRankUsedConfig?.Value ?? string.Empty);
+                rankSelector.value = ranks.IndexOf(Main.ModConfig.LastRankUsed.Value ?? string.Empty);
             }
 
             GameManager.hasRankAccess = true;
@@ -78,8 +79,8 @@ public class ModVerificationResponse : IncomingPacket {
             BingoMainMenu.RankSelection?.SetActive(false);
         }
 
-        NetworkManager.modlistCheckDone = true;
-        NetworkManager.DisconnectWebSocket(1000, "ModCheckDone");
+        GameManager.ModListCheckDone = true;
+        Main.NetworkManager.Socket.Disconnect(1000, "ModCheckDone");
         
         return Task.CompletedTask;
     }

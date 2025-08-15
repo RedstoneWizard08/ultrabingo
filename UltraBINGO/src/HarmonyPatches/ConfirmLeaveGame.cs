@@ -1,5 +1,6 @@
 using HarmonyLib;
 using TMPro;
+using UltraBINGO.Util;
 
 namespace UltraBINGO.HarmonyPatches;
 

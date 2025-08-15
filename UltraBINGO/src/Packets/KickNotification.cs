@@ -1,12 +1,14 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
+using UltraBINGO.Util;
 
 namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class KickNotification : IncomingPacket {
-    public required string PlayerToKick;
-    public required string SteamId;
+    [JsonProperty] public required string PlayerToKick;
+    [JsonProperty] public required string SteamId;
     
     public override Task Handle() {
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage($"{PlayerToKick} was kicked from the game.");

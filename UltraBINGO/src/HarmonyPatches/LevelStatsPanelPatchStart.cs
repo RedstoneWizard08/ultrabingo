@@ -9,7 +9,7 @@ using UltraBINGO.Components;
 using UltraBINGO.UI;
 using UltraBINGO.Util;
 using UnityEngine;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 using Object = UnityEngine.Object;
 
 namespace UltraBINGO.HarmonyPatches;

@@ -71,13 +71,13 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager> {
         if (hasVoted) {
             Logging.Warn("Tried to vote, but alreadyVoted set to true!");
         } else {
-            NetworkManager.SendEncodedMessage(
+            Main.NetworkManager.Socket.Send(
                 new RerollRequest {
                     GameId = GameManager.CurrentGame.GameId,
                     SteamId = Steamworks.SteamClient.SteamId.ToString(),
                     Row = 0,
                     Column = 0,
-                    SteamTicket = NetworkManager.CreateRegisterTicket()
+                    SteamTicket = RegisterTicket.Create()
                 }
             ).Wait();
 

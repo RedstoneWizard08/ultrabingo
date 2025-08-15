@@ -1,11 +1,12 @@
-﻿using UltraBINGO.API;
+﻿using Newtonsoft.Json;
+using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet("JoinRoom")]
 public class JoinRoomRequest : BasePacket {
-    public required string Password;
-    public required string Username;
-    public required string SteamId;
-    public required string Rank;
+    [JsonProperty] public required string Password;
+    [JsonProperty] public required string Username;
+    [JsonProperty] public required string SteamId;
+    [JsonProperty] public required string Rank;
 }

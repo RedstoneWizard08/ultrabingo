@@ -5,7 +5,6 @@ public enum AsyncAction {
     Host,
     Join,
     ModCheck,
-    RetrySend,
     ReconnectGame,
     FetchGames
 }

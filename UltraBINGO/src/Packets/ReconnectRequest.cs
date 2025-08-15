@@ -1,10 +1,11 @@
-﻿using UltraBINGO.API;
+﻿using Newtonsoft.Json;
+using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet]
 public class ReconnectRequest : BasePacket {
-    public required int RoomId;
-    public required string SteamId;
-    public required RegisterTicket Ticket;
+    [JsonProperty] public required int RoomId;
+    [JsonProperty] public required string SteamId;
+    [JsonProperty] public required RegisterTicket Ticket;
 }

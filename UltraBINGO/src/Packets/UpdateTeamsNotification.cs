@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class UpdateTeamsNotification : IncomingPacket {
-    public required int Status;
+    [JsonProperty] public required int Status;
 
     public override Task Handle() {
         string msg;

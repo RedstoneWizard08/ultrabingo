@@ -7,7 +7,7 @@ using UltraBINGO.Packets;
 using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.UI;
 
@@ -42,17 +42,17 @@ public static class BingoSetTeamsMenu {
 
     private static void Cancel() {
         CurrentTeamChanges.Clear();
-        
+
         foreach (var go in TeamSelectionPanelButtons) go?.SetActive(true);
-        
+
         ReturnToLobbyMenu();
     }
 
     private static async Task Discard() {
-        await NetworkManager.SendEncodedMessage(
+        await Main.NetworkManager.Socket.Send(
             new ClearTeamSettings {
                 GameId = GameManager.CurrentGame.GameId,
-                Ticket = NetworkManager.CreateRegisterTicket()
+                Ticket = RegisterTicket.Create()
             }
         );
         ReturnToLobbyMenu();
@@ -66,11 +66,11 @@ public static class BingoSetTeamsMenu {
             return;
         }
 
-        await NetworkManager.SendEncodedMessage(
+        await Main.NetworkManager.Socket.Send(
             new TeamSettings {
                 GameId = GameManager.CurrentGame.GameId,
                 Teams = CurrentTeamChanges,
-                Ticket = NetworkManager.CreateRegisterTicket()
+                Ticket = RegisterTicket.Create()
             }
         );
 

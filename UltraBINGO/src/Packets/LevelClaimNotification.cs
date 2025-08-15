@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 using UltraBINGO.Util;
 
@@ -7,14 +8,14 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class LevelClaimNotification : IncomingPacket {
-    public required int ClaimType; // 0: Claimed, 1: Improved, 2: Reclaimed
-    public required string Username;
-    public required string LevelName;
-    public required string Team;
-    public required int Row;
-    public required int Column;
-    public required float NewTimeRequirement;
-    public required bool IsMapVoted;
+    [JsonProperty] public required int ClaimType; // 0: Claimed, 1: Improved, 2: Reclaimed
+    [JsonProperty] public required string Username;
+    [JsonProperty] public required string LevelName;
+    [JsonProperty] public required string Team;
+    [JsonProperty] public required int Row;
+    [JsonProperty] public required int Column;
+    [JsonProperty] public required float NewTimeRequirement;
+    [JsonProperty] public required bool IsMapVoted;
 
     public override Task Handle() {
         try {

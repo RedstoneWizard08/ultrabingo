@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using static UltraBINGO.CommonFunctions;
+﻿using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO;
 
@@ -7,95 +6,157 @@ public static class CampaignPatches {
     public static void Apply(string levelName) {
         switch (levelName) {
             case "Level 0-2": {
-                var pedestal =
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("5B - Secret Arena"), "5B Nonstuff"),
-                        "Altar (Blue Skull) Variant");
-                pedestal.SetActive(false);
+                var pedestal = FindObjectWithInactiveRoot(
+                    "5B - Secret Arena",
+                    "5B Nonstuff",
+                    "Altar (Blue Skull) Variant"
+                );
+
+                pedestal?.SetActive(false);
+
                 break;
             }
+
             case "Level 1-1": {
                 var fountain =
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1 - First Field"), "1 Stuff"),
-                        "Fountain");
-                fountain.GetComponent<Door>().enabled = false;
+                    GetGameObjectChild(
+                        GetGameObjectChild(GetInactiveRootObject("1 - First Field"), "1 Stuff"),
+                        "Fountain"
+                    );
 
-                var cylinder = fountain.transform.GetChild(0).gameObject;
-                var cylinder2 = fountain.transform.GetChild(1).gameObject;
+                if (fountain != null) {
+                    fountain.GetComponent<Door>().enabled = false;
 
-                cylinder.SetActive(false);
-                cylinder2.SetActive(false);
+                    var cylinder = fountain.transform.GetChild(0).gameObject;
+                    var cylinder2 = fountain.transform.GetChild(1).gameObject;
 
-                var finalroom =
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1 - First Field"), "1 Nonstuff"),
-                        "FinalRoom 1");
-                finalroom.SetActive(false);
-                finalroom.GetComponent<FinalRoom>().enabled = false;
+                    cylinder.SetActive(false);
+                    cylinder2.SetActive(false);
+                }
 
-                var pit = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1 - First Field"), "1 Nonstuff"),
-                    "FinalRoom SecretEntrance");
-                pit.SetActive(false);
-                break;
-            }
-            case "Level 2-3": {
-                var box = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("4 - End Hallway"), "4 Nonstuff"),
-                    "ElectricityBox");
-                box.SetActive(false);
+                var finalRoom =
+                    GetGameObjectChild(
+                        GetGameObjectChild(GetInactiveRootObject("1 - First Field"), "1 Nonstuff"),
+                        "FinalRoom 1"
+                    );
 
-                var secretEntrance =
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Sewer Arena"), "2 Nonstuff"),
-                        "Secret Level Entrance");
-                secretEntrance.SetActive(false);
-
-                break;
-            }
-            case "Level 3-1": {
-                var door = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("6S - P Door"), "6S Nonstuff"),
-                    "HellgateLimboSwitch Variant");
-                door.GetComponent<LimboSwitchLock>().enabled = false;
-                break;
-            }
-            case "Level 4-2": {
-                var button = GetInactiveRootObject("GreedSwitch Variant");
-                button.SetActive(false);
-                break;
-            }
-            case "Level 5-1": {
-                var door = GetGameObjectChild(
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Elevator"), "2B Secret"),
-                        "FinalRoom 1"), "FinalDoor");
-                door.GetComponent<FinalDoor>().enabled = false;
-
-                var finalroom =
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Elevator"), "2B Secret"),
-                        "FinalRoom 1");
-                finalroom.SetActive(false);
-
-                var pit = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Elevator"), "2B Secret"),
-                    "FinalRoom SecretEntrance");
-                pit.SetActive(false);
-
-                break;
-            }
-            case "Level 6-2": {
-                var door = GetGameObjectChild(
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("1S - P Door"), "6S Nonstuff"),
-                        "ToActivate"), "HellgateLimboSwitch Variant");
-                door.GetComponent<LimboSwitchLock>().enabled = false;
-                break;
-            }
-            case "Level 7-3": {
-                var plane = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("Doors"), "1 -> S"),
-                    "Plane (1)");
-                plane.GetComponent<Flammable>().enabled = false;
+                if (finalRoom != null) {
+                    finalRoom.SetActive(false);
+                    finalRoom.GetComponent<FinalRoom>().enabled = false;
+                }
 
                 var pit = GetGameObjectChild(
-                    GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Garden Maze"), "Secret"),
-                        "FinalRoom 1"), "Pit");
-                pit.SetActive(false);
+                    GetGameObjectChild(GetInactiveRootObject("1 - First Field"), "1 Nonstuff"),
+                    "FinalRoom SecretEntrance"
+                );
 
-                var pit2 = GetGameObjectChild(GetGameObjectChild(GetInactiveRootObject("2 - Garden Maze"), "Secret"),
-                    "FinalRoom SecretEntrance");
-                pit2.SetActive(false);
+                pit?.SetActive(false);
+
+                break;
+            }
+
+            case "Level 2-3": {
+                var box = GetGameObjectChild(
+                    GetGameObjectChild(GetInactiveRootObject("4 - End Hallway"), "4 Nonstuff"),
+                    "ElectricityBox"
+                );
+
+                box?.SetActive(false);
+
+                var secretEntrance =
+                    GetGameObjectChild(
+                        GetGameObjectChild(GetInactiveRootObject("2 - Sewer Arena"), "2 Nonstuff"),
+                        "Secret Level Entrance"
+                    );
+
+                secretEntrance?.SetActive(false);
+
+                break;
+            }
+
+            case "Level 3-1": {
+                var door = GetGameObjectChild(
+                    GetGameObjectChild(GetInactiveRootObject("6S - P Door"), "6S Nonstuff"),
+                    "HellgateLimboSwitch Variant"
+                );
+
+                if (door != null) door.GetComponent<LimboSwitchLock>().enabled = false;
+
+                break;
+            }
+
+            case "Level 4-2": {
+                GetInactiveRootObject("GreedSwitch Variant")?.SetActive(false);
+                break;
+            }
+
+            case "Level 5-1": {
+                var door = GetGameObjectChild(
+                    GetGameObjectChild(
+                        GetGameObjectChild(GetInactiveRootObject("2 - Elevator"), "2B Secret"),
+                        "FinalRoom 1"
+                    ),
+                    "FinalDoor"
+                );
+
+                if (door != null) door.GetComponent<FinalDoor>().enabled = false;
+
+                var finalroom =
+                    GetGameObjectChild(
+                        GetGameObjectChild(GetInactiveRootObject("2 - Elevator"), "2B Secret"),
+                        "FinalRoom 1"
+                    );
+
+                finalroom?.SetActive(false);
+
+                var pit = GetGameObjectChild(
+                    GetGameObjectChild(GetInactiveRootObject("2 - Elevator"), "2B Secret"),
+                    "FinalRoom SecretEntrance"
+                );
+
+                pit?.SetActive(false);
+
+                break;
+            }
+
+            case "Level 6-2": {
+                var door = GetGameObjectChild(
+                    GetGameObjectChild(
+                        GetGameObjectChild(GetInactiveRootObject("1S - P Door"), "6S Nonstuff"),
+                        "ToActivate"
+                    ),
+                    "HellgateLimboSwitch Variant"
+                );
+
+                if (door != null) door.GetComponent<LimboSwitchLock>().enabled = false;
+
+                break;
+            }
+
+            case "Level 7-3": {
+                var plane = GetGameObjectChild(
+                    GetGameObjectChild(GetInactiveRootObject("Doors"), "1 -> S"),
+                    "Plane (1)"
+                );
+
+                if (plane != null) plane.GetComponent<Flammable>().enabled = false;
+
+                var pit = GetGameObjectChild(
+                    GetGameObjectChild(
+                        GetGameObjectChild(GetInactiveRootObject("2 - Garden Maze"), "Secret"),
+                        "FinalRoom 1"
+                    ),
+                    "Pit"
+                );
+
+                pit?.SetActive(false);
+
+                var pit2 = GetGameObjectChild(
+                    GetGameObjectChild(GetInactiveRootObject("2 - Garden Maze"), "Secret"),
+                    "FinalRoom SecretEntrance"
+                );
+
+                pit2?.SetActive(false);
 
                 break;
             }

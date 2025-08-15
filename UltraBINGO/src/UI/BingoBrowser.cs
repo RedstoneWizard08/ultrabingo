@@ -5,7 +5,7 @@ using UltraBINGO.Packets;
 using UltraBINGO.Types;
 using UnityEngine;
 using UnityEngine.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.UI;
 
@@ -42,7 +42,7 @@ public static class BingoBrowser {
         Back.GetComponent<Button>().onClick.AddListener(delegate {
             BingoEncapsulator.BingoGameBrowser.SetActive(false);
             BingoEncapsulator.BingoMenu.SetActive(true);
-            NetworkManager.SetState(Types.State.InMenu);
+            Main.NetworkManager.SetState(Types.State.InMenu);
         });
 
         GameListWrapper = GetGameObjectChild(bingoGameBrowser, "GameList");
@@ -106,6 +106,7 @@ public static class BingoBrowser {
         GameList.SetActive(false);
         FetchText.GetComponent<TextMeshProUGUI>().text = "Fetching games, please wait...";
         fetchDone = false;
-        NetworkManager.RequestGames();
+        
+        Requests.RequestGames();
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UltraBINGO.API;
 
 namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class HostMigration : IncomingPacket {
-    public required string OldHost;
-    public required string HostSteamId;
-    public required string HostUsername;
+    [JsonProperty] public required string OldHost;
+    [JsonProperty] public required string HostSteamId;
+    [JsonProperty] public required string HostUsername;
 
     public override Task Handle() {
         var message =

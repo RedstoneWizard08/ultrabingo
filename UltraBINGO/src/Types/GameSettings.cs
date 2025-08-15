@@ -1,17 +1,18 @@
+using Newtonsoft.Json;
+
 namespace UltraBINGO.Types;
 
 public class GameSettings {
-    public int MaxPlayers;
-    public int MaxTeams;
-    public int TimeLimit;
-    public int TeamComposition;
-    public int Gamemode;
-    public int GridSize;
-    public int Difficulty;
-    public bool RequiresPRank;
-    public bool HasManuallySetTeams;
-    public bool DisableCampaignAltExits;
-    public int GameVisibility;
-
-    public int DominationTimer;
+    [JsonProperty] public int MaxPlayers;
+    [JsonProperty] public int MaxTeams;
+    [JsonProperty] public int TimeLimit;
+    [JsonProperty] public int TeamComposition;
+    [JsonProperty] public int Gamemode;
+    [JsonProperty] public int GridSize;
+    [JsonProperty] public int Difficulty;
+    [JsonProperty] public bool RequiresPRank;
+    [JsonProperty] public bool HasManuallySetTeams;
+    [JsonProperty] public bool DisableCampaignAltExits;
+    [JsonProperty] public int GameVisibility;
+    [JsonProperty] public int DominationTimer;
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using TMPro;
 using UltraBINGO.Components;
 using UltraBINGO.Net;
@@ -13,7 +12,7 @@ using UltraBINGO.UI;
 using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.UI;
-using static UltraBINGO.CommonFunctions;
+using static UltraBINGO.Util.CommonFunctions;
 using Object = UnityEngine.Object;
 
 namespace UltraBINGO;
@@ -24,6 +23,7 @@ public static class GameManager {
         private set => currentSetGame = value;
     }
 
+    public static string? RequestedRank = null;
     public static Game? currentSetGame;
     public static bool IsInBingoLevel;
     public static int CurrentRow;
@@ -39,6 +39,8 @@ public static class GameManager {
     public static float dominationTimer = 0;
     public static bool hasRankAccess = false;
     public static VoteData? VoteData = new(false);
+    public static bool ModListCheckDone = false;
+    public static bool ModListCheckPassed = false;
 
     public static async Task SwapRerolledMap(string oldMapId, GameLevel level, int column, int row) {
         if (IsInBingoLevel) {
@@ -82,7 +84,7 @@ public static class GameManager {
     }
 
     public static async Task HumiliateSelf() {
-        await NetworkManager.SendEncodedMessage(new CheatActivation {
+        await Main.NetworkManager.Socket.Send(new CheatActivation {
             Username = SanitiseUsername(Steamworks.SteamClient.Name),
             GameId = CurrentGame.GameId,
             SteamId = Steamworks.SteamClient.SteamId.ToString()
@@ -91,11 +93,11 @@ public static class GameManager {
 
     public static async Task LeaveGame(bool isInLevel = false) {
         //Send a request to the server saying we want to leave.
-        await NetworkManager.SendLeaveGameRequest(CurrentGame.GameId);
+        await Requests.LeaveGame(CurrentGame.GameId);
 
         //When that's sent off, close the connection on our end.
         Logging.Message("Closing connection");
-        NetworkManager.DisconnectWebSocket(1000, "Normal close");
+        Main.NetworkManager.Socket.Disconnect(1000, "Normal close");
 
         ClearGameVariables();
 
@@ -106,9 +108,9 @@ public static class GameManager {
             BingoEncapsulator.BingoEndScreen?.SetActive(false);
             BingoEncapsulator.BingoMenu?.SetActive(true);
 
-            NetworkManager.SetState(Types.State.InMenu);
+            Main.NetworkManager.SetState(Types.State.InMenu);
         } else {
-            NetworkManager.SetState(Types.State.Normal);
+            Main.NetworkManager.SetState(Types.State.Normal);
         }
     }
 
@@ -191,8 +193,9 @@ public static class GameManager {
 
                     if (kick != null) {
                         kick.GetComponent<Button>().onClick.AddListener(delegate {
-                            NetworkManager.KickPlayer(steamId).Wait();
+                            Requests.KickPlayer(steamId).Wait();
                         });
+                        
                         kick.transform.localScale = Vector3.one;
                         kick.SetActive(Steamworks.SteamClient.SteamId.ToString() == CurrentGame.GameHost &&
                                        steamId != Steamworks.SteamClient.SteamId.ToString());
@@ -367,8 +370,8 @@ public static class GameManager {
                 BingoLobby.GameVisibility.value = CurrentGame.GameSettings.GameVisibility;
         }
 
-        NetworkManager.SetState(Types.State.InLobby);
-        await NetworkManager.RegisterConnection();
+        Main.NetworkManager.SetState(Types.State.InLobby);
+        await Requests.RegisterConnection();
     }
 
     private static void ShowGameId(string password) {
@@ -379,7 +382,7 @@ public static class GameManager {
     }
 
     public static async Task StartGame() {
-        await NetworkManager.SendStartGameSignal(CurrentGame.GameId);
+        await Requests.StartGame(CurrentGame.GameId);
     }
 
     public static void UpdateCards(int row, int column, string team, string playername, float newTime) {
@@ -449,12 +452,12 @@ public static class GameManager {
         if (alreadyStartedVote) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You have already started a vote in this game.");
         } else {
-            await NetworkManager.SendEncodedMessage(new RerollRequest {
+            await Main.NetworkManager.Socket.Send(new RerollRequest {
                 GameId = CurrentGame.GameId,
                 SteamId = Steamworks.SteamClient.SteamId.ToString(),
                 Row = row,
                 Column = column,
-                SteamTicket = NetworkManager.CreateRegisterTicket()
+                SteamTicket = RegisterTicket.Create()
             });
         }
 
@@ -462,12 +465,12 @@ public static class GameManager {
     }
 
     public static async Task PingMapForTeam(string team, int row, int column) {
-        await NetworkManager.SendEncodedMessage(new MapPing {
+        await Main.NetworkManager.Socket.Send(new MapPing {
             GameId = CurrentGame.GameId,
             Team = team,
             Row = row,
             Column = column,
-            Ticket = NetworkManager.CreateRegisterTicket()
+            Ticket = RegisterTicket.Create()
         });
     }
 }
