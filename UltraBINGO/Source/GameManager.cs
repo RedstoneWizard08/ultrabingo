@@ -84,11 +84,13 @@ public static class GameManager {
     }
 
     public static async Task HumiliateSelf() {
-        await Main.NetworkManager.Socket.Send(new CheatActivation {
-            Username = SanitiseUsername(Steamworks.SteamClient.Name),
-            GameId = CurrentGame.GameId,
-            SteamId = Steamworks.SteamClient.SteamId.ToString()
-        });
+        await Main.NetworkManager.Socket.Send(
+            new CheatActivation {
+                Username = SanitiseUsername(Steamworks.SteamClient.Name),
+                GameId = CurrentGame.GameId,
+                SteamId = Steamworks.SteamClient.SteamId.ToString()
+            }
+        );
     }
 
     public static async Task LeaveGame(bool isInLevel = false) {
@@ -134,16 +136,16 @@ public static class GameManager {
 
         if (BingoMapSelection.NumOfMapsTotal < requiredMaps) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                $"Not enough maps selected. Add more map pools, or reduce the grid size.\n(<color=orange>{requiredMaps} </color>required, <color=orange>{BingoMapSelection.NumOfMapsTotal}</color> selected)");
+                $"Not enough maps selected. Add more map pools, or reduce the grid size.\n(<color=orange>{requiredMaps} </color>required, <color=orange>{BingoMapSelection.NumOfMapsTotal}</color> selected)"
+            );
             return false;
         }
 
-        if (CurrentGame.GameSettings.TeamComposition == 1 && CurrentGame.GameSettings.HasManuallySetTeams == false) {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Teams must be set before starting the game.");
-            return false;
-        }
-
-        return true;
+        if (CurrentGame.GameSettings.TeamComposition != 1 || CurrentGame.GameSettings.HasManuallySetTeams) return true;
+        
+        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Teams must be set before starting the game.");
+        
+        return false;
     }
 
     //Reset temporary vars on level change.
@@ -192,13 +194,14 @@ public static class GameManager {
                     var kick = GetGameObjectChild(player, "Kick");
 
                     if (kick != null) {
-                        kick.GetComponent<Button>().onClick.AddListener(delegate {
-                            Requests.KickPlayer(steamId).Wait();
-                        });
-                        
+                        kick.GetComponent<Button>().onClick
+                            .AddListener(delegate { Requests.KickPlayer(steamId).Wait(); });
+
                         kick.transform.localScale = Vector3.one;
-                        kick.SetActive(Steamworks.SteamClient.SteamId.ToString() == CurrentGame.GameHost &&
-                                       steamId != Steamworks.SteamClient.SteamId.ToString());
+                        kick.SetActive(
+                            Steamworks.SteamClient.SteamId.ToString() == CurrentGame.GameHost &&
+                            steamId != Steamworks.SteamClient.SteamId.ToString()
+                        );
                     }
 
                     player?.SetActive(true);
@@ -246,11 +249,16 @@ public static class GameManager {
 
                 // Set up the click listener.
                 level.GetComponent<Button>().onClick.RemoveAllListeners();
-                
-                level.GetComponent<Button>().onClick.AddListener(delegate {
-                    BingoMenuController.LoadBingoLevel(levelObject.LevelId, lvlCoords,
-                        level.GetComponent<BingoLevelData>());
-                });
+
+                level.GetComponent<Button>().onClick.AddListener(
+                    delegate {
+                        BingoMenuController.LoadBingoLevel(
+                            levelObject.LevelId,
+                            lvlCoords,
+                            level.GetComponent<BingoLevelData>()
+                        ).Wait();
+                    }
+                );
 
                 level.transform.SetParent(BingoCard.Grid?.transform);
                 level.SetActive(true);
@@ -392,7 +400,8 @@ public static class GameManager {
             Logging.Error("RECEIVED AN INVALID GRID POSITION TO UPDATE!");
             Logging.Error(coordLookup);
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                "A level was claimed by someone but an <color=orange>invalid grid position</color> was given.\nCheck BepInEx console and report it to Clearwater!");
+                "A level was claimed by someone but an <color=orange>invalid grid position</color> was given.\nCheck BepInEx console and report it to Clearwater!"
+            );
             return;
         }
 
@@ -444,7 +453,8 @@ public static class GameManager {
             Logging.Error(e.ToString());
             Logging.Error(coordLookup);
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                "A level was claimed by someone but the grid could not be updated.\nCheck BepInEx console and report it to Clearwater!");
+                "A level was claimed by someone but the grid could not be updated.\nCheck BepInEx console and report it to Clearwater!"
+            );
         }
     }
 
@@ -452,25 +462,29 @@ public static class GameManager {
         if (alreadyStartedVote) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You have already started a vote in this game.");
         } else {
-            await Main.NetworkManager.Socket.Send(new RerollRequest {
-                GameId = CurrentGame.GameId,
-                SteamId = Steamworks.SteamClient.SteamId.ToString(),
-                Row = row,
-                Column = column,
-                SteamTicket = RegisterTicket.Create()
-            });
+            await Main.NetworkManager.Socket.Send(
+                new RerollRequest {
+                    GameId = CurrentGame.GameId,
+                    SteamId = Steamworks.SteamClient.SteamId.ToString(),
+                    Row = row,
+                    Column = column,
+                    SteamTicket = RegisterTicket.Create()
+                }
+            );
         }
 
         MonoSingleton<OptionsManager>.Instance.UnPause();
     }
 
     public static async Task PingMapForTeam(string team, int row, int column) {
-        await Main.NetworkManager.Socket.Send(new MapPing {
-            GameId = CurrentGame.GameId,
-            Team = team,
-            Row = row,
-            Column = column,
-            Ticket = RegisterTicket.Create()
-        });
+        await Main.NetworkManager.Socket.Send(
+            new MapPing {
+                GameId = CurrentGame.GameId,
+                Team = team,
+                Row = row,
+                Column = column,
+                Ticket = RegisterTicket.Create()
+            }
+        );
     }
 }

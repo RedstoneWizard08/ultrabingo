@@ -7,7 +7,6 @@ using UltraBINGO.Components;
 using UltraBINGO.Net;
 using UltraBINGO.Types;
 using UltraBINGO.Util;
-using UnityEngine;
 using static UltraBINGO.Util.CommonFunctions;
 
 namespace UltraBINGO.UI;
@@ -15,8 +14,7 @@ namespace UltraBINGO.UI;
 public static class BingoMenuController {
     public static string currentlyDownloadingLevel = "";
 
-
-    public static bool CheckSteamAuthentication() {
+    private static bool CheckSteamAuthentication() {
         if (Main.UpdateAvailable) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
                 "<color=orange>An update is available! Please update your mod to play Baphomet's Bingo.</color>"
@@ -24,47 +22,44 @@ public static class BingoMenuController {
             return false;
         }
 
-        if (!Main.IsSteamAuthenticated) {
-            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                "Unable to authenticate with Steam.\nYou must be connected to the Steam servers, and own a legal copy of ULTRAKILL to play Baphomet's Bingo."
-            );
-            return false;
-        }
+        if (Main.IsSteamAuthenticated) return Main.IsSteamAuthenticated;
 
-        return Main.IsSteamAuthenticated;
+        MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
+            "Unable to authenticate with Steam.\nYou must be connected to the Steam servers, and own a legal copy of ULTRAKILL to play Baphomet's Bingo."
+        );
+
+        return false;
     }
 
-    public static void LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData) {
+    public static async Task LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData) {
         //Make sure the game hasn't ended.
         if (GameManager.CurrentGame.IsGameFinished()) return;
 
-        if (!GameManager.CurrentGame.IsGameFinished()) {
-            //Force disable cheats and major assists, set difficulty to difficulty of the game set by the host.
-            MonoSingleton<PrefsManager>.Instance.SetBool("majorAssist", false);
-            MonoSingleton<AssistController>.Instance.cheatsEnabled = false;
-            MonoSingleton<PrefsManager>.Instance.SetInt("difficulty", GameManager.CurrentGame.GameSettings.Difficulty);
+        //Force disable cheats and major assists, set difficulty to difficulty of the game set by the host.
+        MonoSingleton<PrefsManager>.Instance.SetBool("majorAssist", false);
+        MonoSingleton<AssistController>.Instance.cheatsEnabled = false;
+        MonoSingleton<PrefsManager>.Instance.SetInt("difficulty", GameManager.CurrentGame.GameSettings.Difficulty);
 
-            var row = int.Parse(levelCoords[0].ToString());
-            var column = int.Parse(levelCoords[2].ToString());
-            GameManager.IsInBingoLevel = true;
+        var row = int.Parse(levelCoords[0].ToString());
+        var column = int.Parse(levelCoords[2].ToString());
+        GameManager.IsInBingoLevel = true;
 
-            //Check if the level we're going into is campaign or Angry.
-            //If it's Angry, we need to do some checks if the level is downloaded before going in.
-            if (levelData.IsAngryLevel) {
-                HandleAngryLoad(levelData, row, column);
-            } else {
-                GameManager.UpdateGridPosition(row, column);
-                SceneHelper.LoadScene(levelName);
-                Main.NetworkManager.SetState(Types.State.InGame);
-            }
+        //Check if the level we're going into is campaign or Angry.
+        //If it's Angry, we need to do some checks if the level is downloaded before going in.
+        if (levelData.IsAngryLevel) {
+            await HandleAngryLoad(levelData, row, column);
+        } else {
+            GameManager.UpdateGridPosition(row, column);
+            SceneHelper.LoadScene(levelName);
+            Main.NetworkManager.SetState(Types.State.InGame);
         }
     }
 
-    public static ScriptManager.LoadScriptResult LoadAngryScript(string scriptName) {
+    private static ScriptManager.LoadScriptResult LoadAngryScript(string scriptName) {
         return ScriptManager.AttemptLoadScriptWithCertificate(scriptName);
     }
 
-    public static async Task<bool> DownloadAngryScript(string scriptName) {
+    private static async Task<bool> DownloadAngryScript(string scriptName) {
         var field = new ScriptUpdateNotification.ScriptUpdateProgressField {
             scriptName = scriptName,
             scriptStatus = ScriptUpdateNotification.ScriptUpdateProgressField.ScriptStatus.Download
@@ -80,12 +75,12 @@ public static class BingoMenuController {
         }
     }
 
-    public static async void HandleAngryLoad(BingoLevelData angryLevelData, int row = 0, int column = 0) {
+    private static async Task HandleAngryLoad(BingoLevelData angryLevelData, int row = 0, int column = 0) {
         //Make sure the game hasn't ended.
         if (GameManager.CurrentGame.IsGameFinished()) return;
 
         //Prevent changing levels while downloading to avoid problems.
-        if (GameManager.IsDownloadingLevel == true) {
+        if (GameManager.IsDownloadingLevel) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
                 "Please wait for the current download to complete before switching to a different level."
             );
@@ -135,42 +130,48 @@ public static class BingoMenuController {
                         if (!ScriptManager.ScriptExists(scriptName)) {
                             Logging.Message($"Asking Angry to download {scriptName}");
                             var downloadResult = await DownloadAngryScript(scriptName);
-                            if (downloadResult == true) {
-                                var res = LoadAngryScript(scriptName);
-                                if (res != ScriptManager.LoadScriptResult.Loaded) {
-                                    Logging.Error("Failed to load script with reason: ");
-                                    Logging.Error(res.ToString());
-                                }
-                            }
+
+                            if (downloadResult != true) continue;
+
+                            var res = LoadAngryScript(scriptName);
+
+                            if (res == ScriptManager.LoadScriptResult.Loaded) continue;
+
+                            Logging.Error("Failed to load script with reason: ");
+                            Logging.Error(res.ToString());
                         } else {
                             Logging.Message($"{scriptName} is already downloaded");
                         }
 
                     if (!GameManager.CurrentGame.IsGameFinished()) {
                         GameManager.IsSwitchingLevels = true;
+
                         AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0; //Prevent nomo override
 
                         GameManager.UpdateGridPosition(row, column);
-                        AngrySceneManager.LoadLevelWithScripts(
-                            requiredAngryScripts,
-                            bundleContainer,
-                            customLevel,
-                            customLevel.data,
-                            customLevel.data.scenePath
-                        );
+
+                        if (customLevel != null)
+                            AngrySceneManager.LoadLevelWithScripts(
+                                requiredAngryScripts,
+                                bundleContainer,
+                                customLevel,
+                                customLevel.data,
+                                customLevel.data.scenePath
+                            );
                     }
                 } else {
                     if (!GameManager.CurrentGame.IsGameFinished()) {
                         GameManager.IsSwitchingLevels = true;
                         AngryLevelLoader.Plugin.difficultyField.gamemodeListValueIndex = 0; //Prevent nomo override
                         GameManager.UpdateGridPosition(row, column);
-                        AngrySceneManager.LoadLevel(
-                            bundleContainer,
-                            customLevel,
-                            customLevel.data,
-                            customLevel.data.scenePath,
-                            true
-                        );
+
+                        if (customLevel != null)
+                            AngrySceneManager.LoadLevel(
+                                bundleContainer,
+                                customLevel,
+                                customLevel.data,
+                                customLevel.data.scenePath
+                            );
                     }
                 }
             } else {
@@ -203,8 +204,8 @@ public static class BingoMenuController {
         }
     }
 
-    public static async void LoadBingoLevelFromPauseMenu(string levelCoords, BingoLevelData levelData) {
-        //Make sure the game hasn't ended or we're not already loading a level.
+    public static async Task LoadBingoLevelFromPauseMenu(string levelCoords, BingoLevelData levelData) {
+        //Make sure the game hasn't ended, or we're not already loading a level.
         if (GameManager.CurrentGame.IsGameFinished() || GameManager.IsSwitchingLevels) return;
 
         //Prevent loading the level we're already on.
@@ -233,7 +234,7 @@ public static class BingoMenuController {
                 : new VoteData(false);
 
             if (levelData.IsAngryLevel) {
-                HandleAngryLoad(levelData, row, column);
+                await HandleAngryLoad(levelData, row, column);
             } else {
                 var msg = $"MOVING TO <color=orange>{levelDisplayName}</color>...";
                 BingoCardPauseMenu.DescriptorText?.GetComponent<TextMeshProUGUI>().SetText(msg);
@@ -253,7 +254,7 @@ public static class BingoMenuController {
     public static void ReturnToMenu() {
         UIManager.RemoveLimit();
         BingoEncapsulator.Root?.SetActive(false);
-        GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.SetActive(true);
+        FindObjectWithInactiveRoot("Canvas", "Difficulty Select (1)")?.SetActive(true);
         Main.NetworkManager.SetState(Types.State.Normal);
     }
 

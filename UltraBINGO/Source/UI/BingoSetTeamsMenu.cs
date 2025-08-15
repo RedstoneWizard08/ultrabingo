@@ -88,7 +88,7 @@ public static class BingoSetTeamsMenu {
         if (CurrentTeamChanges.ContainsKey(playerSteamId)) {
             _currentPlayerObject = player;
 
-            var text = GetGameObjectChild(_teamSelectionPanel, "PlayerName")?.GetComponent<TextMeshProUGUI>();
+            var text = FindObject(_teamSelectionPanel, "PlayerName")?.GetComponent<TextMeshProUGUI>();
 
             if (text != null)
                 text.text = $"<color=orange>{playerName}</color>";
@@ -134,7 +134,7 @@ public static class BingoSetTeamsMenu {
 
                 playerTeamButton.name = id;
 
-                var text = GetGameObjectChild(playerTeamButton, "Text");
+                var text = FindObject(playerTeamButton, "Text");
 
                 if (text != null) text.GetComponent<TextMeshProUGUI>().text = playerName;
 
@@ -159,46 +159,46 @@ public static class BingoSetTeamsMenu {
     public static void Init(ref GameObject bingoSetTeams) {
         if (_buttonTemplate == null) _buttonTemplate = new GameObject();
 
-        _playerGrid = GetGameObjectChild(bingoSetTeams, "PlayerContainer");
+        _playerGrid = FindObject(bingoSetTeams, "PlayerContainer");
 
         // Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter component causes crashes.
-        _buttonTemplate = GetGameObjectChild(_playerGrid, "PlayerTemplate");
+        _buttonTemplate = FindObject(_playerGrid, "PlayerTemplate");
         _buttonTemplate?.SetActive(false);
 
-        _teamSelectionPanel = GetGameObjectChild(bingoSetTeams, "TeamSelection");
+        _teamSelectionPanel = FindObject(bingoSetTeams, "TeamSelection");
 
-        var teamSelectionPanelSub = GetGameObjectChild(_teamSelectionPanel, "TeamColorContainer");
+        var teamSelectionPanelSub = FindObject(_teamSelectionPanel, "TeamColorContainer");
 
         TeamSelectionPanelButtons.Clear(); //Remove previously destroyed references
-        TeamSelectionPanelButtons.Add(GetGameObjectChild(teamSelectionPanelSub, "Red"));
-        TeamSelectionPanelButtons.Add(GetGameObjectChild(teamSelectionPanelSub, "Green"));
-        TeamSelectionPanelButtons.Add(GetGameObjectChild(teamSelectionPanelSub, "Blue"));
-        TeamSelectionPanelButtons.Add(GetGameObjectChild(teamSelectionPanelSub, "Yellow"));
+        TeamSelectionPanelButtons.Add(FindObject(teamSelectionPanelSub, "Red"));
+        TeamSelectionPanelButtons.Add(FindObject(teamSelectionPanelSub, "Green"));
+        TeamSelectionPanelButtons.Add(FindObject(teamSelectionPanelSub, "Blue"));
+        TeamSelectionPanelButtons.Add(FindObject(teamSelectionPanelSub, "Yellow"));
 
-        GetGameObjectChild(teamSelectionPanelSub, "Red")?.GetComponent<Button>().onClick
+        FindObject(teamSelectionPanelSub, "Red")?.GetComponent<Button>().onClick
             .AddListener(delegate { UpdatePlayerTeam(1); });
 
-        GetGameObjectChild(teamSelectionPanelSub, "Green")?.GetComponent<Button>().onClick
+        FindObject(teamSelectionPanelSub, "Green")?.GetComponent<Button>().onClick
             .AddListener(delegate { UpdatePlayerTeam(2); });
 
-        GetGameObjectChild(teamSelectionPanelSub, "Blue")?.GetComponent<Button>().onClick
+        FindObject(teamSelectionPanelSub, "Blue")?.GetComponent<Button>().onClick
             .AddListener(delegate { UpdatePlayerTeam(3); });
 
-        GetGameObjectChild(teamSelectionPanelSub, "Yellow")?.GetComponent<Button>().onClick
+        FindObject(teamSelectionPanelSub, "Yellow")?.GetComponent<Button>().onClick
             .AddListener(delegate { UpdatePlayerTeam(4); });
 
-        _teamSelectionBackButton = GetGameObjectChild(_teamSelectionPanel, "Back");
+        _teamSelectionBackButton = FindObject(_teamSelectionPanel, "Back");
 
         _teamSelectionBackButton?.GetComponent<Button>().onClick
             .AddListener(delegate { _teamSelectionPanel?.SetActive(false); });
 
-        _cancelButton = GetGameObjectChild(bingoSetTeams, "Cancel");
+        _cancelButton = FindObject(bingoSetTeams, "Cancel");
         _cancelButton?.GetComponent<Button>().onClick.AddListener(Cancel);
 
-        _resetButton = GetGameObjectChild(bingoSetTeams, "Reset");
+        _resetButton = FindObject(bingoSetTeams, "Reset");
         _resetButton?.GetComponent<Button>().onClick.AddListener(delegate { Discard().Wait(); });
 
-        _finishButton = GetGameObjectChild(bingoSetTeams, "Finish");
+        _finishButton = FindObject(bingoSetTeams, "Finish");
         _finishButton?.GetComponent<Button>().onClick.AddListener(delegate { Submit().Wait(); });
     }
 }

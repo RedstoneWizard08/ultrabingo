@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using TMPro;
 using Tommy;
 using UltraBINGO.Components;
-using UltraBINGO.Net;
 using UltraBINGO.Packets;
 using UltraBINGO.Types;
 using UltraBINGO.Util;
@@ -114,7 +113,7 @@ public static class BingoMapSelection {
             _mapContainerDescriptionNumMaps.GetComponent<TextMeshProUGUI>().text =
                 $"Number of maps: <color=orange>{poolData.mapPoolNumOfMaps}</color>";
 
-        var mapString = poolData.mapPoolMapList.Aggregate("", (current, map) => current + (map + "\n"));
+        var mapString = poolData.mapPoolMapList?.Aggregate("", (current, map) => current + (map + "\n"));
 
         if (_mapContainerDescriptionMapList != null) {
             _mapContainerDescriptionMapList.GetComponent<TextMeshProUGUI>().text = mapString;
@@ -180,7 +179,7 @@ public static class BingoMapSelection {
                     poolData.mapPoolMapList = currentMapPool.MapList;
                 }
 
-                var text = GetGameObjectChild(newMapPool, "Text");
+                var text = FindObject(newMapPool, "Text");
 
                 if (text != null) text.GetComponent<Text>().text = currentMapPool.MapPoolName;
 
@@ -212,34 +211,18 @@ public static class BingoMapSelection {
     }
 
     public static void Init(ref GameObject mapSelection) {
-        _fetchText = GetGameObjectChild(mapSelection, "FetchText");
-
-        _mapContainer = GetGameObjectChild(mapSelection, "MapContainer");
-        _selectedMapsTotal = GetGameObjectChild(GetGameObjectChild(_mapContainer, "MapPoolList"), "SelectedMapsTotal");
-
-        _mapContainerDescription =
-            GetGameObjectChild(GetGameObjectChild(_mapContainer, "MapPoolDescription"), "Contents");
-
-        _mapContainerDescriptionTitle = GetGameObjectChild(_mapContainerDescription, "Title");
-        _mapContainerDescriptionDesc = GetGameObjectChild(_mapContainerDescription, "Description");
-        _mapContainerDescriptionNumMaps = GetGameObjectChild(_mapContainerDescription, "NumMaps");
-        _mapContainerDescriptionMapList =
-            GetGameObjectChild(GetGameObjectChild(_mapContainerDescription, "MapsList"), "MapName");
-
-        _mapList = GetGameObjectChild(
-            GetGameObjectChild(
-                GetGameObjectChild(
-                    GetGameObjectChild(GetGameObjectChild(_mapContainer, "MapPoolList"), "Scroll View"),
-                    "Scroll Rect"
-                ),
-                "Content"
-            ),
-            "List"
-        );
-
-        _mapListButtonTemplate = GetGameObjectChild(_mapList, "MapListButton");
-
-        _back = GetGameObjectChild(mapSelection, "Back");
+        _fetchText = FindObject(mapSelection, "FetchText");
+        _mapContainer = FindObject(mapSelection, "MapContainer");
+        _selectedMapsTotal = FindObject(_mapContainer, "MapPoolList", "SelectedMapsTotal");
+        _mapContainerDescription = FindObject(_mapContainer, "MapPoolDescription", "Contents");
+        _mapContainerDescriptionTitle = FindObject(_mapContainerDescription, "Title");
+        _mapContainerDescriptionDesc = FindObject(_mapContainerDescription, "Description");
+        _mapContainerDescriptionNumMaps = FindObject(_mapContainerDescription, "NumMaps");
+        _mapContainerDescriptionMapList = FindObject(_mapContainerDescription, "MapsList", "MapName");
+        _mapList = FindObject(_mapContainer, "MapPoolList", "Scroll View", "Scroll Rect", "Content", "List");
+        _mapListButtonTemplate = FindObject(_mapList, "MapListButton");
+        _back = FindObject(mapSelection, "Back");
+        
         _back?.GetComponent<Button>().onClick.AddListener(ReturnToLobby);
     }
 }

@@ -11,8 +11,8 @@ public static class BingoVotePanel {
     public static GameObject? RerollTimer;
 
     public static void Init(ref GameObject votePanel) {
-        RerollText = GetGameObjectChild(votePanel, "RerollText");
-        RerollVotes = GetGameObjectChild(votePanel, "RerollVotes");
-        RerollTimer = GetGameObjectChild(votePanel, "RerollTimer");
+        RerollText = FindObject(votePanel, "RerollText");
+        RerollVotes = FindObject(votePanel, "RerollVotes");
+        RerollTimer = FindObject(votePanel, "RerollTimer");
     }
 }

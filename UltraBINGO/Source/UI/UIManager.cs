@@ -73,10 +73,8 @@ public static class UIManager {
     }
 
     private static void PopulateUnallowedMods() {
-        var mods = GetGameObjectChild(
-            GetGameObjectChild(GetGameObjectChild(ultrabingoUnallowedModsPanel, "BingoLockedPanel"), "Panel"),
-            "ModList"
-        )?.GetComponent<TextMeshProUGUI>();
+        var mods = FindObject(ultrabingoUnallowedModsPanel, "BingoLockedPanel", "Panel", "ModList")
+            ?.GetComponent<TextMeshProUGUI>();
 
         var text = nonWhitelistedMods.Aggregate("<color=orange>", (current, mod) => current + (mod + "\n"));
 

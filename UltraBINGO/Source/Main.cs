@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
 using HarmonyLib;
@@ -33,8 +31,6 @@ public class Main : BaseUnityPlugin {
     private const string PluginId = "clearwater.ultrakillbingo.ultrakillbingo";
     private const string PluginName = "Baphomet's BINGO";
     public const string PluginVersion = "1.1.1";
-
-    public static string? ModFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
     public const bool IsDevelopmentBuild = false;
     public static bool IsSteamAuthenticated;
@@ -116,14 +112,14 @@ public class Main : BaseUnityPlugin {
 
         if (GetSceneName() == "Main Menu") {
             HasUnlocked = HasUnlockedMod();
-            
+
             if (!IsSteamAuthenticated) {
                 Authenticate();
                 VerifyModWhitelist();
             }
 
             if (GameManager.currentSetGame?.IsGameFinished() ?? false) {
-                BingoEnd.ShowEndScreen();
+                BingoEnd.ShowEndScreen().Wait();
                 MonoSingleton<AssistController>.Instance.majorEnabled = false;
                 MonoSingleton<AssistController>.Instance.gameSpeed = 1f;
             }
