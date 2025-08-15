@@ -50,10 +50,10 @@ public class ShopAddLevelInfo {
                     "Main Menu");
 
             var cgButton = GetGameObjectChild(GetGameObjectChild(shopObject, "Buttons"), "CyberGrindButton");
-            cgButton.SetActive(false);
+            cgButton?.SetActive(false);
 
             var sandboxButton = GetGameObjectChild(GetGameObjectChild(shopObject, "Buttons"), "SandboxButton");
-            sandboxButton.SetActive(false);
+            sandboxButton?.SetActive(false);
         } catch (Exception) {
             Logging.Warn("This shop isn't vanilla or an error occured");
         }

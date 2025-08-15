@@ -12,21 +12,22 @@ public static class BingoEncapsulator {
     public static GameObject? BingoEndScreen;
     public static GameObject? BingoMapSelectionMenu;
     public static GameObject? BingoSetTeams;
-
     public static GameObject? BingoGameBrowser;
 
     public static GameObject Init() {
         if (Root == null) Root = new GameObject();
         
         Root.name = "UltraBingo";
-
         BingoMenu = Object.Instantiate(AssetLoader.BingoMainMenu, Root.transform);
+        
         if (BingoMenu != null) {
             BingoMainMenu.Init(ref BingoMenu);
+            
             BingoMenu.name = "BingoMainMenu";
-            BingoMenu.AddComponent<MenuEsc>();
-            BingoMenu.GetComponent<MenuEsc>().previousPage =
+            
+            BingoMenu.GetOrAddComponent<MenuEsc>().previousPage =
                 GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)");
+            
             BingoMenu.transform.SetParent(Root.transform);
         }
 
@@ -41,18 +42,22 @@ public static class BingoEncapsulator {
         BingoCardScreen.transform.SetParent(Root.transform);
 
         BingoMapSelectionMenu = Object.Instantiate(AssetLoader.BingoMapSelectionMenu, Root.transform);
+        
         if (BingoMapSelectionMenu != null) BingoMapSelection.Init(ref BingoMapSelectionMenu);
 
         BingoSetTeams = Object.Instantiate(AssetLoader.BingoSetTeams, Root.transform);
+        
         if (BingoSetTeams != null) {
             BingoSetTeamsMenu.Init(ref BingoSetTeams);
             BingoSetTeams.transform.SetParent(Root.transform);
         }
 
         BingoEndScreen = Object.Instantiate(AssetLoader.BingoEndScreen, Root.transform);
+        
         if (BingoEndScreen != null) BingoEnd.Init(ref BingoEndScreen);
 
         BingoGameBrowser = Object.Instantiate(AssetLoader.BingoGameBrowser, Root.transform);
+        
         if (BingoGameBrowser != null) BingoBrowser.Init(ref BingoGameBrowser);
 
         return Root;

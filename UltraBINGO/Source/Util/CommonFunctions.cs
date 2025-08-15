@@ -55,10 +55,8 @@ public static class CommonFunctions {
     public static GameObject? FindObject(GameObject? parent, params string[] path) =>
         path.Aggregate(parent, GetGameObjectChild);
 
-    public static GameObject? FindObjectWithInactiveRoot(params string[] path) {
-        var actual = new Queue<string>(path);
-
-        return actual.Aggregate(GetInactiveRootObject(actual.Dequeue()), GetGameObjectChild);
+    public static GameObject? FindObjectWithInactiveRoot(string root, params string[] path) {
+        return path.Aggregate(GetInactiveRootObject(root), GetGameObjectChild);
     }
 
     public static TextMeshProUGUI GetTextMeshProGUI(GameObject objectToUse) =>

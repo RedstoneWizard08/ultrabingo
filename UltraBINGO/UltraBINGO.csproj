@@ -9,6 +9,7 @@
         <RootNamespace>UltraBINGO</RootNamespace>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <NoWarn>NU1701</NoWarn>
 
         <RestoreAdditionalProjectSources>
             https://api.nuget.org/v3/index.json;
@@ -48,6 +49,8 @@
     </ItemGroup>
     
     <ItemGroup>
+        <None Remove="Unity/" />
+        <None Remove="Unity/**/*" />
         <None Remove="bingo.assets" />
         <None Remove="bingo.resource" />
         

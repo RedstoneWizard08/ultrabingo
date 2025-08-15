@@ -9,7 +9,7 @@ public class MapPoolData : MonoBehaviour {
     public string mapPoolDescription = "Desc";
     public bool mapPoolEnabled;
     public int mapPoolNumOfMaps;
-    public List<string> mapPoolMapList;
+    public List<string>? mapPoolMapList;
 
     public void Toggle() {
         mapPoolEnabled = !mapPoolEnabled;

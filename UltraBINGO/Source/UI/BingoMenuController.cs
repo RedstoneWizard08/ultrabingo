@@ -119,7 +119,7 @@ public static class BingoMenuController {
                 if (GetSceneName() == "Main Menu")
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
                 else
-                    BingoCardPauseMenu.DescriptorText.GetComponent<TextMeshProUGUI>().text = msg;
+                    BingoCardPauseMenu.DescriptorText?.GetComponent<TextMeshProUGUI>().SetText(msg);
                 await Task.Delay(1000);
                 Main.NetworkManager.SetState(Types.State.InGame);
                 AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.GameSettings.Difficulty;
@@ -236,7 +236,7 @@ public static class BingoMenuController {
                 HandleAngryLoad(levelData, row, column);
             } else {
                 var msg = $"MOVING TO <color=orange>{levelDisplayName}</color>...";
-                BingoCardPauseMenu.DescriptorText.GetComponent<TextMeshProUGUI>().text = msg;
+                BingoCardPauseMenu.DescriptorText?.GetComponent<TextMeshProUGUI>().SetText(msg);
                 GameManager.IsSwitchingLevels = true;
 
                 await Task.Delay(1000);
@@ -252,8 +252,8 @@ public static class BingoMenuController {
 
     public static void ReturnToMenu() {
         UIManager.RemoveLimit();
-        BingoEncapsulator.Root.SetActive(false);
-        GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)").SetActive(true);
+        BingoEncapsulator.Root?.SetActive(false);
+        GetGameObjectChild(GetInactiveRootObject("Canvas"), "Difficulty Select (1)")?.SetActive(true);
         Main.NetworkManager.SetState(Types.State.Normal);
     }
 

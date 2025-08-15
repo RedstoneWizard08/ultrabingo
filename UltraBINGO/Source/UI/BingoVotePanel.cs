@@ -5,12 +5,10 @@ using static UltraBINGO.Util.CommonFunctions;
 namespace UltraBINGO.UI;
 
 public static class BingoVotePanel {
-    public static GameObject Root;
-    public static GameObject RerollText;
-    public static GameObject RerollVotes;
-    public static GameObject RerollTimer;
-
-    public static BingoVoteManager manager;
+    public static GameObject? Root;
+    public static GameObject? RerollText;
+    public static GameObject? RerollVotes;
+    public static GameObject? RerollTimer;
 
     public static void Init(ref GameObject votePanel) {
         RerollText = GetGameObjectChild(votePanel, "RerollText");

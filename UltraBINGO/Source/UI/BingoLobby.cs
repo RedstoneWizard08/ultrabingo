@@ -132,93 +132,90 @@ public static class BingoLobby {
 
     public static void Init(ref GameObject bingoLobby) {
         //Player list
-        PlayerList = GetGameObjectChild(bingoLobby, "BingoLobbyPlayers");
+        PlayerList = FindObject(bingoLobby, "BingoLobbyPlayers");
 
         //Leave game button
-        _returnToBingoMenu = GetGameObjectChild(bingoLobby, "LeaveGame");
+        _returnToBingoMenu = FindObject(bingoLobby, "LeaveGame");
 
         _returnToBingoMenu?.GetComponent<Button>().onClick.AddListener(delegate { GameManager.LeaveGame().Wait(); });
 
-        SelectMaps = GetGameObjectChild(bingoLobby, "SelectMaps");
+        SelectMaps = FindObject(bingoLobby, "SelectMaps");
 
-        SelectMaps?.GetComponent<Button>().onClick.AddListener(delegate {
-            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
-            BingoEncapsulator.BingoMapSelectionMenu.SetActive(true);
-            BingoMapSelection.Setup();
-        });
+        SelectMaps?.GetComponent<Button>().onClick.AddListener(
+            delegate {
+                BingoEncapsulator.BingoLobbyScreen?.SetActive(false);
+                BingoEncapsulator.BingoMapSelectionMenu?.SetActive(true);
+                BingoMapSelection.Setup().Wait();
+            }
+        );
 
-        SetTeams = GetGameObjectChild(bingoLobby, "SetTeams");
+        SetTeams = FindObject(bingoLobby, "SetTeams");
 
-        SetTeams?.GetComponent<Button>().onClick.AddListener(delegate {
-            BingoSetTeamsMenu.Setup();
-            BingoEncapsulator.BingoLobbyScreen.SetActive(false);
-            BingoEncapsulator.BingoSetTeams.SetActive(true);
-        });
+        SetTeams?.GetComponent<Button>().onClick.AddListener(
+            delegate {
+                BingoSetTeamsMenu.Setup();
+                BingoEncapsulator.BingoLobbyScreen?.SetActive(false);
+                BingoEncapsulator.BingoSetTeams?.SetActive(true);
+            }
+        );
 
         //Start game button
-        StartGame = GetGameObjectChild(bingoLobby, "StartGame");
+        StartGame = FindObject(bingoLobby, "StartGame");
 
-        StartGame?.GetComponent<Button>().onClick.AddListener(delegate {
-            if (!GameManager.PreStartChecks()) return;
+        StartGame?.GetComponent<Button>().onClick.AddListener(
+            delegate {
+                if (!GameManager.PreStartChecks()) return;
 
-            //Lock the button to prevent being able to spam it
-            LockUI();
-            GameManager.StartGame();
-        });
+                //Lock the button to prevent being able to spam it
+                LockUI();
+                GameManager.StartGame().Wait();
+            }
+        );
 
         //Room id text
-        RoomIdDisplay = GetGameObjectChild(bingoLobby, "BingoGameID");
+        RoomIdDisplay = FindObject(bingoLobby, "BingoGameID");
 
         //Copy ID
-        CopyId = GetGameObjectChild(bingoLobby, "CopyID");
+        CopyId = FindObject(bingoLobby, "CopyID");
 
-        CopyId?.GetComponent<Button>().onClick.AddListener(delegate {
-            GUIUtility.systemCopyBuffer = GetGameObjectChild(GetGameObjectChild(RoomIdDisplay, "Title"), "Text")?
-                .GetComponent<Text>().text.Split(':')[1];
-        });
+        CopyId?.GetComponent<Button>().onClick.AddListener(
+            delegate {
+                GUIUtility.systemCopyBuffer = FindObject(RoomIdDisplay, "Title", "Text")?
+                    .GetComponent<Text>().text.Split(':')[1];
+            }
+        );
 
         //Game options
-        _gameOptions = GetGameObjectChild(bingoLobby, "BingoGameSettings");
+        _gameOptions = FindObject(bingoLobby, "BingoGameSettings");
 
-        MaxPlayers = GetGameObjectChild(GetGameObjectChild(_gameOptions, "MaxPlayers"), "Input")?
-            .GetComponent<TMP_InputField>();
+        MaxPlayers = FindObject(_gameOptions, "MaxPlayers", "Input")?.GetComponent<TMP_InputField>();
         MaxPlayers?.onEndEdit.AddListener(OnMaxPlayerUpdate);
 
-        MaxTeams = GetGameObjectChild(GetGameObjectChild(_gameOptions, "MaxTeams"), "Input")?
-            .GetComponent<TMP_InputField>();
+        MaxTeams = FindObject(_gameOptions, "MaxTeams", "Input")?.GetComponent<TMP_InputField>();
         MaxTeams?.onEndEdit.AddListener(OnMaxTeamUpdate);
 
-        TimeLimit = GetGameObjectChild(GetGameObjectChild(_gameOptions, "TimeLimit"), "Input")?
-            .GetComponent<TMP_InputField>();
+        TimeLimit = FindObject(_gameOptions, "TimeLimit", "Input")?.GetComponent<TMP_InputField>();
         TimeLimit?.onEndEdit.AddListener(OnTimeLimitUpdate);
 
-        TeamComposition = GetGameObjectChild(GetGameObjectChild(_gameOptions, "TeamComposition"), "Dropdown")?
-            .GetComponent<TMP_Dropdown>();
+        TeamComposition = FindObject(_gameOptions, "TeamComposition", "Dropdown")?.GetComponent<TMP_Dropdown>();
         TeamComposition?.onValueChanged.AddListener(OnTeamCompositionUpdate);
 
-        Gamemode = GetGameObjectChild(GetGameObjectChild(_gameOptions, "Gamemode"), "Dropdown")?
-            .GetComponent<TMP_Dropdown>();
+        Gamemode = FindObject(_gameOptions, "Gamemode", "Dropdown")?.GetComponent<TMP_Dropdown>();
         Gamemode?.onValueChanged.AddListener(OnGamemodeTypeUpdate);
 
-        GridSize = GetGameObjectChild(GetGameObjectChild(_gameOptions, "GridSize"), "Dropdown")?
-            .GetComponent<TMP_Dropdown>();
+        GridSize = FindObject(_gameOptions, "GridSize", "Dropdown")?.GetComponent<TMP_Dropdown>();
         GridSize?.onValueChanged.AddListener(OnGridSizeUpdate);
 
-        Difficulty = GetGameObjectChild(GetGameObjectChild(_gameOptions, "Difficulty"), "Dropdown")?
-            .GetComponent<TMP_Dropdown>();
+        Difficulty = FindObject(_gameOptions, "Difficulty", "Dropdown")?.GetComponent<TMP_Dropdown>();
         Difficulty?.onValueChanged.AddListener(OnDifficultyUpdate);
 
-        RequirePRank = GetGameObjectChild(GetGameObjectChild(_gameOptions, "RequirePRank"), "Input")?
-            .GetComponent<Toggle>();
+        RequirePRank = FindObject(_gameOptions, "RequirePRank", "Input")?.GetComponent<Toggle>();
         RequirePRank?.onValueChanged.AddListener(OnPRankRequiredUpdate);
 
-        DisableCampaignAltExits =
-            GetGameObjectChild(GetGameObjectChild(_gameOptions, "DisableCampaignAltEnds"), "Input")?
-                .GetComponent<Toggle>();
+        DisableCampaignAltExits = FindObject(_gameOptions, "DisableCampaignAltEnds", "Input")?.GetComponent<Toggle>();
         DisableCampaignAltExits?.onValueChanged.AddListener(OnDisableCampaignAltExitsUpdate);
 
-        GameVisibility = GetGameObjectChild(GetGameObjectChild(_gameOptions, "GameVisibility"), "Dropdown")?
-            .GetComponent<TMP_Dropdown>();
+        GameVisibility = FindObject(_gameOptions, "GameVisibility", "Dropdown")?.GetComponent<TMP_Dropdown>();
         GameVisibility?.onValueChanged.AddListener(OnGameVisibilityUpdate);
 
         bingoLobby.SetActive(false);

@@ -8,7 +8,6 @@ using static UltraBINGO.Util.CommonFunctions;
 namespace UltraBINGO.HarmonyPatches;
 
 //When finishing an Angry level in bingo, make sure we don't go to the next linked level if there is one.
-
 //When finishing an Angry level in bingo, make sure Angry doesn't override and quit to main menu.
 
 [HarmonyPatch(typeof(OptionsManager), "Awake")]
@@ -28,9 +27,9 @@ public static class PauseMenu {
         }
 
 
-        FindObject(pauseMenu, "Quit Mission", "Text").GetComponent<TextMeshProUGUI>().text = "LEAVE GAME";
+        FindObject(pauseMenu, "Quit Mission", "Text")?.GetComponent<TextMeshProUGUI>().SetText("LEAVE GAME");
 
         BingoCardPauseMenu.Init(ref instance);
-        BingoCardPauseMenu.ShowBingoCardInPauseMenu(ref instance);
+        BingoCardPauseMenu.ShowBingoCardInPauseMenu();
     }
 }

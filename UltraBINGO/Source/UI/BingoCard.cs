@@ -8,18 +8,12 @@ namespace UltraBINGO.UI;
 
 public static class BingoCard {
     public static GameObject? Root;
-
     public static GameObject? Grid;
-
+    public static GameObject? Teammates;
     private static GameObject? _buttonTemplate;
-
     private static GameObject? _leaveGame;
-
     private static GameObject? _teamIndicator;
     private static GameObject? _objectiveIndicator;
-
-    public static GameObject? Teammates;
-
     private static GameObject? _cardElements;
 
     private const string Team = "PLACEHOLDER";
@@ -42,7 +36,7 @@ public static class BingoCard {
 
         if (_teamIndicator != null)
             _teamIndicator.GetComponent<TMP_Text>().text =
-                $"-- You are on the <color={GameManager.CurrentTeam?.ToLower()}>{GameManager.CurrentTeam} team</color> --";
+                $"-- You are on the <color={GameManager.CurrentTeam.ToLower()}>{GameManager.CurrentTeam} team</color> --";
 
         if (_objectiveIndicator == null) return;
 
@@ -62,7 +56,7 @@ public static class BingoCard {
         _cardElements = Object.Instantiate(AssetLoader.BingoCardElements, Root.transform);
 
         //Bingo grid
-        Grid = GetGameObjectChild(_cardElements, "BingoGrid");
+        Grid = FindObject(_cardElements, "BingoGrid");
         if (Grid != null) {
             Grid.name = "BingoGrid";
             Grid.transform.SetParent(Root.transform);
@@ -72,24 +66,25 @@ public static class BingoCard {
 
         //Have to create the button with normal Text instead of TextMeshProUGUI as trying to instantiate an object with the latter causes crashes.
         _buttonTemplate = Object.Instantiate(AssetLoader.BingoCardButtonTemplate, Root.transform);
+        
         if (_buttonTemplate != null) {
             _buttonTemplate.transform.SetParent(Root.transform);
             _buttonTemplate.SetActive(false);
         }
 
-        _leaveGame = GetGameObjectChild(_cardElements, "LeaveGame");
+        _leaveGame = FindObject(_cardElements, "LeaveGame");
         _leaveGame?.GetComponent<Button>().onClick.AddListener(delegate { GameManager.LeaveGame().Wait(); });
 
         //Team indicator panel
-        _teamIndicator = GetGameObjectChild(_cardElements, "TeamIndicator");
+        _teamIndicator = FindObject(_cardElements, "TeamIndicator");
         if (_teamIndicator != null)
             _teamIndicator.GetComponent<TextMeshProUGUI>().text = $"-- You are on the {Team} team -- ";
 
         //Time/style indicator panel
-        _objectiveIndicator = GetGameObjectChild(_cardElements, "ObjectiveIndicator");
+        _objectiveIndicator = FindObject(_cardElements, "ObjectiveIndicator");
 
         //Teammate panel
-        Teammates = GetGameObjectChild(_cardElements, "Teammates");
+        Teammates = FindObject(_cardElements, "Teammates");
 
         Root.SetActive(false);
         return Root;

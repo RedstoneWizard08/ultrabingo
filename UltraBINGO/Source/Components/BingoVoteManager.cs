@@ -12,7 +12,7 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager> {
     public float timeRemaining;
     public bool voteOngoing;
     public bool hasVoted;
-    public string map = "";
+    public string? map;
     public int currentVotes;
     public int voteThreshold;
 

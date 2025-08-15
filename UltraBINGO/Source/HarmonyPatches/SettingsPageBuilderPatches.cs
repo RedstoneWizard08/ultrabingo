@@ -21,7 +21,7 @@ public static class SettingsPageBuilderPatches {
                     GetGameObjectChild(optionsMenu.gameObject, "Navigation Rail"),
                     "PluginConfiguratorButton(Clone)"
                 )?.SetActive(false);
-            } catch (Exception e) {
+            } catch (Exception) {
                 Logging.Warn("Couldn't find PluginConfigurator button in options - Is it not working?");
             }
 

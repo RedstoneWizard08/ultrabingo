@@ -44,25 +44,29 @@ public static class BingoCardPauseMenu {
             100.0f
         );
 
-        GetGameObjectChild(Root, "SelectedLevelImage").GetComponent<Image>().overrideSprite = levelSprite;
+        var img = GetGameObjectChild(Root, "SelectedLevelImage");
+
+        if (img != null) img.GetComponent<Image>().overrideSprite = levelSprite;
 
         var canReroll = !data.pointerEnter.gameObject.GetComponent<BingoLevelData>().IsClaimed
                         && !MonoSingleton<BingoVoteManager>.Instance.voteOngoing;
 
         var level = GameManager.CurrentGame.Grid.LevelTable[data.pointerEnter.gameObject.name];
 
-        GetGameObjectChild(GetGameObjectChild(Root, "SelectedLevel"), "Text (TMP)").GetComponent<TextMeshProUGUI>()
-                .text = level.LevelName
-                        + (level.ClaimedBy != "NONE"
-                            ? $"\n<color=orange>{GetFormattedTime(level.TimeToBeat)}</color>"
-                            : "")
-                        + (canReroll ? "\n<color=orange>R: Start a reroll vote</color>" : "");
+        FindObject(Root, "SelectedLevel", "Text (TMP)")?.GetComponent<TextMeshProUGUI>()
+            .SetText(
+                level.LevelName
+                + (level.ClaimedBy != "NONE"
+                    ? $"\n<color=orange>{GetFormattedTime(level.TimeToBeat)}</color>"
+                    : "")
+                + (canReroll ? "\n<color=orange>R: Start a reroll vote</color>" : "")
+            );
 
         GetGameObjectChild(Root, "SelectedLevel")?.SetActive(true);
         GetGameObjectChild(Root, "SelectedLevelImage")?.SetActive(true);
     }
 
-    public static void ShowBingoCardInPauseMenu(ref OptionsManager instance) {
+    public static void ShowBingoCardInPauseMenu() {
         var currentGame = GameManager.CurrentGame;
         var templateSquare = GetGameObjectChild(GetGameObjectChild(Root, "Card"), "Image");
 
@@ -98,10 +102,13 @@ public static class BingoCardPauseMenu {
             }
 
             levelSquare.AddComponent<EventTrigger>();
+            
             var mouseEnter = new EventTrigger.Entry {
                 eventID = EventTriggerType.PointerEnter
             };
+            
             mouseEnter.callback.AddListener(data => { OnMouseEnterLevelSquare((PointerEventData)data); });
+            
             levelSquare.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
             levelSquare.SetActive(true);
         }
