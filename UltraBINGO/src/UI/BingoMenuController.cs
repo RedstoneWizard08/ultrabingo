@@ -205,7 +205,7 @@ public static class BingoMenuController {
             var levelId = GameManager.CurrentGame.Grid.LevelTable[levelCoords].LevelId;
 
             //Save vote data if a vote is ongoing, so the panel can reappear after scene switch.
-            GameManager.voteData = MonoSingleton<BingoVoteManager>.Instance.voteOngoing
+            GameManager.VoteData = MonoSingleton<BingoVoteManager>.Instance.voteOngoing
                 ? new VoteData(true, MonoSingleton<BingoVoteManager>.Instance.hasVoted,
                     MonoSingleton<BingoVoteManager>.Instance.voteThreshold,
                     MonoSingleton<BingoVoteManager>.Instance.currentVotes, MonoSingleton<BingoVoteManager>.Instance.map,

@@ -36,7 +36,7 @@ public class RerollVoteNotification : IncomingPacket {
             manager.AddVote();
         }
 
-        GameManager.voteData = new VoteData(
+        GameManager.VoteData = new VoteData(
             true,
             manager.hasVoted,
             manager.voteThreshold,

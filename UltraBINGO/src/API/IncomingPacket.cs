@@ -2,6 +2,6 @@ using System.Threading.Tasks;
 
 namespace UltraBINGO.API;
 
-public abstract class IncomingPacket {
+public abstract class IncomingPacket : BasePacket {
     public abstract Task Handle();
 }

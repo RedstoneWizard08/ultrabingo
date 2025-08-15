@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet]
-public class CheatActivation {
+public class CheatActivation : BasePacket {
     public required int GameId;
     public required string Username;
     public required string SteamId;

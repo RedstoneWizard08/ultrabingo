@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using BepInEx.Configuration;
 using Newtonsoft.Json;
+using UltraBINGO.API;
 using UltraBINGO.Packets;
 using UltraBINGO.Types;
 using UltraBINGO.UI;
@@ -19,28 +20,20 @@ public static class NetworkManager {
     public static AsyncAction pendingAction = AsyncAction.None;
     public static string pendingPassword = "";
     private static VerifyModRequest? pendingVmr;
-    private static string QueuedMessage = "";
+    private static BasePacket? QueuedMessage;
     private static Types.State currentState = Types.State.Normal;
-
     public static ConfigEntry<string>? serverURLConfig;
     public static ConfigEntry<string>? serverPortConfig;
     public static ConfigEntry<string>? lastRankUsedConfig;
-
     private static string? _serverURL;
-
     private static readonly HttpClient Client = new();
-
     public static string? serverMapPoolCatalogURL;
-
     public static bool modlistCheckDone = false;
     public static bool modlistCheckPassed = false;
     private static string? _steamTicket;
-
     public static string? requestedRank = "";
-
     private static WebSocket? _ws;
     private static Timer? _heartbeatTimer;
-
     private const int MaxReconnectionAttempts = 3;
     private static int _currentReconnection;
 
@@ -51,48 +44,43 @@ public static class NetworkManager {
 
     private static async Task HandleAsyncConnect() {
         SetupHeartbeat();
+
         switch (pendingAction) {
-            case AsyncAction.Host: {
+            case AsyncAction.Host:
                 await CreateRoom();
                 break;
-            }
 
-            case AsyncAction.Join: {
+            case AsyncAction.Join:
                 await JoinGame(pendingPassword);
                 break;
-            }
 
-            case AsyncAction.ModCheck: {
-                await SendEncodedMessage(JsonConvert.SerializeObject(pendingVmr));
+            case AsyncAction.ModCheck:
+                if (pendingVmr != null) await SendEncodedMessage(pendingVmr);
                 break;
-            }
 
-            case AsyncAction.RetrySend: {
-                await SendEncodedMessage(JsonConvert.SerializeObject(QueuedMessage));
-                QueuedMessage = "";
+            case AsyncAction.RetrySend:
+                if (QueuedMessage != null) await SendEncodedMessage(QueuedMessage);
+                QueuedMessage = null;
                 break;
-            }
 
-            case AsyncAction.ReconnectGame: {
+            case AsyncAction.ReconnectGame:
                 Logging.Warn("Requesting to reconnect");
 
-                await SendEncodedMessage(JsonConvert.SerializeObject(new ReconnectRequest {
-                    SteamId = Steamworks.SteamClient.SteamId.ToString(),
-                    RoomId = GameManager.CurrentGame.GameId,
-                    Ticket = CreateRegisterTicket()
-                }));
+                await SendEncodedMessage(
+                    new ReconnectRequest {
+                        SteamId = Steamworks.SteamClient.SteamId.ToString(),
+                        RoomId = GameManager.CurrentGame.GameId,
+                        Ticket = CreateRegisterTicket()
+                    }
+                );
 
                 break;
-            }
 
-            case AsyncAction.FetchGames: {
-                var fgr = new FetchGamesRequest();
-                await SendEncodedMessage(JsonConvert.SerializeObject(fgr));
+            case AsyncAction.FetchGames:
+                await SendEncodedMessage(new FetchGamesRequest());
                 break;
-            }
 
             case AsyncAction.None:
-
             default:
                 break;
         }
@@ -113,7 +101,9 @@ public static class NetworkManager {
         _steamTicket = ticket;
     }
 
-    //Fetch the bingo map catalog from the server.
+    /// <summary>
+    /// Fetch the bingo map catalog from the server.
+    /// </summary>
     public static async Task<string?> FetchCatalog(string urlToRequest) {
         try {
             var responseTomlRaw = await Client.GetStringAsync(urlToRequest);
@@ -125,12 +115,16 @@ public static class NetworkManager {
         }
     }
 
-    //Check if the WebSocket connection to the server is active and alive.
+    /// <summary>
+    /// Check if the WebSocket connection to the server is active and alive.
+    /// </summary>
     public static bool IsConnectionUp() {
         return _ws?.IsAlive ?? false;
     }
 
-    //Init and set up the WebSocket connection.
+    /// <summary>
+    /// Init and set up the WebSocket connection.
+    /// </summary>
     public static void Initialise(string url, string port) {
         _serverURL = $"ws://{url}:{port}";
         serverMapPoolCatalogURL = $"http://{url}:{port}/bingoMapPool.toml";
@@ -162,7 +156,9 @@ public static class NetworkManager {
         HandleError(sender, e).Wait();
     }
 
-    //Handle any errors that happen with the WebSocket connection.
+    /// <summary>
+    /// Handle any errors that happen with the WebSocket connection.
+    /// </summary>
     private static async Task HandleError(object _, ErrorEventArgs e) {
         Logging.Error("Network error happened");
         Logging.Error(e.Message);
@@ -172,12 +168,12 @@ public static class NetworkManager {
         else
             // If player is on main menu
             switch (currentState) {
-                case Types.State.InMenu: {
+                case Types.State.InMenu:
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Failed to contact server.");
                     BingoMainMenu.UnlockUI();
                     break;
-                }
-                case Types.State.InLobby: {
+
+                case Types.State.InLobby:
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
                         "Connection to the lobby was lost. Returning to menu."
                     );
@@ -191,9 +187,9 @@ public static class NetworkManager {
                     BingoEncapsulator.BingoMenu?.SetActive(true);
 
                     break;
-                }
-                case Types.State.InGame: {
-                    //Handle in-game reconnection attempts here
+
+                case Types.State.InGame:
+                    // Handle in-game reconnection attempts here
                     if (GameManager.IsInBingoLevel) {
                         _currentReconnection++;
 
@@ -219,39 +215,57 @@ public static class NetworkManager {
                     }
 
                     break;
-                }
-                case Types.State.InBrowser: {
+
+                case Types.State.InBrowser:
                     if (!BingoBrowser.fetchDone)
                         BingoBrowser.DisplayError();
                     else
                         BingoBrowser.UnlockUI();
-
                     break;
-                }
+
                 case Types.State.Normal:
                 default: break;
             }
     }
 
-    //Decode base64 messages recieved from the server.
+    /// <summary>
+    /// Decode base64 messages received from the server.
+    /// </summary>
     private static string DecodeMessage(string encodedMessage) {
         var base64EncodedBytes = Convert.FromBase64String(encodedMessage);
+
         return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
     }
 
-    //Encode and send base64 messages to the server.
-    public static async Task SendEncodedMessage(string jsonToEncode) {
+    /// <summary>
+    /// Encode and send base64 messages to the server.
+    /// </summary>
+    public static async Task SendEncodedMessage(BasePacket packet) {
         if (!IsConnectionUp()) {
             Logging.Warn("Queuing message & retrying connection");
-            QueuedMessage = jsonToEncode;
+
+            QueuedMessage = packet;
             pendingAction = AsyncAction.RetrySend;
+
             ConnectWebSocket();
+
             return;
         }
 
-        var encodedBytes = System.Text.Encoding.UTF8.GetBytes(jsonToEncode);
-        var encodedJson = Convert.ToBase64String(encodedBytes);
+        if (!PacketManager.Packets.ContainsKey(packet.GetType())) {
+            Logging.Error($"Unregistered packet type: {packet.GetType()}. Failed to send!");
+            return;
+        }
 
+        var packetInfo = PacketManager.Packets[packet.GetType()];
+
+        var message = new EncapsulatedMessage {
+            Contents = packetInfo.Serialize(packet),
+            Header = packetInfo.Name
+        };
+
+        var encodedBytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+        var encodedJson = Convert.ToBase64String(encodedBytes);
         var source = new TaskCompletionSource<bool>();
 
         _ws?.SendAsync(
@@ -279,22 +293,28 @@ public static class NetworkManager {
 
     public static async Task RegisterConnection() {
         Logging.Message("Registering connection with server");
-        var rt = CreateRegisterTicket();
-        await SendEncodedMessage(JsonConvert.SerializeObject(rt));
+
+        await SendEncodedMessage(CreateRegisterTicket());
     }
 
-    //Connect the WebSocket to the server.
+    /// <summary>
+    /// Connect the WebSocket to the server.
+    /// </summary>
     public static void ConnectWebSocket() {
         if (IsConnectionUp()) _ws?.Close();
         _ws?.ConnectAsync();
     }
 
-    //Disconnect WebSocket.
+    /// <summary>
+    /// Disconnect WebSocket.
+    /// </summary>
     public static void DisconnectWebSocket(ushort code = 1000, string reason = "Disconnect reason not specified") {
         _ws?.Close(code, reason);
     }
 
-    //Setup WebSocket heartbeat.
+    /// <summary>
+    /// Setup WebSocket heartbeat.
+    /// </summary>
     private static void SetupHeartbeat() {
         _heartbeatTimer = new Timer(10 * 1000); //Ping once every 10 seconds
         _heartbeatTimer.Elapsed += SendPing;
@@ -302,76 +322,84 @@ public static class NetworkManager {
         _heartbeatTimer.Enabled = true;
     }
 
-    //Ping the WebSocket server to keep the connection alive.
+    /// <summary>
+    /// Ping the WebSocket server to keep the connection alive.
+    /// </summary>
     private static void SendPing(object source, ElapsedEventArgs e) {
         _ws?.Ping();
     }
 
-    //Create a new bingo game room.
+    /// <summary>
+    /// Create a new bingo game room.
+    /// </summary>
     private static async Task CreateRoom() {
-        var crr = new CreateRoomRequest {
-            RoomName = "TestRoom",
-            RoomPassword = "password",
-            MaxPlayers = 8,
-            PRankRequired = false,
-            HostSteamName = SanitiseUsername(Steamworks.SteamClient.Name),
-            HostSteamId = Steamworks.SteamClient.SteamId.ToString(),
-            Rank = GameManager.hasRankAccess ? requestedRank ?? "" : ""
-        };
-
-        await SendEncodedMessage(JsonConvert.SerializeObject(crr));
+        await SendEncodedMessage(
+            new CreateRoomRequest {
+                RoomName = "TestRoom",
+                RoomPassword = "password",
+                MaxPlayers = 8,
+                PRankRequired = false,
+                HostSteamName = SanitiseUsername(Steamworks.SteamClient.Name),
+                HostSteamId = Steamworks.SteamClient.SteamId.ToString(),
+                Rank = GameManager.hasRankAccess ? requestedRank ?? "" : ""
+            }
+        );
     }
 
     private static async Task JoinGame(string password) {
-        var jrr = new JoinRoomRequest {
-            Password = password,
-            Username = SanitiseUsername(Steamworks.SteamClient.Name),
-            SteamId = Steamworks.SteamClient.SteamId.ToString(),
-            Rank = GameManager.hasRankAccess ? requestedRank ?? "" : ""
-        };
-        await SendEncodedMessage(JsonConvert.SerializeObject(jrr));
+        await SendEncodedMessage(
+            new JoinRoomRequest {
+                Password = password,
+                Username = SanitiseUsername(Steamworks.SteamClient.Name),
+                SteamId = Steamworks.SteamClient.SteamId.ToString(),
+                Rank = GameManager.hasRankAccess ? requestedRank ?? "" : ""
+            }
+        );
     }
 
     public static async Task SendStartGameSignal(int roomId) {
-        var gameRequest = new StartGameRequest {
-            RoomId = roomId,
-            Ticket = CreateRegisterTicket()
-        };
-
-        await SendEncodedMessage(JsonConvert.SerializeObject(gameRequest));
+        await SendEncodedMessage(
+            new StartGameRequest {
+                RoomId = roomId,
+                Ticket = CreateRegisterTicket()
+            }
+        );
     }
 
     public static async Task SubmitRun(SubmitRunRequest srr) {
-        await SendEncodedMessage(JsonConvert.SerializeObject(srr));
+        await SendEncodedMessage(srr);
     }
 
     public static async Task SendLeaveGameRequest(int roomId) {
-        var leaveRequest = new LeaveGameRequest {
-            Username = SanitiseUsername(Steamworks.SteamClient.Name),
-            SteamId = Steamworks.SteamClient.SteamId.ToString(),
-            RoomId = roomId
-        };
-
-        await SendEncodedMessage(JsonConvert.SerializeObject(leaveRequest));
+        await SendEncodedMessage(
+            new LeaveGameRequest {
+                Username = SanitiseUsername(Steamworks.SteamClient.Name),
+                SteamId = Steamworks.SteamClient.SteamId.ToString(),
+                RoomId = roomId
+            }
+        );
     }
 
     public static async Task KickPlayer(string steamId) {
-        var kp = new KickPlayer {
-            GameId = GameManager.CurrentGame.GameId,
-            PlayerToKick = steamId,
-            Ticket = CreateRegisterTicket()
-        };
-
-        await SendEncodedMessage(JsonConvert.SerializeObject(kp));
+        await SendEncodedMessage(
+            new KickPlayer {
+                GameId = GameManager.CurrentGame.GameId,
+                PlayerToKick = steamId,
+                Ticket = CreateRegisterTicket()
+            }
+        );
     }
 
     public static void RequestGames() {
         pendingAction = AsyncAction.FetchGames;
+
         ConnectWebSocket();
     }
 
 
-    //Handle all incoming messages received from the server.
+    /// <summary>
+    /// Handle all incoming messages received from the server.
+    /// </summary>
     private static void OnMessageReceived(object _, MessageEventArgs e) {
         Logging.Info("Message received!");
         Logging.Info($"Contents: {e.Data}");

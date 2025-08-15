@@ -1,0 +1,29 @@
+fileFormatVersion: 2
+guid: bf7f1c336d5223b469b6c323c511520d
+timeCreated: 1755192673
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  externalObjects: {}
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: VCR OSD Mono
+  fontNames:
+  - VCR OSD Mono
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 2e78f1bbbb41c4048a46cebed644abbc, type: 3}
+  - {fileID: 12800000, guid: 3ce73ed411e7cc34bafbee64a108929e, type: 3}
+  - {fileID: 12800000, guid: 135faf5a704b29b419e6ef0e856ffcc7, type: 3}
+  customCharacters:
+  fontRenderingMode: 0
+  output:
+    hasEmptyFontData: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData:
+  assetBundleName: bingo.assets
+  assetBundleVariant:

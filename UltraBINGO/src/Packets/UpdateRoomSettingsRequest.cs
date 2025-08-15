@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet("UpdateRoomSettings")]
-public class UpdateRoomSettingsRequest {
+public class UpdateRoomSettingsRequest : BasePacket {
     public required int RoomId;
     public required int MaxPlayers;
     public required int MaxTeams;

@@ -45,21 +45,11 @@
         <Reference Include="$(ManagedPath)/UnityEngine.UI.dll"/>
         <Reference Include="$(ManagedPath)/UnityUIExtensions.dll"/>
     </ItemGroup>
-
+    
     <ItemGroup>
-        <Folder Include="HarmonyPatches\"/>
-        <Folder Include="Properties\"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Remove="Server\**"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Remove="Server\**"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Remove="Server\**"/>
+        <None Remove="bingo.assets" />
+        <None Remove="bingo.resource" />
+        
+        <EmbeddedResource Include="bingo.assets" />
     </ItemGroup>
 </Project>

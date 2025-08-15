@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet]
-public class ReconnectRequest {
+public class ReconnectRequest : BasePacket {
     public required int RoomId;
     public required string SteamId;
     public required RegisterTicket Ticket;

@@ -48,8 +48,7 @@ public static class BingoCard {
 
         _objectiveIndicator.GetComponent<TMP_Text>().text =
             gameType == 0 ? bingoDescription : dominationDescription;
-
-
+        
         if (GameManager.CurrentGame.GameSettings.RequiresPRank)
             _objectiveIndicator.GetComponent<TMP_Text>().text +=
                 "\n<color=#ffa200d9>P</color>-Ranks are <color=orange>required</color> to claim a level.";
@@ -57,6 +56,7 @@ public static class BingoCard {
 
     public static GameObject Init() {
         if (Root == null) Root = new GameObject();
+        
         Root.name = "UltraBingoCard";
 
         _cardElements = Object.Instantiate(AssetLoader.BingoCardElements, Root.transform);

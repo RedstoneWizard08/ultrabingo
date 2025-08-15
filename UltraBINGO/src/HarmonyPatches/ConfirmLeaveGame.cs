@@ -8,13 +8,13 @@ public static class ConfirmLeaveGame {
     [HarmonyPrefix]
     public static bool ConfirmLeaveInGame(ref OptionsMenuToManager instance) {
         if (GameManager.IsInBingoLevel) {
-            var leaveText =
-                CommonFunctions.GetGameObjectChild(CommonFunctions.GetGameObjectChild(instance.quitDialog.gameObject, "Panel"), "Text (2)")
-                    .GetComponent<TextMeshProUGUI>();
+            var leaveText = CommonFunctions.FindObject(instance.quitDialog.gameObject, "Panel", "Text (2)")
+                ?.GetComponent<TextMeshProUGUI>();
 
-            leaveText.text = GameManager.PlayerIsHost()
-                ? "<color=orange>WARNING</color>: YOU ARE THE HOST. Leaving now will <color=orange>end the game</color> for all players.\nAre you sure?"
-                : "Leave game in progress?\n(<color=orange>WARNING</color>: You will not be able to rejoin.)";
+            if (leaveText != null)
+                leaveText.text = GameManager.PlayerIsHost()
+                    ? "<color=orange>WARNING</color>: YOU ARE THE HOST. Leaving now will <color=orange>end the game</color> for all players.\nAre you sure?"
+                    : "Leave game in progress?\n(<color=orange>WARNING</color>: You will not be able to rejoin.)";
 
             instance.quitDialog.ShowDialog();
 

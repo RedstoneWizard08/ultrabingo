@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet]
-public class RerollRequest {
+public class RerollRequest : BasePacket {
     public required RegisterTicket SteamTicket;
     public required string SteamId;
     public required int GameId;

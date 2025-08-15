@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet("LeaveGame")]
-public class LeaveGameRequest {
+public class LeaveGameRequest : BasePacket {
     public required int RoomId;
     public required string Username;
     public required string SteamId;

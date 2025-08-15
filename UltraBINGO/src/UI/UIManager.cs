@@ -26,25 +26,25 @@ public static class UIManager {
     public static List<string> nonWhitelistedMods = [];
 
     public static async Task HandleGameSettingsUpdate() {
-        //Only send if we're the host.
+        // Only send if we're the host.
         if (!GameManager.PlayerIsHost()) return;
 
-        var updateReq = new UpdateRoomSettingsRequest {
-            RoomId = GameManager.CurrentGame.GameId,
-            MaxPlayers = int.Parse(BingoLobby.MaxPlayers?.text ?? "8"),
-            MaxTeams = int.Parse(BingoLobby.MaxTeams?.text ?? "4"),
-            TimeLimit = int.Parse(BingoLobby.TimeLimit?.text ?? "5"),
-            GameMode = BingoLobby.Gamemode?.value ?? 0,
-            TeamComposition = BingoLobby.TeamComposition?.value ?? 0,
-            PRankRequired = BingoLobby.RequirePRank?.isOn ?? false,
-            Difficulty = BingoLobby.Difficulty?.value ?? 2,
-            GridSize = BingoLobby.GridSize?.value ?? 3,
-            DisableCampaignAltExits = BingoLobby.DisableCampaignAltExits?.isOn ?? false,
-            GameVisibility = BingoLobby.GameVisibility?.value ?? 0,
-            Ticket = NetworkManager.CreateRegisterTicket()
-        };
-
-        await NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(updateReq));
+        await NetworkManager.SendEncodedMessage(
+            new UpdateRoomSettingsRequest {
+                RoomId = GameManager.CurrentGame.GameId,
+                MaxPlayers = int.Parse(BingoLobby.MaxPlayers?.text ?? "8"),
+                MaxTeams = int.Parse(BingoLobby.MaxTeams?.text ?? "4"),
+                TimeLimit = int.Parse(BingoLobby.TimeLimit?.text ?? "5"),
+                GameMode = BingoLobby.Gamemode?.value ?? 0,
+                TeamComposition = BingoLobby.TeamComposition?.value ?? 0,
+                PRankRequired = BingoLobby.RequirePRank?.isOn ?? false,
+                Difficulty = BingoLobby.Difficulty?.value ?? 2,
+                GridSize = BingoLobby.GridSize?.value ?? 3,
+                DisableCampaignAltExits = BingoLobby.DisableCampaignAltExits?.isOn ?? false,
+                GameVisibility = BingoLobby.GameVisibility?.value ?? 0,
+                Ticket = NetworkManager.CreateRegisterTicket()
+            }
+        );
     }
 
     public static void SetupElements(CanvasController controller) {
@@ -75,7 +75,8 @@ public static class UIManager {
     private static void PopulateUnallowedMods() {
         var mods = GetGameObjectChild(
             GetGameObjectChild(GetGameObjectChild(ultrabingoUnallowedModsPanel, "BingoLockedPanel"), "Panel"),
-            "ModList")?.GetComponent<TextMeshProUGUI>();
+            "ModList"
+        )?.GetComponent<TextMeshProUGUI>();
 
         var text = nonWhitelistedMods.Aggregate("<color=orange>", (current, mod) => current + (mod + "\n"));
 
@@ -100,7 +101,8 @@ public static class UIManager {
     private static void Open() {
         if (!NetworkManager.modlistCheckDone) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
-                "Mod check failed, please restart your game.\nIf this keeps happening, please check your internet.");
+                "Mod check failed, please restart your game.\nIf this keeps happening, please check your internet."
+            );
             return;
         }
 

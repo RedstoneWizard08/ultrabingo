@@ -38,7 +38,7 @@ public static class GameManager {
     public static bool alreadyStartedVote;
     public static float dominationTimer = 0;
     public static bool hasRankAccess = false;
-    public static VoteData? voteData = new(false);
+    public static VoteData? VoteData = new(false);
 
     public static async Task SwapRerolledMap(string oldMapId, GameLevel level, int column, int row) {
         if (IsInBingoLevel) {
@@ -73,7 +73,7 @@ public static class GameManager {
         CurrentColumn = 0;
         IsInBingoLevel = false;
         Teammates = null;
-        voteData = null;
+        VoteData = null;
 
         BingoMapSelection.ClearList();
 
@@ -82,13 +82,11 @@ public static class GameManager {
     }
 
     public static async Task HumiliateSelf() {
-        var ca = new CheatActivation {
+        await NetworkManager.SendEncodedMessage(new CheatActivation {
             Username = SanitiseUsername(Steamworks.SteamClient.Name),
             GameId = CurrentGame.GameId,
             SteamId = Steamworks.SteamClient.SteamId.ToString()
-        };
-
-        await NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ca));
+        });
     }
 
     public static async Task LeaveGame(bool isInLevel = false) {
@@ -451,29 +449,25 @@ public static class GameManager {
         if (alreadyStartedVote) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You have already started a vote in this game.");
         } else {
-            var rr = new RerollRequest {
+            await NetworkManager.SendEncodedMessage(new RerollRequest {
                 GameId = CurrentGame.GameId,
                 SteamId = Steamworks.SteamClient.SteamId.ToString(),
                 Row = row,
                 Column = column,
                 SteamTicket = NetworkManager.CreateRegisterTicket()
-            };
-
-            await NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(rr));
+            });
         }
 
         MonoSingleton<OptionsManager>.Instance.UnPause();
     }
 
     public static async Task PingMapForTeam(string team, int row, int column) {
-        var mp = new MapPing {
+        await NetworkManager.SendEncodedMessage(new MapPing {
             GameId = CurrentGame.GameId,
             Team = team,
             Row = row,
             Column = column,
             Ticket = NetworkManager.CreateRegisterTicket()
-        };
-
-        await NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(mp));
+        });
     }
 }

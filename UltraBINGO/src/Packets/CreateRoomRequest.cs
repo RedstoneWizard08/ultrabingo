@@ -3,7 +3,7 @@ using UltraBINGO.API;
 namespace UltraBINGO.Packets;
 
 [Packet("CreateRoom")]
-public class CreateRoomRequest {
+public class CreateRoomRequest : BasePacket {
     public required string RoomName;
     public required string RoomPassword;
     public required int MaxPlayers;

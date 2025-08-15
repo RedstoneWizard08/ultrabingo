@@ -11,6 +11,7 @@ public class PacketInfo {
     public required string Name;
     public required PacketDirection Direction;
 
+    [UsedImplicitly]
     public string Serialize(object value) {
         if (value.GetType() != Type) throw new ArgumentException("Value type did not match packet type!");
 

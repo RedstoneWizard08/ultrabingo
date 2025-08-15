@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using TMPro;
 using Tommy;
 using UltraBINGO.Components;
@@ -90,13 +89,11 @@ public static class BingoMapSelection {
                 break;
         }
 
-        var ump = new UpdateMapPool {
+        NetworkManager.SendEncodedMessage(new UpdateMapPool {
             GameId = GameManager.CurrentGame.GameId,
             MapPoolIds = SelectedIds.ToList(),
             Ticket = NetworkManager.CreateRegisterTicket()
-        };
-
-        NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(ump)).Wait();
+        }).Wait();
     }
 
     private static void ShowMapPoolData(PointerEventData data) {

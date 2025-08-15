@@ -1,12 +1,14 @@
-﻿using System.IO;
+﻿using System;
 using TMPro;
 using UnityEngine;
 
 namespace UltraBINGO.Util;
 
 public static class AssetLoader {
+    private const string BundlePath = "bingo.assets";
+
     public static AssetBundle Assets = null!;
-    
+
     public static TMP_FontAsset GameFont = null!;
     public static Font GameFontLegacy = null!;
     public static Sprite UISprite = null!;
@@ -27,9 +29,14 @@ public static class AssetLoader {
     public static GameObject BingoUnallowedModsPanel = null!;
     public static AudioClip GameOverSound = null!;
 
+    private static AssetBundle? LoadBundle() => BundleUtils.LoadEmbeddedAssetBundle(
+        typeof(Main).Assembly,
+        $"{typeof(Main).Namespace}.{BundlePath}"
+    );
+
     public static void LoadAssets() {
-        Assets = AssetBundle.LoadFromFile(Path.Combine(Main.ModFolder ?? string.Empty, "bingo.resource"));
-        
+        Assets = LoadBundle() ?? throw new InvalidOperationException("Failed to load asset bundle!");
+
         GameFont = Assets.LoadAsset<TMP_FontAsset>("VCR_OSD_MONO_EXTENDED_TMP");
         GameFontLegacy = Assets.LoadAsset<Font>("VCR_OSD_MONO_LEGACY");
         BingoEntryButton = Assets.LoadAsset<GameObject>("BingoEntryButton");

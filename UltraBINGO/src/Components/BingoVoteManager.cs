@@ -1,85 +1,87 @@
-﻿using Newtonsoft.Json;
-using TMPro;
+﻿using TMPro;
 using UltraBINGO.Net;
 using UltraBINGO.Packets;
 using UltraBINGO.Util;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UltraBINGO.Components;
 
 using static CommonFunctions;
 
 public class BingoVoteManager : MonoSingleton<BingoVoteManager> {
-    [FormerlySerializedAs("Panel")] public GameObject panel;
-
     public float timeRemaining;
     public bool voteOngoing;
     public bool hasVoted;
-
     public string map = "";
-
     public int currentVotes;
     public int voteThreshold;
 
-    public const string VotePrompt = "(<color=orange>F1</color> to vote)";
+    private const string VotePrompt = "(<color=orange>F1</color> to vote)";
 
-    public static TextMeshProUGUI RerollText;
-    public static TextMeshProUGUI RerollVotes;
-    public static TextMeshProUGUI RerollTimer;
-
-    public void Bind(GameObject source) {
-        panel = source;
-    }
+    private static TextMeshProUGUI? _rerollText;
+    private static TextMeshProUGUI? _rerollVotes;
+    private static TextMeshProUGUI? _rerollTimer;
 
     public void CheckOngoingVote() {
-        if (GameManager.voteData != null && GameManager.voteData.VoteOngoing) LoadOngoingVote();
+        if (GameManager.VoteData != null && GameManager.VoteData.VoteOngoing) LoadOngoingVote();
     }
 
     public void LoadOngoingVote() {
+        if (GameManager.VoteData == null) return;
+
         voteOngoing = true;
-        timeRemaining = GameManager.voteData.TimeLeft;
-        hasVoted = GameManager.voteData.HasVoted;
-        currentVotes = GameManager.voteData.CurrentVotes;
-        voteThreshold = GameManager.voteData.MinimumVotesRequired;
-        map = GameManager.voteData.MapName;
+        timeRemaining = GameManager.VoteData.TimeLeft;
+        hasVoted = GameManager.VoteData.HasVoted;
+        currentVotes = GameManager.VoteData.CurrentVotes;
+        voteThreshold = GameManager.VoteData.MinimumVotesRequired;
+        map = GameManager.VoteData.MapName;
         gameObject.SetActive(true);
     }
 
     public void Start() {
-        RerollText = GetGameObjectChild(gameObject, "RerollText").GetComponent<TextMeshProUGUI>();
-        RerollVotes = GetGameObjectChild(gameObject, "RerollVotes").GetComponent<TextMeshProUGUI>();
-        RerollTimer = GetGameObjectChild(gameObject, "RerollTimer").GetComponent<TextMeshProUGUI>();
+        _rerollText = GetGameObjectChild(gameObject, "RerollText")?.GetComponent<TextMeshProUGUI>();
+        _rerollVotes = GetGameObjectChild(gameObject, "RerollVotes")?.GetComponent<TextMeshProUGUI>();
+        _rerollTimer = GetGameObjectChild(gameObject, "RerollTimer")?.GetComponent<TextMeshProUGUI>();
 
         //DontDestroyOnLoad(this.gameObject);
     }
 
     public void Update() {
-        if (voteOngoing && timeRemaining > 0f) {
-            timeRemaining = Mathf.MoveTowards(timeRemaining, 0f, Time.unscaledDeltaTime);
+        switch (voteOngoing) {
+            case true when timeRemaining > 0f:
+                timeRemaining = Mathf.MoveTowards(timeRemaining, 0f, Time.unscaledDeltaTime);
 
-            RerollText.text = $"Reroll <color=orange>{map}</color>?{(!hasVoted ? VotePrompt : "")}";
-            RerollVotes.text = $"<color=orange>{currentVotes}</color>/{voteThreshold} votes";
-            RerollTimer.text = $"Ends in <color=orange>{(int)timeRemaining}</color>s";
-        } else if (voteOngoing && timeRemaining == 0f) {
-            StopVote();
+                if (_rerollText != null)
+                    _rerollText.text = $"Reroll <color=orange>{map}</color>?{(!hasVoted ? VotePrompt : "")}";
+
+                if (_rerollVotes != null)
+                    _rerollVotes.text = $"<color=orange>{currentVotes}</color>/{voteThreshold} votes";
+
+                if (_rerollTimer != null) _rerollTimer.text = $"Ends in <color=orange>{(int)timeRemaining}</color>s";
+
+                break;
+
+            case true when timeRemaining == 0f:
+                StopVote();
+                break;
         }
 
-        if (Input.GetKeyDown(KeyCode.F1)) {
-            if (hasVoted) {
-                Logging.Warn("Tried to vote, but alreadyVoted set to true!");
-            } else {
-                var rr = new RerollRequest {
+        if (!Input.GetKeyDown(KeyCode.F1)) return;
+
+        if (hasVoted) {
+            Logging.Warn("Tried to vote, but alreadyVoted set to true!");
+        } else {
+            NetworkManager.SendEncodedMessage(
+                new RerollRequest {
                     GameId = GameManager.CurrentGame.GameId,
                     SteamId = Steamworks.SteamClient.SteamId.ToString(),
                     Row = 0,
                     Column = 0,
                     SteamTicket = NetworkManager.CreateRegisterTicket()
-                };
+                }
+            ).Wait();
 
-                NetworkManager.SendEncodedMessage(JsonConvert.SerializeObject(rr));
-                hasVoted = true;
-            }
+            hasVoted = true;
         }
     }
 

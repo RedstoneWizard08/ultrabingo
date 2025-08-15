@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet]
-public class MapPing {
+public class MapPing : BasePacket {
     public required int GameId;
     public required string Team;
     public required int Row;

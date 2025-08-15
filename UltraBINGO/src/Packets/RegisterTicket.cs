@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet]
-public class RegisterTicket {
+public class RegisterTicket : BasePacket {
     public required string SteamTicket;
     public required string SteamId;
     public required string SteamUsername;

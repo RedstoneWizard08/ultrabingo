@@ -3,7 +3,7 @@ using UltraBINGO.API;
 namespace UltraBINGO.Packets;
 
 [Packet("SubmitRun")]
-public class SubmitRunRequest {
+public class SubmitRunRequest : BasePacket {
     public required string Team;
     public required int GameId;
     public required int Column;

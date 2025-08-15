@@ -3,7 +3,7 @@
 namespace UltraBINGO.Packets;
 
 [Packet("JoinRoom")]
-public class JoinRoomRequest {
+public class JoinRoomRequest : BasePacket {
     public required string Password;
     public required string Username;
     public required string SteamId;
