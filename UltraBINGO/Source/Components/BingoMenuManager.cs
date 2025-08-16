@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,7 +22,7 @@ public class BingoMenuManager : MonoBehaviour {
         
         gameObject.SetActive(false);
         
-        Task.Delay(1000).Wait();
+        Thread.Sleep(1000);
         
         gameObject.SetActive(true);
         

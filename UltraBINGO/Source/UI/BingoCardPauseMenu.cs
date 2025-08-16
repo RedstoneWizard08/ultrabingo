@@ -83,6 +83,7 @@ public static class BingoCardPauseMenu {
 
             //Set up BingoLevelData
             var bld = levelSquare.AddComponent<BingoLevelData>();
+            
             bld.LevelName = levelObject.LevelName;
             bld.IsAngryLevel = levelObject.IsAngryLevel;
             bld.AngryParentBundle = levelObject.AngryParentBundle;
@@ -93,7 +94,11 @@ public static class BingoCardPauseMenu {
             bld.ClaimedTeam = levelObject.ClaimedBy;
 
             levelSquare.AddComponent<BingoLevelSquare>();
-            levelSquare.GetComponent<Image>().color = TeamColors[currentGame.Grid.LevelTable[$"{x}-{y}"].ClaimedBy];
+
+            var claimedBy = currentGame.Grid.LevelTable[$"{x}-{y}"].ClaimedBy;
+
+            if (claimedBy != null)
+                levelSquare.GetComponent<Image>().color = TeamColors[claimedBy];
 
             if (GameManager.CurrentRow == x && GameManager.CurrentColumn == y) {
                 levelSquare.AddComponent<Outline>();
@@ -102,13 +107,13 @@ public static class BingoCardPauseMenu {
             }
 
             levelSquare.AddComponent<EventTrigger>();
-            
+
             var mouseEnter = new EventTrigger.Entry {
                 eventID = EventTriggerType.PointerEnter
             };
-            
+
             mouseEnter.callback.AddListener(data => { OnMouseEnterLevelSquare((PointerEventData)data); });
-            
+
             levelSquare.GetComponent<EventTrigger>().triggers.Add(mouseEnter);
             levelSquare.SetActive(true);
         }

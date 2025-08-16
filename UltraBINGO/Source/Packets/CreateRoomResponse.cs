@@ -11,10 +11,10 @@ namespace UltraBINGO.Packets;
 public class CreateRoomResponse : IncomingPacket {
     [JsonProperty] public required string Status;
     [JsonProperty] public required int RoomId;
-    [JsonProperty] public required Game RoomDetails;
+    [JsonProperty] public Game? RoomDetails;
     [JsonProperty] public required string RoomPassword;
     
-    public override async Task Handle() {
+    public override void Handle() {
         if (Status == "ban") {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
                 "<color=orange>You have been banned from playing Baphomet's Bingo.</color>");
@@ -26,8 +26,8 @@ public class CreateRoomResponse : IncomingPacket {
                 Logging.Message($"Got details for room {RoomId}");
 
                 //Once room details have been obtained: set up the lobby screen
-                await GameManager.SetupGameDetails(RoomDetails, RoomPassword);
-                
+                if (RoomDetails != null) GameManager.SetupGameDetails(RoomDetails, RoomPassword);
+
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage($"Joined game: {RoomId}");
             }
         }

@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UltraBINGO.API;
 using UltraBINGO.Util;
 
@@ -39,8 +40,8 @@ public static class Messaging {
         return EncodeMessage(
             JsonConvert.SerializeObject(
                 new EncapsulatedMessage {
-                    Contents = packetInfo.Serialize(packet),
-                    Header = packetInfo.Name
+                    Contents = packet,
+                    MessageType = packetInfo.Name
                 }
             )
         );

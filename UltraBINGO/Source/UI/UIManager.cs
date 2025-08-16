@@ -25,12 +25,12 @@ public static class UIManager {
 
     public static List<string> nonWhitelistedMods = [];
 
-    public static async Task HandleGameSettingsUpdate() {
+    public static void HandleGameSettingsUpdate() {
         // Only send if we're the host.
         if (!GameManager.PlayerIsHost()) return;
 
-        await Main.NetworkManager.Socket.Send(
-            new UpdateRoomSettingsRequest {
+        Main.NetworkManager.Socket.Send(
+            new UpdateRoomSettings {
                 RoomId = GameManager.CurrentGame.GameId,
                 MaxPlayers = int.Parse(BingoLobby.MaxPlayers?.text ?? "8"),
                 MaxTeams = int.Parse(BingoLobby.MaxTeams?.text ?? "4"),

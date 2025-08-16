@@ -12,8 +12,6 @@ public static class PacketLoader {
         foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())) {
             TryLoadPacket(type);
         }
-        
-        PacketManager.Freeze();
     }
 
     private static void TryLoadPacket(Type type) {

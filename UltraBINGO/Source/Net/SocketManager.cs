@@ -12,8 +12,8 @@ public class SocketManager {
     private Timer? _heartbeatTimer;
     private BasePacket? _queuedMessage;
 
-    public event Func<Task> OnConnect = () => Task.CompletedTask;
-    public event Func<Task> OnError = () => Task.CompletedTask;
+    public event Action OnConnect = () => {};
+    public event Action OnError = () => {};
 
     /// <summary>
     /// Check if the WebSocket connection to the server is active and alive.
@@ -28,9 +28,9 @@ public class SocketManager {
         _ws.EnableRedirection = true;
         _ws.WaitTime = TimeSpan.FromSeconds(15);
 
-        _ws.OnOpen += (_, _) => HandleConnect().Wait();
+        _ws.OnOpen += (_, _) => HandleConnect();
         _ws.OnMessage += OnMessageReceived;
-        _ws.OnError += (_, e) => HandleError(e).Wait();
+        _ws.OnError += (_, e) => HandleError(e);
 
         _ws.OnClose += (_, e) => {
             if (e.WasClean) {
@@ -58,7 +58,7 @@ public class SocketManager {
     /// <summary>
     /// Encode and send base64 messages to the server.
     /// </summary>
-    public async Task Send(BasePacket packet) {
+    public void Send(BasePacket packet) {
         if (!IsAlive) {
             Logging.Warn("Queuing message & retrying connection");
             _queuedMessage = packet;
@@ -81,25 +81,25 @@ public class SocketManager {
             }
         );
 
-        await source.Task;
+        source.Task.Wait();
     }
 
     /// <summary>
     /// Handle all incoming messages received from the server.
     /// </summary>
-    private void OnMessageReceived(object _, MessageEventArgs e) {
+    private static void OnMessageReceived(object _, MessageEventArgs e) {
         Logging.Info("Message received!");
         Logging.Info($"Contents: {e.Data}");
 
         try {
-            ProcessMessage(e.Data).Wait();
+            ProcessMessage(e.Data);
         } catch (Exception ex) {
             Logging.Error("Failed to process message!");
             Logging.Error($"Error: {ex}");
         }
     }
 
-    private async Task ProcessMessage(string data) {
+    private static void ProcessMessage(string data) {
         var em = Messaging.DecodeRawPacket(data);
 
         if (em == null) {
@@ -107,18 +107,18 @@ public class SocketManager {
             return;
         }
 
-        if (!PacketManager.PacketsByName.ContainsKey(em.Header)) {
-            Logging.Error($"Packet with name '{em.Header}' does not exist!");
+        if (!PacketManager.PacketsByName.TryGetValue(em.MessageType, out var value)) {
+            Logging.Error($"Packet with name '{em.MessageType}' does not exist!");
             return;
         }
 
-        var err = await PacketManager.PacketsByName[em.Header].Handle(em.Contents);
+        var err = value.Handle(em.Contents);
 
-        if (err != null) {
-            Logging.Error($"An error occured while handling packet '{em.Header}':");
-            Logging.Error(err.Message);
-            Logging.Error(err.StackTrace);
-        }
+        if (err == null) return;
+        
+        Logging.Error($"An error occured while handling packet '{em.MessageType}':");
+        Logging.Error(err.Message);
+        Logging.Error(err.StackTrace);
     }
 
     /// <summary>
@@ -135,26 +135,26 @@ public class SocketManager {
     /// <summary>
     /// Ping the WebSocket server to keep the connection alive.
     /// </summary>
-    private void Ping(object source, ElapsedEventArgs e) => _ws?.Ping();
+    private void Ping(object source, ElapsedEventArgs e) => _ws.Ping();
 
     /// <summary>
     /// Handle any errors that happen with the WebSocket connection.
     /// </summary>
-    private async Task HandleError(ErrorEventArgs e) {
+    private void HandleError(ErrorEventArgs e) {
         Logging.Error("Network error happened");
         Logging.Error(e.Message);
         Logging.Error(e.Exception?.ToString());
 
         if (IsAlive) _ws.CloseAsync();
-        else await OnError.Invoke();
+        else OnError.Invoke();
     }
 
-    private async Task HandleConnect() {
+    private void HandleConnect() {
         SetupHeartbeat();
 
-        if (_queuedMessage != null) await Send(_queuedMessage);
+        if (_queuedMessage != null) Send(_queuedMessage);
         _queuedMessage = null;
 
-        await OnConnect.Invoke();
+        OnConnect.Invoke();
     }
 }

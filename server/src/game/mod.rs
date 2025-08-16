@@ -37,7 +37,7 @@ lazy_static! {
 #[serde_as]
 #[derive(Debug, Clone, Derivative, Serialize)]
 #[derivative(PartialEq, PartialOrd, Hash)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct GamePlayer {
     #[serde_as(as = "DisplayFromStr")]
     pub steam_id: SteamID,
@@ -63,7 +63,7 @@ impl GamePlayer {
 
 #[derive(Derivative, Serialize)]
 #[derivative(Debug)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct Game {
     pub id: i32,
     pub grid: GameGrid,
@@ -83,7 +83,7 @@ pub struct Game {
     pub start_time: Option<DateTime<Utc>>,
     pub end_time: Option<DateTime<Utc>>,
     pub best_stat_map: Option<String>,
-    pub best_stat_value: Option<f64>,
+    pub best_stat_value: Option<f32>,
     pub is_vote_active: bool,
     pub current_votes: usize,
     pub vote_pos: Option<[usize; 2]>,
@@ -98,17 +98,21 @@ pub struct Game {
 }
 
 #[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct GameInfo {
+    #[serde(rename = "GameId")]
     pub id: i32,
+    pub current_players: HashMap<String, GamePlayer>,
     #[serde(skip)]
     pub grid: GameGrid,
-    #[serde(rename = "grid")]
+    #[serde(rename = "Grid")]
     pub client_grid: ClientGameGrid,
-    pub host: Option<i64>,
+    #[serde(rename = "GameHost")]
+    pub host: Option<String>,
+    #[serde(rename = "GameState")]
     pub state: GameState,
-    pub current_players: HashMap<SteamID, GamePlayer>,
     pub teams: HashMap<String, Vec<SteamID>>,
+    #[serde(rename = "GameSettings")]
     pub settings: GameSettings,
     pub ended: bool,
     pub first_map_claimed: Option<String>,
@@ -117,7 +121,7 @@ pub struct GameInfo {
     pub start_time: Option<DateTime<Utc>>,
     pub end_time: Option<DateTime<Utc>>,
     pub best_stat_map: Option<String>,
-    pub best_stat_value: Option<f64>,
+    pub best_stat_value: Option<f32>,
     pub is_vote_active: bool,
     pub current_votes: usize,
     pub vote_pos: Option<[usize; 2]>,
@@ -190,9 +194,13 @@ impl Game {
     pub fn apply(&mut self, info: GameInfo) {
         self.id = info.id;
         self.grid = info.grid;
-        self.host = info.host;
+        self.host = info.host.map(|it| it.parse().unwrap());
         self.state = info.state;
-        self.current_players = info.current_players;
+        self.current_players = info
+            .current_players
+            .into_iter()
+            .map(|(k, v)| (k.parse().unwrap(), v))
+            .collect();
         self.teams = info.teams;
         self.settings = info.settings;
         self.ended = info.ended;
@@ -216,9 +224,13 @@ impl Game {
         GameInfo {
             id: self.id,
             grid: self.grid.clone(),
-            host: self.host,
+            host: self.host.map(|it| format!("{it}")),
             state: self.state,
-            current_players: self.current_players.clone(),
+            current_players: self
+                .current_players
+                .iter()
+                .map(|(k, v)| (format!("{k}"), v.clone()))
+                .collect(),
             teams: self.teams.clone(),
             settings: self.settings.clone(),
             ended: self.ended,
@@ -437,7 +449,7 @@ impl Game {
         })
     }
 
-    pub fn update_best_stat_value(&mut self, value: f64, map: String) {
+    pub fn update_best_stat_value(&mut self, value: f32, map: String) {
         // Shouldn't this be `value > it`? Idk...
         if self.best_stat_value.is_none_or(|it| value < it) {
             self.best_stat_value = Some(value);

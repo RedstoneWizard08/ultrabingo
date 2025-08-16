@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UltraBINGO.Components;
@@ -42,7 +43,7 @@ public static class GameManager {
     public static bool ModListCheckDone = false;
     public static bool ModListCheckPassed = false;
 
-    public static async Task SwapRerolledMap(string oldMapId, GameLevel level, int column, int row) {
+    public static void SwapRerolledMap(string oldMapId, GameLevel level, int column, int row) {
         if (IsInBingoLevel) {
             CurrentGame.Grid.LevelTable[$"{column}-{row}"] = level;
             var a = GetGameObjectChild(BingoCardPauseMenu.Grid, $"{column}-{row}")?.GetComponent<BingoLevelData>();
@@ -58,7 +59,7 @@ public static class GameManager {
         if (oldMapId != GetSceneName()) return;
 
         Logging.Message("Currently on old map - switching in 5 seconds");
-        await Task.Delay(5000);
+        Thread.Sleep(5000);
         var b = GetGameObjectChild(BingoCardPauseMenu.Grid, $"{column}-{row}")?.GetComponent<Button>();
         b?.onClick.Invoke();
     }
@@ -83,8 +84,8 @@ public static class GameManager {
         if (GetSceneName() == "Main Menu") BingoCard.Cleanup();
     }
 
-    public static async Task HumiliateSelf() {
-        await Main.NetworkManager.Socket.Send(
+    public static void HumiliateSelf() {
+        Main.NetworkManager.Socket.Send(
             new CheatActivation {
                 Username = SanitiseUsername(Steamworks.SteamClient.Name),
                 GameId = CurrentGame.GameId,
@@ -93,9 +94,9 @@ public static class GameManager {
         );
     }
 
-    public static async Task LeaveGame(bool isInLevel = false) {
+    public static void LeaveGame(bool isInLevel = false) {
         //Send a request to the server saying we want to leave.
-        await Requests.LeaveGame(CurrentGame.GameId);
+        Requests.LeaveGame(CurrentGame.GameId);
 
         //When that's sent off, close the connection on our end.
         Logging.Message("Closing connection");
@@ -195,7 +196,7 @@ public static class GameManager {
 
                     if (kick != null) {
                         kick.GetComponent<Button>().onClick
-                            .AddListener(delegate { Requests.KickPlayer(steamId).Wait(); });
+                            .AddListener(delegate { Requests.KickPlayer(steamId); });
 
                         kick.transform.localScale = Vector3.one;
                         kick.SetActive(
@@ -256,7 +257,7 @@ public static class GameManager {
                             levelObject.LevelId,
                             lvlCoords,
                             level.GetComponent<BingoLevelData>()
-                        ).Wait();
+                        );
                     }
                 );
 
@@ -296,7 +297,7 @@ public static class GameManager {
         alreadyStartedVote = false;
     }
 
-    public static async Task SetupGameDetails(Game game, string password, bool isHost = true) {
+    public static void SetupGameDetails(Game game, string password, bool isHost = true) {
         CurrentGame = game;
 
         BingoEncapsulator.BingoMenu?.SetActive(false);
@@ -305,7 +306,7 @@ public static class GameManager {
         //Small hack to fix the lobby UI elements & player list appearing invisible due to a base issue with TextMeshPro and how it works
         if (BingoEncapsulator.BingoLobbyScreen != null) {
             foreach (var text in BingoEncapsulator.BingoLobbyScreen.GetComponentsInChildren<TextMeshProUGUI>(true)) {
-                await Task.Delay(1);
+                Thread.Sleep(1);
                 text.ForceMeshUpdate();
             }
 
@@ -379,7 +380,7 @@ public static class GameManager {
         }
 
         Main.NetworkManager.SetState(Types.State.InLobby);
-        await Requests.RegisterConnection();
+        Requests.RegisterConnection();
     }
 
     private static void ShowGameId(string password) {
@@ -389,8 +390,8 @@ public static class GameManager {
         if (text != null) text.text = $"Game ID: {password}";
     }
 
-    public static async Task StartGame() {
-        await Requests.StartGame(CurrentGame.GameId);
+    public static void StartGame() {
+        Requests.StartGame(CurrentGame.GameId);
     }
 
     public static void UpdateCards(int row, int column, string team, string playername, float newTime) {
@@ -458,11 +459,11 @@ public static class GameManager {
         }
     }
 
-    public static async Task RequestReroll(int row, int column) {
+    public static void RequestReroll(int row, int column) {
         if (alreadyStartedVote) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("You have already started a vote in this game.");
         } else {
-            await Main.NetworkManager.Socket.Send(
+            Main.NetworkManager.Socket.Send(
                 new RerollRequest {
                     GameId = CurrentGame.GameId,
                     SteamId = Steamworks.SteamClient.SteamId.ToString(),
@@ -476,8 +477,8 @@ public static class GameManager {
         MonoSingleton<OptionsManager>.Instance.UnPause();
     }
 
-    public static async Task PingMapForTeam(string team, int row, int column) {
-        await Main.NetworkManager.Socket.Send(
+    public static void PingMapForTeam(string team, int row, int column) {
+        Main.NetworkManager.Socket.Send(
             new MapPing {
                 GameId = CurrentGame.GameId,
                 Team = team,

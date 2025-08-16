@@ -1,3 +1,4 @@
+using System;
 using Cake.Common;
 using Cake.Common.IO;
 using Cake.Core.Diagnostics;
@@ -30,9 +31,14 @@ public sealed class LaunchTask : FrostingTask<BuildContext> {
 
         context.Log.Information("Launching game...");
 
-        context.StartAndReturnProcess("wine", new ProcessSettings {
-            Arguments = $"{gamePath} {args}",
-            RedirectStandardOutput = true,
-        }).WaitForExit();
+        if (OperatingSystem.IsWindows())
+            context.StartAndReturnProcess(
+                gamePath,
+                new ProcessSettings {
+                    Arguments = args,
+                    RedirectStandardOutput = true,
+                }
+            ).WaitForExit();
+        else context.Log.Information("Done! Now launch the game with your mod manager.");
     }
 }

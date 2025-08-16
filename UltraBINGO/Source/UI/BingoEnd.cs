@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using TMPro;
+using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using static UltraBINGO.Util.CommonFunctions;
@@ -19,14 +21,14 @@ public static class BingoEnd {
     public static int numOfClaims;
     public static string? firstMap;
     public static string? lastMap;
-    public static float bestStatValue;
+    public static float? bestStatValue;
     public static string? bestStatName;
 
     public static int endCode;
     public static string? tiedTeams;
 
-    public static async Task ShowEndScreen() {
-        await Task.Delay(50); //Give the game a moment to fully load back into the menu before displaying
+    public static void ShowEndScreen() {
+        Thread.Sleep(50); //Give the game a moment to fully load back into the menu before displaying
 
         FindObjectWithInactiveRoot("Canvas", "Main Menu (1)")?.SetActive(false);
         
@@ -76,7 +78,7 @@ public static class BingoEnd {
 
         _leaveGame?.GetComponent<Button>().onClick.AddListener(
             delegate {
-                GameManager.LeaveGame().Wait();
+                GameManager.LeaveGame();
                 BingoMapSelection.ClearList(true);
             }
         );

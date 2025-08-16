@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UltraBINGO.Util;
 
 public static class AssetLoader {
-    private const string BundlePath = "bingo.assets";
+    private const string BundlePath = "bingo.resource";
 
     public static AssetBundle Assets = null!;
 

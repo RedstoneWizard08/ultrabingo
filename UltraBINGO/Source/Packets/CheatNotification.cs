@@ -24,12 +24,10 @@ public class CheatNotification : IncomingPacket {
         "Point and laugh at this person."
     ];
 
-    public override Task Handle() {
+    public override void Handle() {
         var random = new Random();
         var msg = $"{PlayerToHumiliate} tried to enable cheats.\n{Messages[random.Next(Messages.Count)]}";
 
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
-
-        return Task.CompletedTask;
     }
 }

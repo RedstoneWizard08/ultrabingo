@@ -38,7 +38,7 @@ impl GameMode for BingoGamemode {
         game.broadcast(OutgoingMessage::LevelClaimed {
             username: received.player_name.clone(),
             team: received.team.clone(),
-            level,
+            level_name: level,
             claim_type: submit_result,
             row: received.row,
             column: received.column,

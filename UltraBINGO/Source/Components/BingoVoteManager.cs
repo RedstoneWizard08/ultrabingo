@@ -79,7 +79,7 @@ public class BingoVoteManager : MonoSingleton<BingoVoteManager> {
                     Column = 0,
                     SteamTicket = RegisterTicket.Create()
                 }
-            ).Wait();
+            );
 
             hasVoted = true;
         }

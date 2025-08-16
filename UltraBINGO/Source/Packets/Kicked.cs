@@ -6,7 +6,7 @@ namespace UltraBINGO.Packets;
 
 [Packet(PacketDirection.ServerToClient)]
 public class Kicked : IncomingPacket {
-    public override Task Handle() {
+    public override void Handle() {
         GameManager.ClearGameVariables();
         
         // If dc'ing from lobby/card/end screen, return to the bingo menu.
@@ -14,7 +14,5 @@ public class Kicked : IncomingPacket {
         BingoEncapsulator.BingoLobbyScreen?.SetActive(false);
         BingoEncapsulator.BingoEndScreen?.SetActive(false);
         BingoEncapsulator.BingoMenu?.SetActive(true);
-        
-        return Task.CompletedTask;
     }
 }

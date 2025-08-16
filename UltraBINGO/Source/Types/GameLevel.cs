@@ -5,8 +5,8 @@ namespace UltraBINGO.Types;
 public class GameLevel {
     [JsonProperty] public required string LevelName;
     [JsonProperty] public required string LevelId;
-    [JsonProperty] public required string ClaimedBy;
-    [JsonProperty] public required string PersonToBeat;
+    [JsonProperty] public string? ClaimedBy;
+    [JsonProperty] public string? PersonToBeat;
     [JsonProperty] public required float TimeToBeat;
     [JsonProperty] public required int Row;
     [JsonProperty] public required int Column;

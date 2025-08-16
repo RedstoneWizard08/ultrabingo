@@ -18,7 +18,7 @@
         </RestoreAdditionalProjectSources>
     </PropertyGroup>
 
-    <Import Project="../Path.props" />
+    <Import Project="../Path.props"/>
 
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" ExcludeAssets="RUNTIME"/>
@@ -28,32 +28,37 @@
 
         <PackageReference Include="UnityEngine.Modules" Version="2022.3.29" IncludeAssets="compile" ExcludeAssets="RUNTIME"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Tommy" Version="3.1.2"/>
+        <PackageReference Include="Tomlyn" Version="0.19.0"/>
         <PackageReference Include="WebSocketSharp" Version="1.0.3-rc11"/>
-        <PackageReference Include="System.Collections.Immutable" Version="9.0.8" />
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="../Lib/AngryLevelLoader.dll" Publicize="true" />
+        <Reference Include="../Lib/AngryLevelLoader.dll" Publicize="true"/>
         <Reference Include="../Lib/PluginConfigurator.dll"/>
         <Reference Include="../Lib/RudeLevelScripts.Essentials.dll"/>
 
-        <Reference Include="$(ManagedPath)/Assembly-CSharp.dll"/>
+        <Reference Include="$(ManagedPath)/Assembly-CSharp.dll" Publicize="true"/>
         <Reference Include="$(ManagedPath)/Facepunch.Steamworks.Win64.dll"/>
         <Reference Include="$(ManagedPath)/plog.dll"/>
         <Reference Include="$(ManagedPath)/Unity.Addressables.dll"/>
         <Reference Include="$(ManagedPath)/Unity.ResourceManager.dll"/>
         <Reference Include="$(ManagedPath)/Unity.TextMeshPro.dll"/>
+        <Reference Include="$(ManagedPath)/UnityEngine.UnityWebRequestModule.dll"/>
         <Reference Include="$(ManagedPath)/UnityEngine.UI.dll"/>
         <Reference Include="$(ManagedPath)/UnityUIExtensions.dll"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-        <None Remove="Unity/" />
-        <None Remove="Unity/**/*" />
-        <None Remove="bingo.assets" />
-        <None Remove="bingo.resource" />
-        
-        <EmbeddedResource Include="bingo.assets" />
+        <None Remove="Unity/"/>
+        <None Remove="Unity/**/*"/>
+        <None Remove="bingo.assets"/>
+        <None Remove="bingo.resource"/>
+        <None Remove="BingoLogo.png"/>
+        <None Remove="SquareLogo.png"/>
+
+        <EmbeddedResource Include="BingoLogo.png"/>
+        <EmbeddedResource Include="SquareLogo.png"/>
+        <EmbeddedResource Include="bingo.assets"/>
+        <EmbeddedResource Include="bingo.resource"/>
     </ItemGroup>
 </Project>

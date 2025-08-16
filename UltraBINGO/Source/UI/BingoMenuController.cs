@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using AngryLevelLoader.Fields;
 using AngryLevelLoader.Managers;
 using AngryLevelLoader.Notifications;
@@ -31,7 +32,7 @@ public static class BingoMenuController {
         return false;
     }
 
-    public static async Task LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData) {
+    public static void LoadBingoLevel(string levelName, string levelCoords, BingoLevelData levelData) {
         //Make sure the game hasn't ended.
         if (GameManager.CurrentGame.IsGameFinished()) return;
 
@@ -47,7 +48,7 @@ public static class BingoMenuController {
         //Check if the level we're going into is campaign or Angry.
         //If it's Angry, we need to do some checks if the level is downloaded before going in.
         if (levelData.IsAngryLevel) {
-            await HandleAngryLoad(levelData, row, column);
+            HandleAngryLoad(levelData, row, column);
         } else {
             GameManager.UpdateGridPosition(row, column);
             SceneHelper.LoadScene(levelName);
@@ -59,13 +60,13 @@ public static class BingoMenuController {
         return ScriptManager.AttemptLoadScriptWithCertificate(scriptName);
     }
 
-    private static async Task<bool> DownloadAngryScript(string scriptName) {
+    private static bool DownloadAngryScript(string scriptName) {
         var field = new ScriptUpdateNotification.ScriptUpdateProgressField {
             scriptName = scriptName,
             scriptStatus = ScriptUpdateNotification.ScriptUpdateProgressField.ScriptStatus.Download
         };
         field.StartDownload();
-        while (field.downloading) await Task.Delay(500);
+        while (field.downloading) Thread.Sleep(500);
         if (field.isDone) {
             Logging.Warn("Download finished");
             return true;
@@ -75,7 +76,7 @@ public static class BingoMenuController {
         }
     }
 
-    private static async Task HandleAngryLoad(BingoLevelData angryLevelData, int row = 0, int column = 0) {
+    private static void HandleAngryLoad(BingoLevelData angryLevelData, int row = 0, int column = 0) {
         //Make sure the game hasn't ended.
         if (GameManager.CurrentGame.IsGameFinished()) return;
 
@@ -99,8 +100,10 @@ public static class BingoMenuController {
             Logging.Message("Loading Angry level");
             //Need to (re)load the bundle before accessing it to make sure the level fields are accessible.
             GameManager.EnteringAngryLevel = true;
-            await bundleContainer.UpdateScenes(true, false);
-            await Task.Delay(250);
+            var task = bundleContainer.UpdateScenes(true, false);
+            task.Start();
+            task.Wait();
+            Thread.Sleep(250);
 
             //Make sure the given angry level ID exists inside the bundle...
             var levelsInBundle = bundleContainer.levels;
@@ -115,7 +118,7 @@ public static class BingoMenuController {
                     MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
                 else
                     BingoCardPauseMenu.DescriptorText?.GetComponent<TextMeshProUGUI>().SetText(msg);
-                await Task.Delay(1000);
+                Thread.Sleep(1000);
                 Main.NetworkManager.SetState(Types.State.InGame);
                 AngryLevelLoader.Plugin.selectedDifficulty = GameManager.CurrentGame.GameSettings.Difficulty;
 
@@ -129,7 +132,7 @@ public static class BingoMenuController {
                     foreach (var scriptName in requiredAngryScripts)
                         if (!ScriptManager.ScriptExists(scriptName)) {
                             Logging.Message($"Asking Angry to download {scriptName}");
-                            var downloadResult = await DownloadAngryScript(scriptName);
+                            var downloadResult = DownloadAngryScript(scriptName);
 
                             if (downloadResult != true) continue;
 
@@ -200,11 +203,11 @@ public static class BingoMenuController {
             currentlyDownloadingLevel = angryLevelData.LevelName;
             OnlineLevelsManager.onlineLevels[angryLevelData.AngryParentBundle].Download();
             while (OnlineLevelsManager.onlineLevels[angryLevelData.AngryParentBundle].downloading)
-                await Task.Delay(500);
+                Thread.Sleep(500);
         }
     }
 
-    public static async Task LoadBingoLevelFromPauseMenu(string levelCoords, BingoLevelData levelData) {
+    public static void LoadBingoLevelFromPauseMenu(string levelCoords, BingoLevelData levelData) {
         //Make sure the game hasn't ended, or we're not already loading a level.
         if (GameManager.CurrentGame.IsGameFinished() || GameManager.IsSwitchingLevels) return;
 
@@ -234,13 +237,13 @@ public static class BingoMenuController {
                 : new VoteData(false);
 
             if (levelData.IsAngryLevel) {
-                await HandleAngryLoad(levelData, row, column);
+                HandleAngryLoad(levelData, row, column);
             } else {
                 var msg = $"MOVING TO <color=orange>{levelDisplayName}</color>...";
                 BingoCardPauseMenu.DescriptorText?.GetComponent<TextMeshProUGUI>().SetText(msg);
                 GameManager.IsSwitchingLevels = true;
 
-                await Task.Delay(1000);
+                Thread.Sleep(1000);
                 //Check if game hasn't ended between click and delay. If it has, prevent level load.
                 if (GameManager.CurrentGame.IsGameFinished()) return;
 

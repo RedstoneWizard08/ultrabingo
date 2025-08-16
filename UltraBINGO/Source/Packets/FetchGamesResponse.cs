@@ -11,14 +11,10 @@ namespace UltraBINGO.Packets;
 [Packet(PacketDirection.ServerToClient)]
 public class FetchGamesResponse : IncomingPacket {
     [JsonProperty] public required string Status;
-    [JsonProperty] public required string GameData;
+    [JsonProperty] public required List<PublicGameData> GameData;
 
-    public override Task Handle() {
-        var games = JsonConvert.DeserializeObject<List<PublicGameData>>(GameData);
-
+    public override void Handle() {
         Main.NetworkManager.Socket.Disconnect(1000, "GameList");
-        BingoBrowser.PopulateGames(games ?? []);
-
-        return Task.CompletedTask;
+        BingoBrowser.PopulateGames(GameData);
     }
 }

@@ -1,19 +1,21 @@
-use crate::{levels::MAP_POOLS, pools::Level, types::SteamID};
+use crate::{levels::MAP_POOLS, pools::Level};
 use rand::random_range;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq, PartialOrd, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct GameLevel {
+    #[serde(rename = "LevelName")]
     pub name: String,
+    #[serde(rename = "LevelId")]
     pub id: String,
-    #[serde(rename = "claimedBy")]
+    #[serde(rename = "ClaimedBy")]
     pub claimed_by_team: Option<String>,
-    pub person_to_beat: Option<SteamID>,
-    pub time_to_beat: Option<f64>,
+    pub person_to_beat: Option<String>,
+    pub time_to_beat: Option<f32>,
     pub row: usize,
     pub column: usize,
-    #[serde(rename = "isAngryLevel")]
+    #[serde(rename = "IsAngryLevel")]
     pub is_angry: bool,
     pub angry_parent_bundle: String,
     pub angry_level_id: String,
@@ -51,7 +53,7 @@ pub struct GameGrid {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct ClientGameGrid {
     pub size: usize,
     pub level_table: HashMap<String, GameLevel>,

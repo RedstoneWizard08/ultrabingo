@@ -48,8 +48,8 @@ public static class BingoSetTeamsMenu {
         ReturnToLobbyMenu();
     }
 
-    private static async Task Discard() {
-        await Main.NetworkManager.Socket.Send(
+    private static void Discard() {
+        Main.NetworkManager.Socket.Send(
             new ClearTeamSettings {
                 GameId = GameManager.CurrentGame.GameId,
                 Ticket = RegisterTicket.Create()
@@ -58,7 +58,7 @@ public static class BingoSetTeamsMenu {
         ReturnToLobbyMenu();
     }
 
-    private static async Task Submit() {
+    private static void Submit() {
         if (_playersToMap != _playersMapped) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
                 "One or more players have not been assigned to a team."
@@ -66,7 +66,7 @@ public static class BingoSetTeamsMenu {
             return;
         }
 
-        await Main.NetworkManager.Socket.Send(
+        Main.NetworkManager.Socket.Send(
             new TeamSettings {
                 GameId = GameManager.CurrentGame.GameId,
                 Teams = CurrentTeamChanges,
@@ -196,9 +196,9 @@ public static class BingoSetTeamsMenu {
         _cancelButton?.GetComponent<Button>().onClick.AddListener(Cancel);
 
         _resetButton = FindObject(bingoSetTeams, "Reset");
-        _resetButton?.GetComponent<Button>().onClick.AddListener(delegate { Discard().Wait(); });
+        _resetButton?.GetComponent<Button>().onClick.AddListener(delegate { Discard(); });
 
         _finishButton = FindObject(bingoSetTeams, "Finish");
-        _finishButton?.GetComponent<Button>().onClick.AddListener(delegate { Submit().Wait(); });
+        _finishButton?.GetComponent<Button>().onClick.AddListener(delegate { Submit(); });
     }
 }

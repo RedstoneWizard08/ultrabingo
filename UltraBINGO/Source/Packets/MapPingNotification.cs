@@ -9,12 +9,12 @@ using UnityEngine.UI;
 
 namespace UltraBINGO.Packets;
 
-[Packet(PacketDirection.ServerToClient)]
+[Packet("MapPing", PacketDirection.ServerToClient)]
 public class MapPingNotification : IncomingPacket {
     [JsonProperty] public required int Row;
     [JsonProperty] public required int Column;
 
-    public override Task Handle() {
+    public override void Handle() {
         var location = $"{Row}-{Column}";
 
         var levelName = CommonFunctions.GetGameObjectChild(BingoCardPauseMenu.Grid, location)?.GetComponent<BingoLevelData>().LevelName;
@@ -32,7 +32,5 @@ public class MapPingNotification : IncomingPacket {
 
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
             $"Your team has pinged <color=orange>{levelName}</color>.");
-
-        return Task.CompletedTask;
     }
 }

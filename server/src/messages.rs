@@ -5,12 +5,10 @@ use strum::AsRefStr;
 use crate::{
     enums::{Difficulty, TeamComposition},
     game::{
-        GameInfo,
-        grid::{ClientGameGrid, GameLevel},
-        models::{GameVisibility, SubmissionData},
+        grid::{ClientGameGrid, GameLevel}, models::{GameVisibility, SubmissionData}, GameInfo
     },
     modes::GameModeType,
-    rooms::models::JoinEligibility,
+    rooms::models::{JoinEligibility, PublicGameData},
     ticketing::RegisterTicket,
 };
 
@@ -92,18 +90,12 @@ pub enum UpdateTeamsStatus {
 }
 
 #[derive(Debug, Serialize, AsRefStr)]
-#[serde(tag = "messageType")]
-#[serde(rename_all_fields = "camelCase")]
+#[serde(untagged)]
+#[serde(rename_all_fields = "PascalCase")]
 pub enum OutgoingMessage {
-    LevelClaimed {
-        username: String,
-        team: String,
-        level: String,
-        claim_type: SubmissionResult,
-        row: usize,
-        column: usize,
-        new_time_requirement: f64,
-        is_map_voted: bool,
+    CheatNotification {
+        #[serde(rename = "PlayerToHumiliate")]
+        player: String,
     },
 
     CreateRoomResponse {
@@ -113,14 +105,14 @@ pub enum OutgoingMessage {
         room_password: String,
     },
 
-    ServerDisconnection {
-        disconnect_code: u32,
-        disconnect_message: String,
-    },
-
     DisconnectNotification {
         username: String,
         steam_id: String,
+    },
+
+    FetchGamesResponse {
+        status: FetchGamesStatus,
+        game_data: Vec<PublicGameData>,
     },
 
     GameEnd {
@@ -130,29 +122,16 @@ pub enum OutgoingMessage {
         claims: usize,
         first_map_claimed: Option<String>,
         last_map_claimed: Option<String>,
-        best_stat_value: Option<f64>,
+        best_stat_value: Option<f32>,
         best_stat_map: Option<String>,
         end_status: GameEndStatus,
         tied_teams: Vec<String>,
     },
 
-    FetchGamesResponse {
-        status: FetchGamesStatus,
-
-        /// This is actually a [`Vec<Room>`], but C# expects it to be JSON.
-        #[serde(rename = "gameData")]
-        games: String,
-    },
-
-    CheatNotification {
-        #[serde(rename = "playerToHumil")]
-        player: String,
-    },
-
-    JoinRoomResponse {
-        status: JoinEligibility,
-        room_id: i32,
-        room_details: Option<GameInfo>,
+    HostMigration {
+        old_host: String,
+        host_username: String,
+        host_steam_id: String,
     },
 
     JoinRoomNotification {
@@ -161,31 +140,58 @@ pub enum OutgoingMessage {
         rank: String,
     },
 
+    JoinRoomResponse {
+        status: JoinEligibility,
+        room_id: i32,
+        room_details: Option<GameInfo>,
+    },
+
+    Kicked {},
+
     KickNotification {
         player_to_kick: String,
         steam_id: String,
     },
 
-    Kicked,
+    LevelClaimed {
+        claim_type: SubmissionResult,
+        username: String,
+        level_name: String,
+        team: String,
+        row: usize,
+        column: usize,
+        new_time_requirement: f32,
+        is_map_voted: bool,
+    },
 
     MapPing {
         row: usize,
         column: usize,
     },
 
-    NewHostNotification {
-        old_host: String,
-        host_username: String,
-        host_steam_id: String,
-    },
-
-    Pong {
-        status: PongStatus,
+    ModVerificationResponse {
+        non_whitelisted_mods: Vec<String>,
+        /// See [`crate::util::CLIENT_VERSION`]
+        latest_version: String,
+        motd: String,
+        available_ranks: String,
     },
 
     ReconnectResponse {
         status: ReconnectStatus,
         game_data: Option<GameInfo>,
+    },
+
+    RerollExpire {
+        map_name: String,
+    },
+
+    RerollSuccess {
+        old_map_id: String,
+        old_map_name: String,
+        map_data: GameLevel,
+        location_x: usize,
+        location_y: usize,
     },
 
     RerollVote {
@@ -201,41 +207,33 @@ pub enum OutgoingMessage {
         timer: u64,
     },
 
-    RerollSuccess {
-        old_map_id: String,
-        old_map_name: String,
-        map_data: GameLevel,
-        location_x: usize,
-        location_y: usize,
-    },
-
-    RerollExpire {
-        map_name: String,
-    },
-
     RoomUpdate {
         max_players: usize,
         max_teams: usize,
         time_limit: u32,
         team_composition: TeamComposition,
         gamemode: GameModeType,
-        grid_size: usize,
-        difficulty: Difficulty,
-        #[serde(rename = "PRankRequired")]
         p_rank_required: bool,
+        difficulty: Difficulty,
+        grid_size: usize,
         disable_campaign_alt_exits: bool,
         game_visibility: GameVisibility,
         were_teams_reset: bool,
     },
 
+    ServerDisconnection {
+        disconnect_code: u32,
+        disconnect_message: String,
+    },
+
     StartGame {
         game: GameInfo,
         team_color: String,
-        teammates: Vec<i64>,
+        teammates: Vec<String>,
         grid: ClientGameGrid,
     },
 
-    TimeoutNotification {
+    Timeout {
         player: String,
         steam_id: String,
     },
@@ -244,18 +242,15 @@ pub enum OutgoingMessage {
         status: UpdateTeamsStatus,
     },
 
-    ModVerificationResponse {
-        non_whitelisted_mods: Vec<String>,
-        /// See [`crate::util::CLIENT_VERSION`]
-        latest_version: String,
-        motd: String,
-        available_ranks: String,
+    Pong {
+        status: PongStatus,
     },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "PascalCase")]
 pub struct EncapsulatedMessage {
-    pub header: String,
+    pub message_type: String,
     pub contents: String,
 }
 
@@ -264,7 +259,7 @@ impl EncapsulatedMessage {
         let name: &str = msg.as_ref();
 
         Ok(Self {
-            header: name.into(),
+            message_type: name.into(),
             contents: serde_json::to_string(&msg)?,
         })
     }
@@ -280,15 +275,14 @@ pub enum ServerMessage {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct RoomSettingsUpdate {
     pub room_id: i32,
     pub max_players: usize,
     pub max_teams: usize,
     pub time_limit: u32,
     pub team_composition: TeamComposition,
-    pub gamemode: GameModeType,
-    #[serde(rename = "PRankRequired")]
+    pub game_mode: GameModeType,
     pub p_rank_required: bool,
     pub difficulty: Difficulty,
     pub grid_size: usize,
@@ -298,8 +292,8 @@ pub struct RoomSettingsUpdate {
 }
 
 #[derive(Debug, Serialize, Deserialize, AsRefStr)]
-#[serde(tag = "messageType")]
-#[serde(rename_all_fields = "camelCase")]
+#[serde(tag = "MessageType", content = "Contents")]
+#[serde(rename_all_fields = "PascalCase")]
 pub enum IncomingMessage {
     CheatActivation {
         game_id: i32,
@@ -322,7 +316,7 @@ pub enum IncomingMessage {
         rank: String,
     },
 
-    FetchGames,
+    FetchGames {},
 
     JoinRoom {
         password: String,
@@ -367,8 +361,6 @@ pub enum IncomingMessage {
         column: usize,
     },
 
-    UpdateRoomSettings(RoomSettingsUpdate),
-
     StartGame {
         room_id: i32,
         ticket: RegisterTicket,
@@ -387,6 +379,8 @@ pub enum IncomingMessage {
         map_pool_ids: Vec<String>,
         ticket: RegisterTicket,
     },
+
+    UpdateRoomSettings(RoomSettingsUpdate),
 
     VerifyModList {
         client_mod_list: Vec<String>,

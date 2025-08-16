@@ -7,14 +7,14 @@ using UltraBINGO.UI;
 
 namespace UltraBINGO.Packets;
 
-[Packet(PacketDirection.ServerToClient)]
+[Packet("StartGame", PacketDirection.ServerToClient)]
 public class StartGameResponse : IncomingPacket {
     [JsonProperty] public required Game Game;
     [JsonProperty] public required string TeamColor;
     [JsonProperty] public required List<string> Teammates;
     [JsonProperty] public required GameGrid Grid;
 
-    public override Task Handle() {
+    public override void Handle() {
         GameManager.CurrentTeam = TeamColor;
         GameManager.Teammates = Teammates;
         GameManager.CurrentGame.Grid = Grid;
@@ -25,7 +25,5 @@ public class StartGameResponse : IncomingPacket {
         };
 
         BingoMenuController.StartGame(Game.GameSettings.Gamemode);
-
-        return Task.CompletedTask;
     }
 }

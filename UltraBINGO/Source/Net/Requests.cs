@@ -6,13 +6,13 @@ using UltraBINGO.Util;
 namespace UltraBINGO.Net;
 
 public static class Requests {
-    public static async Task RegisterConnection() {
+    public static void RegisterConnection() {
         Logging.Message("Registering connection with server");
 
-        await Main.NetworkManager.Socket.Send(RegisterTicket.Create());
+        Main.NetworkManager.Socket.Send(RegisterTicket.Create());
     }
 
-    public static void SendModCheck(VerifyModRequest vmr) {
+    public static void SendModCheck(VerifyModList vmr) {
         ActionQueue.PendingAction = AsyncAction.ModCheck;
         ActionQueue.PendingVerifyModRequest = vmr;
 
@@ -22,8 +22,8 @@ public static class Requests {
     /// <summary>
     /// Create a new bingo game room.
     /// </summary>
-    public static async Task CreateRoom() {
-        await Main.NetworkManager.Socket.Send(
+    public static void CreateRoom() {
+        Main.NetworkManager.Socket.Send(
             new CreateRoomRequest {
                 RoomName = "TestRoom",
                 RoomPassword = "password",
@@ -36,9 +36,9 @@ public static class Requests {
         );
     }
 
-    public static async Task JoinGame(string password) {
-        await Main.NetworkManager.Socket.Send(
-            new JoinRoomRequest {
+    public static void JoinGame(string password) {
+        Main.NetworkManager.Socket.Send(
+            new JoinRoom {
                 Password = password,
                 Username = CommonFunctions.SanitiseUsername(Steamworks.SteamClient.Name),
                 SteamId = Steamworks.SteamClient.SteamId.ToString(),
@@ -47,8 +47,8 @@ public static class Requests {
         );
     }
 
-    public static async Task StartGame(int roomId) {
-        await Main.NetworkManager.Socket.Send(
+    public static void StartGame(int roomId) {
+        Main.NetworkManager.Socket.Send(
             new StartGameRequest {
                 RoomId = roomId,
                 Ticket = RegisterTicket.Create()
@@ -56,13 +56,13 @@ public static class Requests {
         );
     }
 
-    public static async Task SubmitRun(SubmitRunRequest srr) {
-        await Main.NetworkManager.Socket.Send(srr);
+    public static void SubmitRun(SubmitRunRequest srr) {
+        Main.NetworkManager.Socket.Send(srr);
     }
 
-    public static async Task LeaveGame(int roomId) {
-        await Main.NetworkManager.Socket.Send(
-            new LeaveGameRequest {
+    public static void LeaveGame(int roomId) {
+        Main.NetworkManager.Socket.Send(
+            new LeaveGame {
                 Username = CommonFunctions.SanitiseUsername(Steamworks.SteamClient.Name),
                 SteamId = Steamworks.SteamClient.SteamId.ToString(),
                 RoomId = roomId
@@ -70,8 +70,8 @@ public static class Requests {
         );
     }
 
-    public static async Task KickPlayer(string steamId) {
-        await Main.NetworkManager.Socket.Send(
+    public static void KickPlayer(string steamId) {
+        Main.NetworkManager.Socket.Send(
             new KickPlayer {
                 GameId = GameManager.CurrentGame.GameId,
                 PlayerToKick = steamId,

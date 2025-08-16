@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UltraBINGO.API;
@@ -8,16 +9,17 @@ namespace UltraBINGO.Packets;
 [Packet(PacketDirection.ServerToClient)]
 public class ReconnectResponse : IncomingPacket {
     [JsonProperty] public required string Status;
-    [JsonProperty] public required Game GameData;
+    [JsonProperty] public required Game? GameData;
 
-    public override async Task Handle() {
+    public override void Handle() {
         switch (Status) {
             case "OK": {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Reconnected successfully.");
                 break;
             }
-            case "end": {
-                await new DisconnectSignal {
+            case "END": {
+                new ServerDisconnection {
+                    DisconnectCode = 1000,
                     DisconnectMessage = "GAMEENDED"
                 }.Handle();
                 
@@ -29,7 +31,7 @@ public class ReconnectResponse : IncomingPacket {
                 MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
                     "Failed to reconnect. Leaving game in 5 seconds...");
                 GameManager.ClearGameVariables();
-                await Task.Delay(5000);
+                Thread.Sleep(5000);
 
                 SceneHelper.LoadScene("Main Menu");
                 break;

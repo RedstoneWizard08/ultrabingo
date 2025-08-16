@@ -110,7 +110,7 @@ impl Default for GameSettings {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct SubmissionData {
     pub team: String,
     pub game_id: i32,
@@ -120,6 +120,6 @@ pub struct SubmissionData {
     pub level_id: String,
     pub player_name: String,
     pub steam_id: String,
-    pub time: f64,
+    pub time: f32,
     pub ticket: RegisterTicket,
 }

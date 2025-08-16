@@ -12,7 +12,6 @@ use crate::{
 };
 use anyhow::Result;
 use axum::{
-    body::Bytes,
     extract::{
         ConnectInfo, State, WebSocketUpgrade,
         ws::{CloseFrame, Message, WebSocket},
@@ -178,7 +177,7 @@ async fn process_message(
                         }
                     }
 
-                    IncomingMessage::FetchGames => {
+                    IncomingMessage::FetchGames {} => {
                         let games = state.rooms.get_public_games()?;
 
                         send(
@@ -189,7 +188,7 @@ async fn process_message(
                                 } else {
                                     FetchGamesStatus::Ok
                                 },
-                                games: serde_json::to_string(&games)?,
+                                game_data: games,
                             },
                         )?;
                     }
@@ -658,9 +657,8 @@ async fn write(
                 writer.send(Message::Text(msg.into())).await?
             }
 
-            ServerMessage::Pong => writer.send(Message::Pong(Bytes::new())).await?,
-
             ServerMessage::ForceClose => break,
+            _ => {}
         }
     }
 

@@ -10,7 +10,7 @@ public class HostMigration : IncomingPacket {
     [JsonProperty] public required string HostSteamId;
     [JsonProperty] public required string HostUsername;
 
-    public override Task Handle() {
+    public override void Handle() {
         var message =
             $"The current host ({OldHost}) has lost connection.\n{(HostSteamId == Steamworks.SteamClient.SteamId.ToString()
                 ? "You are now the new host."
@@ -18,7 +18,5 @@ public class HostMigration : IncomingPacket {
 
         MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(message);
         GameManager.CurrentGame.GameHost = HostSteamId;
-
-        return Task.CompletedTask;
     }
 }

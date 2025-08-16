@@ -8,10 +8,10 @@ public class Game {
     [JsonProperty] public required int GameId;
     [JsonProperty] public required Dictionary<string, Player> CurrentPlayers; //<SteamID,Player>
     [JsonProperty] public required GameGrid Grid;
-    [JsonProperty] public required string GameHost; //SteamID
+    [JsonProperty] public string? GameHost; //SteamID
     [JsonProperty] public required int GameState;
     [JsonProperty] public required GameSettings GameSettings;
-    [JsonProperty] public required string WinningTeam;
+    public string? WinningTeam;
 
     public List<Player> GetPlayers() {
         return CurrentPlayers.Values.ToList();

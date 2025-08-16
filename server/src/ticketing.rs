@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "PascalCase")]
 pub struct RegisterTicket {
     pub steam_ticket: String,
     pub steam_id: String,

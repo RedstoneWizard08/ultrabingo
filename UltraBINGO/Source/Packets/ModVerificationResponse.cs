@@ -18,7 +18,7 @@ public class ModVerificationResponse : IncomingPacket {
     [JsonProperty] public required string Motd;
     [JsonProperty] public required string AvailableRanks;
 
-    public override Task Handle() {
+    public override void Handle() {
         GameManager.ModListCheckPassed = NonWhitelistedMods.Count == 0;
 
         if (!GameManager.ModListCheckPassed) UIManager.nonWhitelistedMods = NonWhitelistedMods;
@@ -81,7 +81,5 @@ public class ModVerificationResponse : IncomingPacket {
 
         GameManager.ModListCheckDone = true;
         Main.NetworkManager.Socket.Disconnect(1000, "ModCheckDone");
-        
-        return Task.CompletedTask;
     }
 }

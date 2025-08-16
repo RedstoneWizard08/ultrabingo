@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
-using Tommy;
+using Tomlyn;
 using UltraBINGO.Components;
 using UltraBINGO.Packets;
 using UltraBINGO.Types;
@@ -34,8 +33,8 @@ public static class BingoMapSelection {
 
     public static int NumOfMapsTotal;
 
-    public static HashSet<string> SelectedIds = [];
-    public static List<GameObject> MapPoolButtons = [];
+    public static readonly HashSet<string> SelectedIds = [];
+    public static readonly List<GameObject> MapPoolButtons = [];
     private static readonly List<MapPoolContainer> AvailableMapPools = [];
     private static bool _hasAlreadyFetched;
 
@@ -94,7 +93,7 @@ public static class BingoMapSelection {
                 MapPoolIds = SelectedIds.ToList(),
                 Ticket = RegisterTicket.Create()
             }
-        ).Wait();
+        );
     }
 
     private static void ShowMapPoolData(PointerEventData data) {
@@ -128,35 +127,20 @@ public static class BingoMapSelection {
     }
 
     private static async Task<int> ObtainMapPools() {
-        var catalogString = await Main.NetworkManager.FetchCatalog(Main.NetworkManager.ServerMapPoolCatalogURL);
-        var read = new StringReader(catalogString ?? "");
-        var catalog = TOML.Parse(read);
+        var catalogString = await Main.NetworkManager.FetchCatalog();
+        Logging.Info("Parsing map pools");
+        var catalog = Toml.ToModel<BingoMapPools>(catalogString ?? "");
 
-        if (catalog["mapPools"] is TomlTable mapPools) {
-            // Loop through each map pool defined in the file.
-            foreach (var mapPoolKey in mapPools.Keys)
-                if (mapPools[mapPoolKey] is TomlTable mapPoolTable) {
-                    string name = mapPoolTable["name"];
-                    string description = mapPoolTable["description"];
-                    int numOfMaps = mapPoolTable["numOfMaps"];
-                    var mapList = new List<string>();
+        // Loop through each map pool defined in the file.
+        foreach (var (key, pool) in catalog.MapPools) {
+            var currentMapPool = new MapPoolContainer(key, pool.Name, pool.Description, pool.NumOfMaps, pool.Maps);
 
-                    if (mapPoolTable["maps"] is TomlArray mapArray)
-                        foreach (var item in mapArray)
-                            if (item is TomlString mapItem)
-                                mapList.Add(mapItem.Value);
-
-                    var currentMapPool = new MapPoolContainer(mapPoolKey, name, description, numOfMaps, mapList);
-                    AvailableMapPools.Add(currentMapPool);
-                    Logging.Message($"Found {mapPoolKey} with {numOfMaps} maps");
-                }
-
-            Logging.Message($"{AvailableMapPools.Count} mappools loaded");
-            return 0;
-        } else {
-            Logging.Error("Failed to load map pools from file! Is the file malformed or corrupt?");
-            return -1;
+            AvailableMapPools.Add(currentMapPool);
+            Logging.Info($"Found {key} with {pool.NumOfMaps} maps");
         }
+
+        Logging.Info($"{AvailableMapPools.Count} map pools loaded");
+        return 0;
     }
 
     public static async Task Setup() {
@@ -222,7 +206,7 @@ public static class BingoMapSelection {
         _mapList = FindObject(_mapContainer, "MapPoolList", "Scroll View", "Scroll Rect", "Content", "List");
         _mapListButtonTemplate = FindObject(_mapList, "MapListButton");
         _back = FindObject(mapSelection, "Back");
-        
+
         _back?.GetComponent<Button>().onClick.AddListener(ReturnToLobby);
     }
 }

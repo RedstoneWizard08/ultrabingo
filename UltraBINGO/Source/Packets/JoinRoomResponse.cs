@@ -12,7 +12,7 @@ namespace UltraBINGO.Packets;
 public class JoinRoomResponse : IncomingPacket {
     [JsonProperty] public required int Status;
     [JsonProperty] public required int RoomId;
-    [JsonProperty] public required Game RoomDetails;
+    [JsonProperty] public required Game? RoomDetails;
 
     private static readonly Dictionary<int, string> Messages = new() {
         { -6, "You have been kicked from this game." },
@@ -23,16 +23,22 @@ public class JoinRoomResponse : IncomingPacket {
         { -1, "Game does not exist." }
     };
 
-    public override async Task Handle() {
+    public override void Handle() {
         var msg = "Failed to join: ";
 
         if (Status < 0) {
             msg += Messages[Status];
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(msg);
             Main.NetworkManager.Socket.Disconnect(1000, "Normal close");
-        } else {
+        } else if (RoomDetails != null) {
             MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage("Joined game.");
-            await GameManager.SetupGameDetails(RoomDetails, "", false);
+            GameManager.SetupGameDetails(RoomDetails, "", false);
+        } else {
+            MonoSingleton<HudMessageReceiver>.Instance.SendHudMessage(
+                "Attempted to join the game, but no room details were received!"
+            );
+
+            Main.NetworkManager.Socket.Disconnect(1000, "Normal close");
         }
 
         BingoMainMenu.UnlockUI();

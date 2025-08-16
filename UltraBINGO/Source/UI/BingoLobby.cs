@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UltraBINGO.Packets;
+using UltraBINGO.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using static UltraBINGO.Util.CommonFunctions;
@@ -36,65 +37,65 @@ public static class BingoLobby {
             MaxPlayers.text = Mathf.Clamp(amount, Mathf.Max(amount, GameManager.CurrentGame.CurrentPlayers.Count), 16f)
                 .ToString();
 
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnMaxTeamUpdate(string teamAmount) {
         var amount = int.Parse(teamAmount);
         GameManager.CurrentGame.GameSettings.MaxTeams = Mathf.Clamp(amount, 2, 4);
         if (MaxTeams != null) MaxTeams.text = Mathf.Clamp(amount, 2f, 4f).ToString();
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnTimeLimitUpdate(string timeLimit) {
         var amount = int.Parse(timeLimit);
         GameManager.CurrentGame.GameSettings.TimeLimit = Mathf.Clamp(amount, 5, 30);
         if (TimeLimit != null) TimeLimit.text = Mathf.Clamp(amount, 5, 30).ToString();
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnGamemodeTypeUpdate(int value) {
         GameManager.CurrentGame.GameSettings.Gamemode = value;
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnTeamCompositionUpdate(int value) {
         GameManager.CurrentGame.GameSettings.TeamComposition = value;
         SetTeams?.SetActive(value == 1 && GameManager.PlayerIsHost());
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnGridSizeUpdate(int value) {
         if (GridSize != null) GridSize.value = value;
         GameManager.CurrentGame.GameSettings.GridSize = value;
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnDifficultyUpdate(int value) {
         GameManager.CurrentGame.GameSettings.Difficulty = value;
         if (Difficulty != null) Difficulty.value = value;
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnPRankRequiredUpdate(bool value) {
         if (RequirePRank != null) RequirePRank.isOn = value;
         GameManager.CurrentGame.GameSettings.RequiresPRank = value;
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnDisableCampaignAltExitsUpdate(bool value) {
         if (DisableCampaignAltExits != null) DisableCampaignAltExits.isOn = value;
         GameManager.CurrentGame.GameSettings.DisableCampaignAltExits = value;
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
     private static void OnGameVisibilityUpdate(int value) {
         if (GameVisibility != null) GameVisibility.value = value;
         GameManager.CurrentGame.GameSettings.GameVisibility = value;
-        UIManager.HandleGameSettingsUpdate().Wait();
+        UIManager.HandleGameSettingsUpdate();
     }
 
-    public static void UpdateFromNotification(UpdateRoomSettingsNotification newSettings) {
+    public static void UpdateFromNotification(RoomUpdate newSettings) {
         if (MaxPlayers is not null) MaxPlayers.text = newSettings.MaxPlayers.ToString();
         if (MaxTeams is not null) MaxTeams.text = newSettings.MaxTeams.ToString();
         if (TimeLimit is not null) TimeLimit.text = newSettings.TimeLimit.ToString();
@@ -137,7 +138,7 @@ public static class BingoLobby {
         //Leave game button
         _returnToBingoMenu = FindObject(bingoLobby, "LeaveGame");
 
-        _returnToBingoMenu?.GetComponent<Button>().onClick.AddListener(delegate { GameManager.LeaveGame().Wait(); });
+        _returnToBingoMenu?.GetComponent<Button>().onClick.AddListener(delegate { GameManager.LeaveGame(); });
 
         SelectMaps = FindObject(bingoLobby, "SelectMaps");
 
@@ -145,7 +146,7 @@ public static class BingoLobby {
             delegate {
                 BingoEncapsulator.BingoLobbyScreen?.SetActive(false);
                 BingoEncapsulator.BingoMapSelectionMenu?.SetActive(true);
-                BingoMapSelection.Setup().Wait();
+                BingoMapSelection.Setup();
             }
         );
 
@@ -168,7 +169,7 @@ public static class BingoLobby {
 
                 //Lock the button to prevent being able to spam it
                 LockUI();
-                GameManager.StartGame().Wait();
+                GameManager.StartGame();
             }
         );
 

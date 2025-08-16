@@ -73,7 +73,7 @@ public static class BingoCard {
         }
 
         _leaveGame = FindObject(_cardElements, "LeaveGame");
-        _leaveGame?.GetComponent<Button>().onClick.AddListener(delegate { GameManager.LeaveGame().Wait(); });
+        _leaveGame?.GetComponent<Button>().onClick.AddListener(delegate { GameManager.LeaveGame(); });
 
         //Team indicator panel
         _teamIndicator = FindObject(_cardElements, "TeamIndicator");

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace UltraBINGO.Types;
 
@@ -10,13 +9,9 @@ public class MapPoolContainer(
     int numOfMaps,
     List<string> mapList
 ) {
-    [JsonConstructor]
-    private MapPoolContainer() : this("", "", "", -1, []) {
-    }
-
-    [JsonProperty] public string MapPoolId = mapPoolId;
-    [JsonProperty] public string MapPoolName = mapPoolName;
-    [JsonProperty] public string Description = description;
-    [JsonProperty] public int NumOfMaps = numOfMaps;
-    [JsonProperty] public List<string> MapList = mapList;
+    public readonly string MapPoolId = mapPoolId;
+    public readonly string MapPoolName = mapPoolName;
+    public readonly string Description = description;
+    public readonly int NumOfMaps = numOfMaps;
+    public readonly List<string> MapList = mapList;
 }

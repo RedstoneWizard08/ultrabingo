@@ -1,7 +1,9 @@
 using System;
+using System.Dynamic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UltraBINGO.Packets;
 
 namespace UltraBINGO.API;
@@ -19,11 +21,14 @@ public class PacketInfo {
     }
 
     [UsedImplicitly]
-    public IncomingPacket? Deserialize(string value) {
+    public IncomingPacket? Deserialize(object value) {
         if (Direction != PacketDirection.ServerToClient)
             throw new InvalidOperationException("Cannot deserialize a ClientToServer packet!");
 
-        return JsonConvert.DeserializeObject(value, Type) as IncomingPacket;
+        if (value is not string s)
+            throw new ArgumentException("Value was not a string!");
+
+        return JsonConvert.DeserializeObject(s, Type) as IncomingPacket;
     }
 
     [UsedImplicitly]
@@ -33,12 +38,10 @@ public class PacketInfo {
         return JsonConvert.DeserializeObject(value, Type) as IncomingPacket;
     }
 
-    public async Task<Exception?> Handle(string value) {
+    public Exception? Handle(object value) {
         try {
-            await (
-                Deserialize(value)?.Handle() ??
-                throw new InvalidOperationException("Cannot handle a packet that couldn't be deserialized!")
-            );
+            (Deserialize(value) ??
+             throw new InvalidOperationException("Cannot handle a packet that couldn't be deserialized!")).Handle();
         } catch (Exception e) {
             return e;
         }

@@ -28,8 +28,8 @@ namespace UltraBINGO;
 [BepInPlugin(PluginId, PluginName, PluginVersion)]
 [BepInDependency("com.eternalUnion.angryLevelLoader")]
 public class Main : BaseUnityPlugin {
-    private const string PluginId = "clearwater.ultrakillbingo.ultrakillbingo";
-    private const string PluginName = "Baphomet's BINGO";
+    public const string PluginId = "clearwater.ultrakillbingo.ultrakillbingo";
+    public const string PluginName = "Baphomet's BINGO";
     public const string PluginVersion = "1.1.1";
 
     public const bool IsDevelopmentBuild = false;
@@ -98,7 +98,7 @@ public class Main : BaseUnityPlugin {
         }
 
         Requests.SendModCheck(
-            new VerifyModRequest {
+            new VerifyModList {
                 ClientModList = LoadedMods,
                 SteamId = SteamClient.SteamId.ToString()
             }
@@ -119,7 +119,7 @@ public class Main : BaseUnityPlugin {
             }
 
             if (GameManager.currentSetGame?.IsGameFinished() ?? false) {
-                BingoEnd.ShowEndScreen().Wait();
+                BingoEnd.ShowEndScreen();
                 MonoSingleton<AssistController>.Instance.majorEnabled = false;
                 MonoSingleton<AssistController>.Instance.gameSpeed = 1f;
             }

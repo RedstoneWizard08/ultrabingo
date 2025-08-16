@@ -6,7 +6,7 @@ namespace UltraBINGO.Components;
 
 public class BingoLevelData : MonoBehaviour {
     public bool IsClaimed;
-    public string ClaimedTeam = "none";
+    public string? ClaimedTeam = "none";
     public string ClaimedPlayer = "none";
     public int Row;
     public int Column;

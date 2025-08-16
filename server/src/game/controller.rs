@@ -98,7 +98,7 @@ impl GameController {
                         player
                             .conn
                             .send(ServerMessage::Normal(EncapsulatedMessage::new(
-                                OutgoingMessage::Kicked,
+                                OutgoingMessage::Kicked {},
                             )?))?;
                     } else {
                         player.conn.send(ServerMessage::Normal(notif.clone()))?;
@@ -139,7 +139,7 @@ impl GameController {
                 settings.max_teams = data.max_teams;
                 settings.team_composition = data.team_composition;
                 settings.time_limit = data.time_limit;
-                settings.game_mode = data.gamemode;
+                settings.game_mode = data.game_mode;
                 settings.difficulty = data.difficulty;
                 settings.grid_size = data.grid_size;
                 settings.p_rank_required = data.p_rank_required;
@@ -239,7 +239,7 @@ impl GameController {
                         player.send(OutgoingMessage::StartGame {
                             game: info.clone(),
                             team_color: team.clone(),
-                            teammates: game.teams[team].clone(),
+                            teammates: game.teams[team].iter().map(|it| format!("{it}")).collect(),
                             grid: game.grid.clone().into(),
                         })?;
                     } else {
@@ -426,7 +426,7 @@ impl GameController {
         if let Some(game) = self.current_games.get(&data.game_id) {
             let mut game = game.upgradable_read();
             let level = &game.grid.level_table[data.row][data.column];
-            let steam_id = data.steam_id.parse::<i64>()?;
+            let steam_id = data.steam_id;
 
             if level.claimed_by_team.is_none() {
                 info!(
